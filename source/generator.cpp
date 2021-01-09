@@ -3,9 +3,16 @@
 
 #include "generator.hpp"
 
+#include <fstream>
 #include <iostream>
+#include <iterator>
 #include <string_view>
 using namespace std::literals;
+
+#pragma warning(push)
+#pragma warning(disable: 4702)
+#include "ctre.hpp"
+#pragma warning(pop)
 
 std::optional<pugi::xml_document> vma_xml::detail::load_xml(std::filesystem::path const &file) {
 	auto output = std::make_optional<pugi::xml_document>();
@@ -152,26 +159,106 @@ bool vma_xml::detail::parse_compound(std::string_view refid, std::filesystem::pa
 	return false;
 }
 
-std::optional<vma_xml::detail::data_t> vma_xml::parse(std::filesystem::path const &directory) {
-	if (auto index_xml = detail::load_xml(directory.string() + "/index.xml"); index_xml)
+std::vector<std::string> get_handles(std::string_view source_view) {
+	std::vector<std::string> output;
+
+	static constexpr auto pattern = ctll::fixed_string{ R"(VK_DEFINE_HANDLE\(([A-Za-z_0-9]+)\))" };
+	auto search_result = ctre::search<pattern>(source_view);
+	while (search_result) {
+		output.push_back(std::string(search_result.get<1>().to_string()));
+		search_result = ctre::search<pattern>(search_result.get<1>().end(), source_view.end());
+	}
+
+	return output;
+}
+bool vma_xml::detail::parse_header(std::filesystem::path const &path, [[maybe_unused]] detail::data_t &data) {
+	std::ifstream stream(path, std::fstream::ate);
+	if (stream) {
+		size_t source_size = stream.tellg();
+		std::string source(source_size, '\0');
+		stream.seekg(0);
+		stream.read(source.data(), source_size);
+		
+		data.handle_names = get_handles(source);
+
+		return true;
+	} else
+		std::cout << "Error: Unable to open '" << std::filesystem::absolute(path) << "'. Make sure it exists.";
+	return false;
+}
+
+std::optional<vma_xml::detail::data_t> vma_xml::parse(std::filesystem::path const &xml_directory,
+													  std::filesystem::path const &header_path) {
+	if (auto index_xml = detail::load_xml(xml_directory.string() + "/index.xml"); index_xml)
 		if (auto index = index_xml->child("doxygenindex"); index) {
 			detail::data_t output;
 			for (auto const &compound : index.children())
 				if (compound.name() == "compound"sv)
 					if (auto kind = compound.attribute("kind").value(); kind == "struct"sv || kind == "file"sv)
-						detail::parse_compound(compound.attribute("refid").value(), directory, output);
+						detail::parse_compound(compound.attribute("refid").value(), xml_directory, output);
 					else if (kind == "page"sv || kind == "dir"sv) {
 						// Ignore 'page' and 'dir' index entries.
 					} else
 						std::cout << "Warning: Ignore a compound of an unknown kind: '" << kind << "'.\n";
 				else
 					std::cout << "Warning: Ignore an unknown node: " << compound.name() << '\n';
-			return output;
+			if (detail::parse_header(header_path, output))
+				return output;
 		}
 	return std::nullopt;
 }
 
-std::optional<pugi::xml_document> vma_xml::generate([[maybe_unused]] detail::data_t const &data) {
+std::string to_upper_case(std::string_view input) {
+	static std::locale locale("en_US.UTF8");
+
+	std::string output(input.substr(0, 1));
+	output.reserve(input.size());
+	for (size_t i = 1; i < input.size(); ++i) {
+		if (std::isupper(input[i], locale) && std::islower(input[i - 1], locale))
+			output += '_';
+		output += std::toupper(input[i], locale);
+	}
+
+	return output;
+}
+
+std::string to_objtypeenum(std::string_view input) {
+	std::string output = to_upper_case(input);
+	if (std::string_view(output).substr(0, 4) == "VMA_")
+		return output.insert(4, "OBJECT_TYPE_");
+	return output;
+}
+
+std::optional<vma_xml::detail::function_t> parse_function_pointer(vma_xml::detail::typedef_t input) {
+	auto name = std::string_view(input.name);
+	auto type = std::string_view(input.type);
+	if (name.substr(0, 4) == "PFN_") {
+		vma_xml::detail::function_t output;
+		output.name = name;
+
+		size_t open_br_pos = type.find("(");
+		output.return_type = std::string(type.substr(0, open_br_pos));
+
+		if (type.substr(open_br_pos, 14) == "(VKAPI_PTR *)(" && type.substr(type.size() - 1) == ")") {
+			size_t offset = open_br_pos + 14;
+			while (offset < type.size()) {
+				auto space_pos = type.find(" ", offset);
+				auto comma_pos = type.find(", ", space_pos);
+				if (comma_pos == std::string_view::npos)
+					comma_pos = type.size();
+				output.parameters.emplace_back(
+					std::string(type.begin() + space_pos + 1, type.begin() + comma_pos),
+					std::string(type.begin() + offset, type.begin() + space_pos)
+				);
+				offset = comma_pos + 2;
+			}
+			return output;
+		}
+	}
+	return std::nullopt;
+}
+
+std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) {
 	auto output = std::make_optional<pugi::xml_document>();
 	auto registry = output->append_child("registry");
 
@@ -229,28 +316,87 @@ std::optional<pugi::xml_document> vma_xml::generate([[maybe_unused]] detail::dat
 			type.append_child(pugi::node_pcdata).set_value(";");
 		}
 
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
+		"Handle types"
+	);
+	for (auto &handle : data.handle_names) {
+		auto type = types.append_child("type");
+		type.append_attribute("category").set_value("handle");
+		type.append_attribute("objtypeenum").set_value(to_objtypeenum(handle).data());
+		type.append_child("type").append_child(pugi::node_pcdata).set_value("VK_DEFINE_HANDLE");
+		type.append_child(pugi::node_pcdata).set_value("(");
+		type.append_child("name").append_child(pugi::node_pcdata).set_value(handle.data());
+		type.append_child(pugi::node_pcdata).set_value(")");
+	}
+
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
+		"Enumeration types"
+	);
+	for (auto &enumeration : data.enums) {
+		auto type = types.append_child("type");
+		type.append_attribute("name").set_value(enumeration.name.data());
+		type.append_attribute("category").set_value("enum");
+	}
+
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
+		"Function pointer typedefs"
+	);
+	for (auto &type_def : data.typedefs)
+		if (auto function_pointer = parse_function_pointer(type_def); function_pointer) {
+			auto type = types.append_child("type");
+			type.append_attribute("category").set_value("funcpointer");
+			type.append_child(pugi::node_pcdata).set_value(
+				("typedef " + function_pointer->return_type + "(VKAPI_PTR *").data()
+			);
+			type.append_child("name").append_child(pugi::node_pcdata).set_value(function_pointer->name.data());
+			type.append_child(pugi::node_pcdata).set_value("(");
+			for (auto iterator = function_pointer->parameters.begin()
+				 ; iterator != std::prev(function_pointer->parameters.end())
+				 ; ++iterator) {
+
+				type.append_child("type").append_child(pugi::node_pcdata).set_value(
+					iterator->type.data()
+				);
+				type.append_child(pugi::node_pcdata).set_value(
+					(" " + iterator->name + ", ").data()
+				);
+			}
+			type.append_child("type").append_child(pugi::node_pcdata).set_value(
+				function_pointer->parameters.back().type.data()
+			);
+			type.append_child(pugi::node_pcdata).set_value(
+				(" " + function_pointer->parameters.back().name + ");").data()
+			);
+		}
+
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
+		"Struct types"
+	);
 
 	return std::move(output);
 }
 
 #ifndef VMA_XML_NO_MAIN
 int main(int argc, char **argv) {
-	std::string_view input_path = "../doxygen_xml/";
-	std::string_view output_path = "../output/";
+	std::string_view xml_input_path = "../doxygen_xml/";
+	std::string_view header_path = "../VulkanMemoryAllocator/src/vk_mem_alloc.h";
+	std::string_view xml_output_path = "../output/";
 	if (argc >= 2)
-		input_path = argv[1];
+		xml_input_path = argv[1];
 	if (argc >= 3)
-		output_path = argv[2];
+		header_path = argv[2];
+	if (argc >= 4)
+		xml_output_path = argv[3];
 	if (argc > 3)
 		std::cout << "Warning: All the argument after the first two are ignored.\n";
 	if (argc == 1)
 		std::cout << "Warning: No paths provided. Using default values:\n"
-		<< "input index: '" << input_path << "'.\n"
-		<< "output: '" << output_path << "'.\n";
+		<< "input index: '" << xml_input_path << "'.\n"
+		<< "output: '" << xml_output_path << "'.\n";
 
-	if (auto output = vma_xml::generate(input_path); output) {
-		std::filesystem::create_directory(output_path);
-		std::filesystem::path output_file = output_path; output_file /= "vma.xml";
+	if (auto output = vma_xml::generate(xml_input_path, header_path); output) {
+		std::filesystem::create_directory(xml_output_path);
+		std::filesystem::path output_file = xml_output_path; output_file /= "vma.xml";
 		if (auto result = output->save_file(output_file.c_str()); result)
 			std::cout << "\nSuccess: " << std::filesystem::absolute(output_file) << "\n";
 		else

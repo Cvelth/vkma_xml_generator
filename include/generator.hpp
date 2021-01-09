@@ -46,6 +46,8 @@ namespace vma_xml {
 			std::vector<typedef_t> typedefs;
 			std::vector<function_t> functions;
 			std::vector<enum_t> enums;
+
+			std::vector<std::string> handle_names;
 		};
 		
 		std::optional<pugi::xml_document> load_xml(std::filesystem::path const &file);
@@ -62,12 +64,15 @@ namespace vma_xml {
 		bool parse_file(pugi::xml_node const &xml, detail::data_t &data);
 		bool parse_compound(std::string_view refid, std::filesystem::path const &directory, 
 							detail::data_t &data);
+		bool parse_header(std::filesystem::path const &path, detail::data_t &data);
 	}
 
-	std::optional<detail::data_t> parse(std::filesystem::path const &directory);
+	std::optional<detail::data_t> parse(std::filesystem::path const &xml_directory,
+										std::filesystem::path const &header_path);
 	std::optional<pugi::xml_document> generate(detail::data_t const &data);
-	inline std::optional<pugi::xml_document> generate(std::filesystem::path const &directory) {
-		if (auto data = parse(directory); data)
+	inline std::optional<pugi::xml_document> generate(std::filesystem::path const &xml_directory,
+													  std::filesystem::path const &header_path) {
+		if (auto data = parse(xml_directory, header_path); data)
 			return generate(*data);
 		else
 			return std::nullopt;

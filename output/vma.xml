@@ -22,5 +22,24 @@
 		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaAllocationCreateFlags</name>;</type>
 		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaPoolCreateFlags</name>;</type>
 		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaDefragmentationFlags</name>;</type>
+		<comment>Handle types</comment>
+		<type category="handle" objtypeenum="VMA_OBJECT_TYPE_ALLOCATOR">
+			<type>VK_DEFINE_HANDLE</type>(<name>VmaAllocator</name>)</type>
+		<type category="handle" objtypeenum="VMA_OBJECT_TYPE_POOL">
+			<type>VK_DEFINE_HANDLE</type>(<name>VmaPool</name>)</type>
+		<type category="handle" objtypeenum="VMA_OBJECT_TYPE_ALLOCATION">
+			<type>VK_DEFINE_HANDLE</type>(<name>VmaAllocation</name>)</type>
+		<type category="handle" objtypeenum="VMA_OBJECT_TYPE_DEFRAGMENTATION_CONTEXT">
+			<type>VK_DEFINE_HANDLE</type>(<name>VmaDefragmentationContext</name>)</type>
+		<comment>Enumeration types</comment>
+		<type name="VmaAllocatorCreateFlagBits" category="enum" />
+		<type name="VmaRecordFlagBits" category="enum" />
+		<type name="VmaMemoryUsage" category="enum" />
+		<type name="VmaAllocationCreateFlagBits" category="enum" />
+		<type name="VmaPoolCreateFlagBits" category="enum" />
+		<type name="VmaDefragmentationFlagBits" category="enum" />
+		<comment>Function pointer typesdefs</comment>
+		<type category="funcpointer">typedef void(VKAPI_PTR *<name>PFN_vmaAllocateDeviceMemoryFunction</name>(<type>VmaAllocator</type> allocator, <type>uint32_t</type> memoryType, <type>VkDeviceMemory</type> memory, <type>VkDeviceSize</type> size));</type>
+		<type category="funcpointer">typedef void(VKAPI_PTR *<name>PFN_vmaFreeDeviceMemoryFunction</name>(<type>VmaAllocator</type> allocator, <type>uint32_t</type> memoryType, <type>VkDeviceMemory</type> memory, <type>VkDeviceSize</type> size));</type>
 	</types>
 </registry>
