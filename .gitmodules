@@ -1,0 +1,4 @@
+[submodule "VulkanMemoryAllocator"]
+	path = VulkanMemoryAllocator
+	url = https://github.com/gpuopen-librariesandsdks/VulkanMemoryAllocator/
+	branch = v2.3.0
