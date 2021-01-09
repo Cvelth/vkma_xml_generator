@@ -21,4 +21,4 @@ templated.project "generator"
     templated.kind "ConsoleApp"
     templated.files ""
     targetdir "bin/%{cfg.system}_%{cfg.buildcfg}"
-    depends "pugixml"
+    depends { "pugixml", "ctre" }

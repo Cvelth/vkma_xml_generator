@@ -8,3 +8,12 @@ pugixml:
 - depend: 
     include: default
     lib: default
+ctre:
+- github_release:
+    owner: hanickadot
+    name: compile-time-regular-expressions
+    tag: v3.3.4
+- install:
+    include: single-header/ctre*.hpp
+- depend:
+    include: include/single-header
