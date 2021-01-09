@@ -1,6 +1,26 @@
 <?xml version="1.0"?>
-<languages>
-	<english locale="us">true</english>
-	<日本語>true</日本語>
-	<Español>true</Español>
-</languages>
+<registry>
+	<comment>DO NOT MODIFY MANUALLY!</comment>
+	<comment>This file was generated using [generator](https://github.com/Cvelth/vma_xml_generator).</comment>
+	<comment>Generated files are licensed under [The Unlicense](https://unlicense.org).</comment>
+	<comment>The generator itself is licensed under [MIT License](https://www.mit.edu/~amini/LICENSE.md).</comment>
+	<comment>SPDX-License-Identifier: Unlicense.</comment>
+	<comment></comment>
+	<comment>This file was generated from xml 'doxygen' documentation for [vk_mem_alloc.h (VulkanMemoryAllocator)](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/blob/master/src/vk_mem_alloc.h) header.</comment>
+	<comment>It is intended to be used as [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hpp) generator input.</comment>
+	<comment>The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hpp/blob/master/vulkan/vulkan.hpp) compatible header - an improved c++ interface.</comment>
+	<types>
+		<type category="define">#define <name>VMA_RECORDING_ENABLED</name> 0</type>
+		<type category="define">#define <name>VMA_VULKAN_VERSION</name> 1000000</type>
+		<type category="define">#define <name>VMA_DEDICATED_ALLOCATION</name> 0</type>
+		<type category="define">#define <name>VMA_BIND_MEMORY2</name> 0</type>
+		<type category="define">#define <name>VMA_MEMORY_BUDGET</name> 0</type>
+		<type category="define">#define <name>VMA_STATS_STRING_ENABLED</name> 1</type>
+		<comment>Bitmask types</comment>
+		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaAllocatorCreateFlags</name>;</type>
+		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaRecordFlags</name>;</type>
+		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaAllocationCreateFlags</name>;</type>
+		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaPoolCreateFlags</name>;</type>
+		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaDefragmentationFlags</name>;</type>
+	</types>
+</registry>

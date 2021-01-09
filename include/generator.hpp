@@ -1,3 +1,6 @@
+// Copyright (c) 2021 Cvelth <cvelth.mail@gmail.com>
+// SPDX-License-Identifier: MIT
+
 #pragma once
 #include "pugixml.hpp"
 

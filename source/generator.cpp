@@ -1,4 +1,7 @@
-﻿#include "generator.hpp"
+﻿// Copyright (c) 2021 Cvelth <cvelth.mail@gmail.com>
+// SPDX-License-Identifier: MIT
+
+#include "generator.hpp"
 
 #include <iostream>
 #include <string_view>
@@ -170,14 +173,62 @@ std::optional<vma_xml::detail::data_t> vma_xml::parse(std::filesystem::path cons
 
 std::optional<pugi::xml_document> vma_xml::generate([[maybe_unused]] detail::data_t const &data) {
 	auto output = std::make_optional<pugi::xml_document>();
-	auto node = output->append_child("languages");
+	auto registry = output->append_child("registry");
 
-	auto english = node.append_child("english");
-	english.append_attribute("locale").set_value("us");
-	english.append_child(pugi::node_pcdata).set_value("true");
+	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
+		"DO NOT MODIFY MANUALLY!"
+	);
+	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
+		"This file was generated using [generator](https://github.com/Cvelth/vma_xml_generator)."
+	);
+	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
+		"Generated files are licensed under [The Unlicense](https://unlicense.org)."
+	);
+	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
+		"The generator itself is licensed under [MIT License](https://www.mit.edu/~amini/LICENSE.md)."
+	);
+	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
+		"SPDX-License-Identifier: Unlicense."
+	);
+	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
+		""
+	);
+	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
+		"This file was generated from xml 'doxygen' documentation for "
+		"[vk_mem_alloc.h (VulkanMemoryAllocator)](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/blob/master/src/vk_mem_alloc.h) "
+		"header."
+	);
+	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
+		"It is intended to be used as [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hpp) generator input."
+	);
+	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
+		"The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hpp/blob/master/vulkan/vulkan.hpp) "
+		"compatible header - an improved c++ interface."
+	);
 
-	node.append_child("日本語").append_child(pugi::node_pcdata).set_value("true");
-	node.append_child("Español").append_child(pugi::node_pcdata).set_value("true");
+	auto types = registry.append_child("types");
+	for (auto &define : data.defines) {
+		auto type = types.append_child("type");
+		type.append_attribute("category").set_value("define");
+		type.append_child(pugi::node_pcdata).set_value("#define ");
+		type.append_child("name").append_child(pugi::node_pcdata).set_value(define.name.data());
+		type.append_child(pugi::node_pcdata).set_value((" " + define.value).data());
+	}
+
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
+		"Bitmask types"
+	);
+	for (auto &type_def : data.typedefs)
+		if (type_def.type == "VkFlags") {
+			auto type = types.append_child("type");
+			type.append_attribute("category").set_value("bitmask");
+			type.append_child(pugi::node_pcdata).set_value("typedef ");
+			type.append_child("type").append_child(pugi::node_pcdata).set_value("VkFlags");
+			type.append_child(pugi::node_pcdata).set_value(" ");
+			type.append_child("name").append_child(pugi::node_pcdata).set_value(type_def.name.data());
+			type.append_child(pugi::node_pcdata).set_value(";");
+		}
+
 
 	return std::move(output);
 }
