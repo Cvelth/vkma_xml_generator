@@ -1,0 +1,10 @@
+tinyxml2:
+- github_release:
+    owner: leethomason
+    tag: "8.0.0"
+- cmake:
+    options: >
+        -DBUILD_SHARED_LIBS=OFF
+- depend: 
+    include: default
+    lib: default
