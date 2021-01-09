@@ -13,20 +13,84 @@ std::optional<pugi::xml_document> vma_xml::detail::load_xml(std::filesystem::pat
 			<< result.description() << '\n';
 	return std::nullopt;
 }
+
+std::string to_string(pugi::xml_node const &xml) {
+	std::string output;
+	for (auto &child : xml.children())
+		if (child.type() == pugi::xml_node_type::node_pcdata)
+			output += child.value();
+		else if (child.name() == "ref"sv)
+			output += child.child_value();
+		else
+			std::cout << "Warning: Ignore an unknown tag: '" << child.name() << "'.\n";
+	return output;
+}
+
 std::optional<vma_xml::detail::variable_t> vma_xml::detail::parse_variable(pugi::xml_node const &xml) {
 	if (auto name = xml.child("name"), type = xml.child("type"); name && type)
-		if (auto child = type.first_child(); child.type() == pugi::xml_node_type::node_pcdata)
-			return std::make_optional<vma_xml::detail::variable_t>(name.child_value(), type.child_value());
-		else if (child.name() == "ref"sv)
-			return std::make_optional<vma_xml::detail::variable_t>(name.child_value(), child.child_value());
+		return std::make_optional<variable_t>(to_string(name), to_string(type));
+	return std::nullopt;
+}
+std::optional<vma_xml::detail::define_t> vma_xml::detail::parse_define(pugi::xml_node const &xml) {
+	if (auto name = xml.child("name"), value = xml.child("initializer"); name && value)
+		return std::make_optional<define_t>(to_string(name), to_string(value));
+	return std::nullopt;
+}
+std::optional<vma_xml::detail::enum_value_t> vma_xml::detail::parse_enum_value(pugi::xml_node const &xml) {
+	if (auto name = xml.child("name"), value = xml.child("initializer"); name && value)
+		if (auto value_str = to_string(value); std::string_view(value_str).substr(0, 2) == "= ")
+			return std::make_optional<enum_value_t>(to_string(name), value_str.substr(2));
 		else
-			std::cout << "Warning: Ignore a variable with unknown type: '" << name.child_value() << "'.\n";
+			return std::make_optional<enum_value_t>(to_string(name), value_str);
+	return std::nullopt;
+}
+std::optional<vma_xml::detail::enum_t> vma_xml::detail::parse_enum(pugi::xml_node const &xml) {
+	enum_t output;
+	for (auto &child : xml.children())
+		if (child.name() == "type"sv)
+			if (auto string = to_string(child); string != "")
+				output.type = string;
+			else
+				output.type = std::nullopt;
+		else if (child.name() == "name"sv)
+			output.name = to_string(child);
+		else if (child.name() == "enumvalue"sv)
+			if (auto value = parse_enum_value(child); value)
+				output.values.emplace_back(*value);
+	if (output.name != "")
+		return output;
+	else
+		return std::nullopt;
+}
+std::optional<vma_xml::detail::typedef_t> vma_xml::detail::parse_typedef(pugi::xml_node const &xml) {
+	if (auto name = xml.child("name"), type = xml.child("type"), args = xml.child("argsstring"); name && type && args)
+		return std::make_optional<typedef_t>(to_string(name), to_string(type) + to_string(args));
+	return std::nullopt;
+}
+std::optional<vma_xml::detail::variable_t> vma_xml::detail::parse_function_parameter(pugi::xml_node const &xml) {
+	if (auto name = xml.child("declname"), type = xml.child("type"); name && type)
+		return std::make_optional<variable_t>(to_string(name), to_string(type));
+	return std::nullopt;
+}
+std::optional<vma_xml::detail::function_t> vma_xml::detail::parse_function(pugi::xml_node const &xml) {
+	function_t output;
+	for (auto &child : xml.children())
+		if (child.name() == "type"sv)
+			output.return_type = to_string(child);
+		else if (child.name() == "name"sv)
+			output.name = to_string(child);
+		else if (child.name() == "param"sv)
+			if (auto parameter = parse_function_parameter(child); parameter)
+				output.parameters.emplace_back(*parameter);
+	if (output.name != "" && output.return_type != "")
+		return output;
+	else
 		return std::nullopt;
 }
 
 bool vma_xml::detail::parse_struct(pugi::xml_node const &xml, detail::data_t &data) {
 	struct_t output;
-	for (auto &child : xml.children()) {
+	for (auto &child : xml.children())
 		if (child.name() == "compoundname"sv)
 			output.name = child.child_value();
 		else if (child.name() == "sectiondef"sv)
@@ -40,7 +104,6 @@ bool vma_xml::detail::parse_struct(pugi::xml_node const &xml, detail::data_t &da
 							<< "'. Only variables are supported.\n";
 				else
 					std::cout << "Warning: Ignore unknown struct member: '" << member.name() << "'.\n";
-	}
 
 	if (output.name != "") {
 		data.structs.emplace_back(std::move(output));
@@ -49,7 +112,25 @@ bool vma_xml::detail::parse_struct(pugi::xml_node const &xml, detail::data_t &da
 		std::cout << "Warning: Ignore a struct compound without a name.\n";
 	return false;
 }
-bool vma_xml::detail::parse_file(pugi::xml_node const &, detail::data_t &) {
+bool vma_xml::detail::parse_file(pugi::xml_node const &xml, detail::data_t &data) {
+	for (auto &child : xml.children())
+		if (child.name() == "sectiondef"sv)
+			for (auto &member : child.children())
+				if (member.name() == "memberdef"sv)
+					if (auto kind = member.attribute("kind").value(); kind == "define"sv) {
+						if (auto define = parse_define(member); define)
+							data.defines.emplace_back(*define);
+					} else if (kind == "enum"sv) {
+						if (auto enumeration = parse_enum(member); enumeration)
+							data.enums.emplace_back(*enumeration);
+					} else if (kind == "typedef"sv) {
+						if (auto type_def = parse_typedef(member); type_def)
+							data.typedefs.emplace_back(*type_def);
+					} else if (kind == "function"sv) {
+						if (auto function = parse_function(member); function)
+							data.functions.emplace_back(*function);
+					}
+
 	return false;
 }
 
@@ -128,88 +209,3 @@ int main(int argc, char **argv) {
 	return 0;
 }
 #endif
-
-//vma_xml::detail::variable_t vma_xml::parse_variable(pugi::xml_node const &input, std::string_view refid) {
-//	return vma_xml::detail::variable_t {
-//		.name = name_only(input),
-//		.refid = refid
-//	};
-//}
-//std::optional<vma_xml::detail::struct_t> vma_xml::detail::parse_struct(pugi::xml_node const &input, 
-//																	   std::string_view refid) {
-//	if (auto index_xml = load_xml(directory.string() + "/index.xml"); index_xml)
-//		if (auto index = index_xml->child("doxygenindex"); index) {
-//	
-//	vma_xml::detail::struct_t output; output.refid = refid;
-//	for (auto const &child : input.children())
-//		if (child.name() == "name"sv)
-//			output.name = child.child_value();
-//		else if (child.name() == "member"sv)
-//			if (auto entity = parse_attributes(child); entity.kind == "variable"sv)
-//				output.variables.emplace_back(parse_variable(child, entity.refid));
-//			else
-//				std::cout << "Warning: Ignore a struct member: '" 
-//					<< entity.kind << "'. Only variables are supported.\n";
-//		else
-//			std::cout << "Warning: Ignore an unknown child: " << child.name() << ".\n";
-//	return output;
-//}
-
-//vma_xml::detail::define_t vma_xml::parse_define(pugi::xml_node const &input, std::string_view refid) {
-//	return vma_xml::detail::define_t {
-//		.name = name_only(input),
-//		.refid = refid
-//	};
-//}
-//vma_xml::detail::enum_t vma_xml::parse_enum(pugi::xml_node const &input, std::string_view refid) {
-//	return vma_xml::detail::enum_t{
-//		.name = name_only(input),
-//		.refid = refid
-//	};
-//}
-//vma_xml::detail::enum_value_t vma_xml::parse_enumvalue(pugi::xml_node const &input, std::string_view refid) {
-//	return vma_xml::detail::enum_value_t {
-//		.name = name_only(input),
-//		.refid = refid
-//	};
-//}
-//vma_xml::detail::typedef_t vma_xml::parse_typedef(pugi::xml_node const &input, std::string_view refid) {
-//	return vma_xml::detail::typedef_t {
-//		.name = name_only(input),
-//		.refid = refid
-//	};
-//}
-//vma_xml::detail::function_t vma_xml::parse_function(pugi::xml_node const &input, std::string_view refid) {
-//	return vma_xml::detail::function_t{
-//		.name = name_only(input),
-//		.refid = refid
-//	};
-//}
-//vma_xml::detail::file_t vma_xml::parse_file(pugi::xml_node const &input, std::string_view refid) {
-//	detail::file_t output; output.refid = refid;
-//	for (auto const &child : input.children())
-//		if (child.name() == "name"sv)
-//			output.name = child.child_value();
-//		else if (child.name() == "member"sv)
-//			if (auto entity = parse_attributes(child); entity.kind == "define"sv)
-//				output.defines.emplace_back(parse_define(child, entity.refid));
-//			else if (entity.kind == "enum"sv)
-//				output.enums.emplace_back(parse_enum(child, entity.refid));
-//			else if (entity.kind == "enumvalue"sv)
-//				if (!output.enums.empty())
-//					output.enums.back().values.emplace_back(
-//						parse_enumvalue(child, entity.refid)
-//					);
-//				else
-//					std::cout << "Warning: Ignore enumvalue: no enums were defined.";
-//			else if (entity.kind == "typedef"sv)
-//				output.typedefs.emplace_back(parse_typedef(child, entity.refid));
-//			else if (entity.kind == "function"sv)
-//				output.functions.emplace_back(parse_function(child, entity.refid));
-//			else
-//				std::cout << "Warning: Ignore an unknown file member: '"
-//					<< entity.kind << "'.\n";
-//		else
-//			std::cout << "Warning: Ignore an unknown child: " << child.name() << ".\n";
-//	return output;
-//}
