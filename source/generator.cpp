@@ -311,6 +311,9 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 	// Skip 'platforms' if it can be avoided
 	registry.append_child("platforms");
 
+	// Skip 'tags' if it can be avoided
+	registry.append_child("tags");
+
 	auto types = registry.append_child("types");
 	for (auto &define : data.defines) {
 		auto type = types.append_child("type");
