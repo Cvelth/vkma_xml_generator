@@ -90,7 +90,6 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		<type category="funcpointer">typedef void(VKAPI_PTR *<name>PFN_vmaFreeDeviceMemoryFunction</name>)(<type>VmaAllocator</type> allocator, <type>uint32_t</type> memoryType, <type>VkDeviceMemory</type> memory, <type>VkDeviceSize</type> size);</type>
 		<comment>____</comment>
 		<comment>Struct types</comment>
-		<type category="struct" name="VmaAllocation" />
 		<type category="struct" name="VmaAllocationCreateInfo">
 			<member>
 				<type>VmaAllocationCreateFlags</type> <name>flags</name>
@@ -134,7 +133,6 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 				<type>void *</type> <name>pUserData</name>
 			</member>
 		</type>
-		<type category="struct" name="VmaAllocator" />
 		<type category="struct" name="VmaAllocatorCreateInfo">
 			<member>
 				<type>VmaAllocatorCreateFlags</type> <name>flags</name>
@@ -187,7 +185,6 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 				<type>VkDeviceSize</type> <name>budget</name>
 			</member>
 		</type>
-		<type category="struct" name="VmaDefragmentationContext" />
 		<type category="struct" name="VmaDefragmentationInfo">
 			<member>
 				<type>VkDeviceSize</type> <name>maxBytesToMove</name>
@@ -253,7 +250,6 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 				<type>PFN_vmaFreeDeviceMemoryFunction</type> <name>pfnFree</name>
 			</member>
 		</type>
-		<type category="struct" name="VmaPool" />
 		<type category="struct" name="VmaPoolCreateInfo">
 			<member>
 				<type>uint32_t</type> <name>memoryTypeIndex</name>

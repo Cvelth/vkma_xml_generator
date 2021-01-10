@@ -471,20 +471,22 @@ void append_function_pointer(pugi::xml_node &types, std::vector<vma_xml::detail:
 			);
 		}
 }
-void append_struct(pugi::xml_node &types, std::vector<vma_xml::detail::struct_t> const &structs) {
+void append_struct(pugi::xml_node &types, std::vector<vma_xml::detail::struct_t> const &structs, 
+				   std::set<std::string> handle_names) {
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("Struct types");
-	for (auto &structure : structs) {
-		auto type = types.append_child("type");
-		type.append_attribute("category").set_value("struct");
-		type.append_attribute("name").set_value(structure.name.data());
-		for (auto &variable : structure.variables) {
-			auto member = type.append_child("member");
-			member.append_child("type").append_child(pugi::node_pcdata).set_value(variable.type.data());
-			member.append_child(pugi::node_pcdata).set_value(" ");
-			member.append_child("name").append_child(pugi::node_pcdata).set_value(variable.name.data());
+	for (auto &structure : structs) 
+		if (!handle_names.contains(structure.name)) {
+			auto type = types.append_child("type");
+			type.append_attribute("category").set_value("struct");
+			type.append_attribute("name").set_value(structure.name.data());
+			for (auto &variable : structure.variables) {
+				auto member = type.append_child("member");
+				member.append_child("type").append_child(pugi::node_pcdata).set_value(variable.type.data());
+				member.append_child(pugi::node_pcdata).set_value(" ");
+				member.append_child("name").append_child(pugi::node_pcdata).set_value(variable.name.data());
+			}
 		}
-	}
 }
 
 void append_enumerations(pugi::xml_node &registry, std::vector<vma_xml::detail::enum_t> const &enumerations) {
@@ -600,7 +602,7 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 		append_handle(types, data.handle_names);
 		append_enum(types, data.enums);
 		append_function_pointer(types, data.typedefs);
-		append_struct(types, data.structs);
+		append_struct(types, data.structs, data.handle_names);
 	}
 	append_enumerations(registry, data.enums);
 	append_commands(registry, data.functions);
