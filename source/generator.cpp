@@ -295,12 +295,15 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 	);
 
 	// Skip 'platforms' if it can be avoided
-	registry.append_child("platforms");
+	auto platforms = registry.append_child("platforms");
+	platforms.append_attribute("comment").set_value("empty");
 
 	// Skip 'tags' if it can be avoided
-	registry.append_child("tags");
+	auto tags = registry.append_child("tags");
+	tags.append_attribute("comment").set_value("empty");
 
 	auto types = registry.append_child("types");
+	types.append_attribute("comment").set_value("VMA type definitions");
 	for (auto &define : data.defines) {
 		auto type = types.append_child("type");
 		type.append_attribute("category").set_value("define");
@@ -450,6 +453,7 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 		"VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, "
 		"VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT";
 	auto commands = registry.append_child("commands");
+	commands.append_attribute("comment").set_value("VMA command definitions");
 	for (auto &function : data.functions) {
 		auto command = commands.append_child("command");
 		if (function.return_type == "VkResult") {
@@ -470,16 +474,20 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 	}
 
 	// Skip 'feature' if it can be avoided
-	registry.append_child("feature");
+	auto feature = registry.append_child("feature");
+	feature.append_attribute("comment").set_value("empty");
 
 	// Skip 'extensions' if it can be avoided
-	registry.append_child("extensions");
+	auto extensions = registry.append_child("extensions");
+	extensions.append_attribute("comment").set_value("empty");
 
 	// Skip 'spirvextensions' if it can be avoided
-	registry.append_child("spirvextensions");
+	auto spirvextensions = registry.append_child("spirvextensions");
+	spirvextensions.append_attribute("comment").set_value("empty");
 
 	// Skip 'spirvcapabilities' if it can be avoided
-	registry.append_child("spirvcapabilities");
+	auto spirvcapabilities = registry.append_child("spirvcapabilities");
+	spirvcapabilities.append_attribute("comment").set_value("empty");
 
 	return std::move(output);
 }
