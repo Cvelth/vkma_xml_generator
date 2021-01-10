@@ -41,6 +41,25 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		<type requires="vulkan" name="size_t" />
 		<type name="int" />
 		<comment>____</comment>
+		<comment>Vulkan types</comment>
+		<type requires="vulkan" name="VkAllocationCallbacks" />
+		<type requires="vulkan" name="VkBool32" />
+		<type requires="vulkan" name="VkBuffer" />
+		<type requires="vulkan" name="VkBufferCreateInfo" />
+		<type requires="vulkan" name="VkCommandBuffer" />
+		<type requires="vulkan" name="VkDevice" />
+		<type requires="vulkan" name="VkDeviceMemory" />
+		<type requires="vulkan" name="VkDeviceSize" />
+		<type requires="vulkan" name="VkImage" />
+		<type requires="vulkan" name="VkImageCreateInfo" />
+		<type requires="vulkan" name="VkInstance" />
+		<type requires="vulkan" name="VkMemoryPropertyFlags" />
+		<type requires="vulkan" name="VkMemoryRequirements" />
+		<type requires="vulkan" name="VkPhysicalDevice" />
+		<type requires="vulkan" name="VkPhysicalDeviceMemoryProperties" />
+		<type requires="vulkan" name="VkPhysicalDeviceProperties" />
+		<type requires="vulkan" name="VkResult" />
+		<comment>____</comment>
 		<comment>Bitmask types</comment>
 		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaAllocatorCreateFlags</name>;</type>
 		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaRecordFlags</name>;</type>

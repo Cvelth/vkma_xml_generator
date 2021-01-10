@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
+#include <set>
 #include <string_view>
 using namespace std::literals;
 
@@ -186,7 +187,36 @@ std::vector<std::string> get_handles(std::string_view source_view) {
 
 	return output;
 }
-bool vma_xml::detail::parse_header(std::filesystem::path const &path, [[maybe_unused]] detail::data_t &data) {
+void extract_vk_name(std::string_view type, std::set<std::string> &output) {
+	if (type.size() > 6 && type.substr(0, 6) == "const ")
+		extract_vk_name(type.substr(6), output);
+	else if (type.size() > 6 && type.substr(type.size() - 6) == " const")
+		extract_vk_name(type.substr(0, type.size() - 6), output);
+	else if (type.size() > 2 && type.substr(type.size() - 3) == " **")
+		extract_vk_name(type.substr(0, type.size() - 3), output);
+	else if (type.size() > 2 && type.substr(type.size() - 2) == " *")
+		extract_vk_name(type.substr(0, type.size() - 2), output);
+	else
+		if (type.size() > 2 && type.substr(0, 2) == "Vk")
+			output.emplace(std::string(type));
+}
+std::vector<std::string> extract_vk_names(vma_xml::detail::data_t const &data) {
+	std::set<std::string> output;
+	for (auto &structure : data.structs)
+		for (auto &variable : structure.variables)
+			extract_vk_name(variable.type, output);
+	for (auto &function : data.functions) {
+		extract_vk_name(function.return_type, output);
+		for (auto &parameter : function.parameters)
+			extract_vk_name(parameter.type, output);
+	}
+
+	std::vector<std::string> vector_output;
+	vector_output.reserve(output.size());
+	std::ranges::move(output, std::back_inserter(vector_output));
+	return vector_output;
+}
+bool vma_xml::detail::parse_header(std::filesystem::path const &path, detail::data_t &data) {
 	std::ifstream stream(path, std::fstream::ate);
 	if (stream) {
 		size_t source_size = stream.tellg();
@@ -195,6 +225,7 @@ bool vma_xml::detail::parse_header(std::filesystem::path const &path, [[maybe_un
 		stream.read(source.data(), source_size);
 		
 		data.handle_names = get_handles(source);
+		data.vulkan_type_names = extract_vk_names(data);
 
 		return true;
 	} else
@@ -361,6 +392,16 @@ void append_basic(pugi::xml_node &types) {
 	type_size_t.append_attribute("name").set_value("size_t");
 	auto type_int = types.append_child("type");
 	type_int.append_attribute("name").set_value("int");
+}
+
+void append_vulkan(pugi::xml_node &types, std::vector<std::string> const &vulkan_type_names) {
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value("Vulkan types");
+	for (auto &type_name : vulkan_type_names) {
+		auto type = types.append_child("type");
+		type.append_attribute("requires").set_value("vulkan");
+		type.append_attribute("name").set_value(type_name.data());
+	}
 }
 
 void append_bitmask(pugi::xml_node &types, std::vector<vma_xml::detail::typedef_t> const &typedefs) {
@@ -546,6 +587,7 @@ void append_misc(pugi::xml_node &registry) {
 	auto spirvcapabilities = registry.append_child("spirvcapabilities");
 	spirvcapabilities.append_attribute("comment").set_value("empty");
 }
+
 std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) {
 	auto output = std::make_optional<pugi::xml_document>();
 	auto registry = output->append_child("registry");
@@ -558,6 +600,7 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 		append_includes(types);
 		append_defines(types, data.defines);
 		append_basic(types);
+		append_vulkan(types, data.vulkan_type_names);
 		append_bitmask(types, data.typedefs);
 		append_handle(types, data.handle_names);
 		append_enum(types, data.enums);
