@@ -399,13 +399,21 @@ void append_vulkan(pugi::xml_node &types, std::set<std::string> const &vulkan_ty
 	}
 }
 
-void append_bitmask(pugi::xml_node &types, std::vector<vma_xml::detail::typedef_t> const &typedefs) {
+void append_bitmask(pugi::xml_node &types, std::vector<vma_xml::detail::typedef_t> const &typedefs,
+					std::vector<vma_xml::detail::enum_t> const &enums) {
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("Bitmask types");
 	for (auto &type_def : typedefs)
 		if (type_def.type == "VkFlags") {
 			auto type = types.append_child("type");
 			type.append_attribute("category").set_value("bitmask");
+			if (auto iterator = std::ranges::find_if(enums, [&type_def](auto const &enumeration) {
+				return std::string_view(type_def.name).substr(type_def.name.size() - 5) == "Flags"
+					&& enumeration.name == (type_def.name.substr(0, type_def.name.size() - 1) + "Bits");
+			}); iterator != enums.end())
+				type.append_attribute("requires").set_value(iterator->name.data());
+			else
+				type.append_attribute("requires").set_value("none");
 			type.append_child(pugi::node_pcdata).set_value("typedef ");
 			type.append_child("type").append_child(pugi::node_pcdata).set_value("VkFlags");
 			type.append_child(pugi::node_pcdata).set_value(" ");
@@ -598,7 +606,7 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 		append_defines(types, data.defines);
 		append_basic(types);
 		append_vulkan(types, data.vulkan_type_names);
-		append_bitmask(types, data.typedefs);
+		append_bitmask(types, data.typedefs, data.enums);
 		append_handle(types, data.handle_names);
 		append_enum(types, data.enums);
 		append_function_pointer(types, data.typedefs);

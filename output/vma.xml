@@ -61,11 +61,11 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		<type requires="vulkan" name="VkResult" />
 		<comment>____</comment>
 		<comment>Bitmask types</comment>
-		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaAllocatorCreateFlags</name>;</type>
-		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaRecordFlags</name>;</type>
-		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaAllocationCreateFlags</name>;</type>
-		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaPoolCreateFlags</name>;</type>
-		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaDefragmentationFlags</name>;</type>
+		<type category="bitmask" requires="VmaAllocatorCreateFlagBits">typedef <type>VkFlags</type> <name>VmaAllocatorCreateFlags</name>;</type>
+		<type category="bitmask" requires="VmaRecordFlagBits">typedef <type>VkFlags</type> <name>VmaRecordFlags</name>;</type>
+		<type category="bitmask" requires="VmaAllocationCreateFlagBits">typedef <type>VkFlags</type> <name>VmaAllocationCreateFlags</name>;</type>
+		<type category="bitmask" requires="VmaPoolCreateFlagBits">typedef <type>VkFlags</type> <name>VmaPoolCreateFlags</name>;</type>
+		<type category="bitmask" requires="VmaDefragmentationFlagBits">typedef <type>VkFlags</type> <name>VmaDefragmentationFlags</name>;</type>
 		<comment>____</comment>
 		<comment>Handle types</comment>
 		<type category="handle" objtypeenum="VMA_OBJECT_TYPE_ALLOCATION">
