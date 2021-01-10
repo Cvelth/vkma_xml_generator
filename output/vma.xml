@@ -103,7 +103,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</member>
 			<member><type>VmaPool</type> <name>pool</name>
 			</member>
-			<member><type>void</type> * <name>pUserData</name>
+			<member><type>void</type>* <name>pUserData</name>
 			</member>
 		</type>
 		<type category="struct" name="VmaAllocationInfo">
@@ -115,9 +115,9 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</member>
 			<member><type>VkDeviceSize</type> <name>size</name>
 			</member>
-			<member><type>void</type> * <name>pMappedData</name>
+			<member><type>void</type>* <name>pMappedData</name>
 			</member>
-			<member><type>void</type> * <name>pUserData</name>
+			<member><type>void</type>* <name>pUserData</name>
 			</member>
 		</type>
 		<type category="struct" name="VmaAllocatorCreateInfo">
@@ -129,17 +129,17 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</member>
 			<member><type>VkDeviceSize</type> <name>preferredLargeHeapBlockSize</name>
 			</member>
-			<member>const <type>VkAllocationCallbacks</type> * <name>pAllocationCallbacks</name>
+			<member>const <type>VkAllocationCallbacks</type>* <name>pAllocationCallbacks</name>
 			</member>
-			<member>const <type>VmaDeviceMemoryCallbacks</type> * <name>pDeviceMemoryCallbacks</name>
+			<member>const <type>VmaDeviceMemoryCallbacks</type>* <name>pDeviceMemoryCallbacks</name>
 			</member>
 			<member><type>uint32_t</type> <name>frameInUseCount</name>
 			</member>
-			<member>const <type>VkDeviceSize</type> * <name>pHeapSizeLimit</name>
+			<member>const <type>VkDeviceSize</type>* <name>pHeapSizeLimit</name>
 			</member>
-			<member>const <type>VmaVulkanFunctions</type> * <name>pVulkanFunctions</name>
+			<member>const <type>VmaVulkanFunctions</type>* <name>pVulkanFunctions</name>
 			</member>
-			<member>const <type>VmaRecordSettings</type> * <name>pRecordSettings</name>
+			<member>const <type>VmaRecordSettings</type>* <name>pRecordSettings</name>
 			</member>
 			<member><type>VkInstance</type> <name>instance</name>
 			</member>
@@ -167,13 +167,13 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</member>
 			<member><type>uint32_t</type> <name>allocationCount</name>
 			</member>
-			<member><type>VmaAllocation</type> * <name>pAllocations</name>
+			<member><type>VmaAllocation</type>* <name>pAllocations</name>
 			</member>
-			<member><type>VkBool32</type> * <name>pAllocationsChanged</name>
+			<member><type>VkBool32</type>* <name>pAllocationsChanged</name>
 			</member>
 			<member><type>uint32_t</type> <name>poolCount</name>
 			</member>
-			<member><type>VmaPool</type> * <name>pPools</name>
+			<member><type>VmaPool</type>* <name>pPools</name>
 			</member>
 			<member><type>VkDeviceSize</type> <name>maxCpuBytesToMove</name>
 			</member>
@@ -233,7 +233,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		<type category="struct" name="VmaRecordSettings">
 			<member><type>VmaRecordFlags</type> <name>flags</name>
 			</member>
-			<member>const <type>char</type> * <name>pFilePath</name>
+			<member>const <type>char</type>* <name>pFilePath</name>
 			</member>
 		</type>
 		<type category="struct" name="VmaStatInfo">
@@ -366,9 +366,9 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<proto>
 				<type>VkResult</type> <name>vmaCreateAllocator</name>
 			</proto>
-			<param>const <type>VmaAllocatorCreateInfo</type> * <name>pCreateInfo</name>
+			<param>const <type>VmaAllocatorCreateInfo</type>* <name>pCreateInfo</name>
 			</param>
-			<param><type>VmaAllocator</type> * <name>pAllocator</name>
+			<param><type>VmaAllocator</type>* <name>pAllocator</name>
 			</param>
 		</command>
 		<command>
@@ -384,7 +384,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</proto>
 			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>const <type>VkPhysicalDeviceProperties</type> ** <name>ppPhysicalDeviceProperties</name>
+			<param>const <type>VkPhysicalDeviceProperties</type>** <name>ppPhysicalDeviceProperties</name>
 			</param>
 		</command>
 		<command>
@@ -393,7 +393,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</proto>
 			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>const <type>VkPhysicalDeviceMemoryProperties</type> ** <name>ppPhysicalDeviceMemoryProperties</name>
+			<param>const <type>VkPhysicalDeviceMemoryProperties</type>** <name>ppPhysicalDeviceMemoryProperties</name>
 			</param>
 		</command>
 		<command>
@@ -404,7 +404,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</param>
 			<param><type>uint32_t</type> <name>memoryTypeIndex</name>
 			</param>
-			<param><type>VkMemoryPropertyFlags</type> * <name>pFlags</name>
+			<param><type>VkMemoryPropertyFlags</type>* <name>pFlags</name>
 			</param>
 		</command>
 		<command>
@@ -422,7 +422,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</proto>
 			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param><type>VmaStats</type> * <name>pStats</name>
+			<param><type>VmaStats</type>* <name>pStats</name>
 			</param>
 		</command>
 		<command>
@@ -431,7 +431,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</proto>
 			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param><type>VmaBudget</type> * <name>pBudget</name>
+			<param><type>VmaBudget</type>* <name>pBudget</name>
 			</param>
 		</command>
 		<command>
@@ -440,7 +440,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</proto>
 			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param><type>char</type> ** <name>ppStatsString</name>
+			<param><type>char</type>** <name>ppStatsString</name>
 			</param>
 			<param><type>VkBool32</type> <name>detailedMap</name>
 			</param>
@@ -451,7 +451,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</proto>
 			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param><type>char</type> * <name>pStatsString</name>
+			<param><type>char</type>* <name>pStatsString</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
@@ -462,9 +462,9 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</param>
 			<param><type>uint32_t</type> <name>memoryTypeBits</name>
 			</param>
-			<param>const <type>VmaAllocationCreateInfo</type> * <name>pAllocationCreateInfo</name>
+			<param>const <type>VmaAllocationCreateInfo</type>* <name>pAllocationCreateInfo</name>
 			</param>
-			<param><type>uint32_t</type> * <name>pMemoryTypeIndex</name>
+			<param><type>uint32_t</type>* <name>pMemoryTypeIndex</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
@@ -473,11 +473,11 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</proto>
 			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>const <type>VkBufferCreateInfo</type> * <name>pBufferCreateInfo</name>
+			<param>const <type>VkBufferCreateInfo</type>* <name>pBufferCreateInfo</name>
 			</param>
-			<param>const <type>VmaAllocationCreateInfo</type> * <name>pAllocationCreateInfo</name>
+			<param>const <type>VmaAllocationCreateInfo</type>* <name>pAllocationCreateInfo</name>
 			</param>
-			<param><type>uint32_t</type> * <name>pMemoryTypeIndex</name>
+			<param><type>uint32_t</type>* <name>pMemoryTypeIndex</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
@@ -486,11 +486,11 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</proto>
 			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>const <type>VkImageCreateInfo</type> * <name>pImageCreateInfo</name>
+			<param>const <type>VkImageCreateInfo</type>* <name>pImageCreateInfo</name>
 			</param>
-			<param>const <type>VmaAllocationCreateInfo</type> * <name>pAllocationCreateInfo</name>
+			<param>const <type>VmaAllocationCreateInfo</type>* <name>pAllocationCreateInfo</name>
 			</param>
-			<param><type>uint32_t</type> * <name>pMemoryTypeIndex</name>
+			<param><type>uint32_t</type>* <name>pMemoryTypeIndex</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
@@ -499,9 +499,9 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</proto>
 			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>const <type>VmaPoolCreateInfo</type> * <name>pCreateInfo</name>
+			<param>const <type>VmaPoolCreateInfo</type>* <name>pCreateInfo</name>
 			</param>
-			<param><type>VmaPool</type> * <name>pPool</name>
+			<param><type>VmaPool</type>* <name>pPool</name>
 			</param>
 		</command>
 		<command>
@@ -521,7 +521,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</param>
 			<param><type>VmaPool</type> <name>pool</name>
 			</param>
-			<param><type>VmaPoolStats</type> * <name>pPoolStats</name>
+			<param><type>VmaPoolStats</type>* <name>pPoolStats</name>
 			</param>
 		</command>
 		<command>
@@ -532,7 +532,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</param>
 			<param><type>VmaPool</type> <name>pool</name>
 			</param>
-			<param><type>size_t</type> * <name>pLostAllocationCount</name>
+			<param><type>size_t</type>* <name>pLostAllocationCount</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
@@ -552,7 +552,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</param>
 			<param><type>VmaPool</type> <name>pool</name>
 			</param>
-			<param>const <type>char</type> ** <name>ppName</name>
+			<param>const <type>char</type>** <name>ppName</name>
 			</param>
 		</command>
 		<command>
@@ -563,7 +563,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</param>
 			<param><type>VmaPool</type> <name>pool</name>
 			</param>
-			<param>const <type>char</type> * <name>pName</name>
+			<param>const <type>char</type>* <name>pName</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
@@ -572,13 +572,13 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</proto>
 			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>const <type>VkMemoryRequirements</type> * <name>pVkMemoryRequirements</name>
+			<param>const <type>VkMemoryRequirements</type>* <name>pVkMemoryRequirements</name>
 			</param>
-			<param>const <type>VmaAllocationCreateInfo</type> * <name>pCreateInfo</name>
+			<param>const <type>VmaAllocationCreateInfo</type>* <name>pCreateInfo</name>
 			</param>
-			<param><type>VmaAllocation</type> * <name>pAllocation</name>
+			<param><type>VmaAllocation</type>* <name>pAllocation</name>
 			</param>
-			<param><type>VmaAllocationInfo</type> * <name>pAllocationInfo</name>
+			<param><type>VmaAllocationInfo</type>* <name>pAllocationInfo</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
@@ -587,15 +587,15 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</proto>
 			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>const <type>VkMemoryRequirements</type> * <name>pVkMemoryRequirements</name>
+			<param>const <type>VkMemoryRequirements</type>* <name>pVkMemoryRequirements</name>
 			</param>
-			<param>const <type>VmaAllocationCreateInfo</type> * <name>pCreateInfo</name>
+			<param>const <type>VmaAllocationCreateInfo</type>* <name>pCreateInfo</name>
 			</param>
 			<param><type>size_t</type> <name>allocationCount</name>
 			</param>
-			<param><type>VmaAllocation</type> * <name>pAllocations</name>
+			<param><type>VmaAllocation</type>* <name>pAllocations</name>
 			</param>
-			<param><type>VmaAllocationInfo</type> * <name>pAllocationInfo</name>
+			<param><type>VmaAllocationInfo</type>* <name>pAllocationInfo</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
@@ -606,11 +606,11 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</param>
 			<param><type>VkBuffer</type> <name>buffer</name>
 			</param>
-			<param>const <type>VmaAllocationCreateInfo</type> * <name>pCreateInfo</name>
+			<param>const <type>VmaAllocationCreateInfo</type>* <name>pCreateInfo</name>
 			</param>
-			<param><type>VmaAllocation</type> * <name>pAllocation</name>
+			<param><type>VmaAllocation</type>* <name>pAllocation</name>
 			</param>
-			<param><type>VmaAllocationInfo</type> * <name>pAllocationInfo</name>
+			<param><type>VmaAllocationInfo</type>* <name>pAllocationInfo</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
@@ -621,11 +621,11 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</param>
 			<param><type>VkImage</type> <name>image</name>
 			</param>
-			<param>const <type>VmaAllocationCreateInfo</type> * <name>pCreateInfo</name>
+			<param>const <type>VmaAllocationCreateInfo</type>* <name>pCreateInfo</name>
 			</param>
-			<param><type>VmaAllocation</type> * <name>pAllocation</name>
+			<param><type>VmaAllocation</type>* <name>pAllocation</name>
 			</param>
-			<param><type>VmaAllocationInfo</type> * <name>pAllocationInfo</name>
+			<param><type>VmaAllocationInfo</type>* <name>pAllocationInfo</name>
 			</param>
 		</command>
 		<command>
@@ -645,7 +645,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</param>
 			<param><type>size_t</type> <name>allocationCount</name>
 			</param>
-			<param><type>VmaAllocation</type> * <name>pAllocations</name>
+			<param><type>VmaAllocation</type>* <name>pAllocations</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
@@ -667,7 +667,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</param>
 			<param><type>VmaAllocation</type> <name>allocation</name>
 			</param>
-			<param><type>VmaAllocationInfo</type> * <name>pAllocationInfo</name>
+			<param><type>VmaAllocationInfo</type>* <name>pAllocationInfo</name>
 			</param>
 		</command>
 		<command>
@@ -687,7 +687,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</param>
 			<param><type>VmaAllocation</type> <name>allocation</name>
 			</param>
-			<param><type>void</type> * <name>pUserData</name>
+			<param><type>void</type>* <name>pUserData</name>
 			</param>
 		</command>
 		<command>
@@ -696,7 +696,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</proto>
 			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param><type>VmaAllocation</type> * <name>pAllocation</name>
+			<param><type>VmaAllocation</type>* <name>pAllocation</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
@@ -707,7 +707,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</param>
 			<param><type>VmaAllocation</type> <name>allocation</name>
 			</param>
-			<param><type>void</type> ** <name>ppData</name>
+			<param><type>void</type>** <name>ppData</name>
 			</param>
 		</command>
 		<command>
@@ -760,11 +760,11 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</proto>
 			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>const <type>VmaDefragmentationInfo2</type> * <name>pInfo</name>
+			<param>const <type>VmaDefragmentationInfo2</type>* <name>pInfo</name>
 			</param>
-			<param><type>VmaDefragmentationStats</type> * <name>pStats</name>
+			<param><type>VmaDefragmentationStats</type>* <name>pStats</name>
 			</param>
-			<param><type>VmaDefragmentationContext</type> * <name>pContext</name>
+			<param><type>VmaDefragmentationContext</type>* <name>pContext</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
@@ -782,15 +782,15 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</proto>
 			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param><type>VmaAllocation</type> * <name>pAllocations</name>
+			<param><type>VmaAllocation</type>* <name>pAllocations</name>
 			</param>
 			<param><type>size_t</type> <name>allocationCount</name>
 			</param>
-			<param><type>VkBool32</type> * <name>pAllocationsChanged</name>
+			<param><type>VkBool32</type>* <name>pAllocationsChanged</name>
 			</param>
-			<param>const <type>VmaDefragmentationInfo</type> * <name>pDefragmentationInfo</name>
+			<param>const <type>VmaDefragmentationInfo</type>* <name>pDefragmentationInfo</name>
 			</param>
-			<param><type>VmaDefragmentationStats</type> * <name>pDefragmentationStats</name>
+			<param><type>VmaDefragmentationStats</type>* <name>pDefragmentationStats</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
@@ -816,7 +816,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</param>
 			<param><type>VkBuffer</type> <name>buffer</name>
 			</param>
-			<param>const <type>void</type> * <name>pNext</name>
+			<param>const <type>void</type>* <name>pNext</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
@@ -842,7 +842,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</param>
 			<param><type>VkImage</type> <name>image</name>
 			</param>
-			<param>const <type>void</type> * <name>pNext</name>
+			<param>const <type>void</type>* <name>pNext</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
@@ -851,15 +851,15 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</proto>
 			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>const <type>VkBufferCreateInfo</type> * <name>pBufferCreateInfo</name>
+			<param>const <type>VkBufferCreateInfo</type>* <name>pBufferCreateInfo</name>
 			</param>
-			<param>const <type>VmaAllocationCreateInfo</type> * <name>pAllocationCreateInfo</name>
+			<param>const <type>VmaAllocationCreateInfo</type>* <name>pAllocationCreateInfo</name>
 			</param>
-			<param><type>VkBuffer</type> * <name>pBuffer</name>
+			<param><type>VkBuffer</type>* <name>pBuffer</name>
 			</param>
-			<param><type>VmaAllocation</type> * <name>pAllocation</name>
+			<param><type>VmaAllocation</type>* <name>pAllocation</name>
 			</param>
-			<param><type>VmaAllocationInfo</type> * <name>pAllocationInfo</name>
+			<param><type>VmaAllocationInfo</type>* <name>pAllocationInfo</name>
 			</param>
 		</command>
 		<command>
@@ -879,15 +879,15 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</proto>
 			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>const <type>VkImageCreateInfo</type> * <name>pImageCreateInfo</name>
+			<param>const <type>VkImageCreateInfo</type>* <name>pImageCreateInfo</name>
 			</param>
-			<param>const <type>VmaAllocationCreateInfo</type> * <name>pAllocationCreateInfo</name>
+			<param>const <type>VmaAllocationCreateInfo</type>* <name>pAllocationCreateInfo</name>
 			</param>
-			<param><type>VkImage</type> * <name>pImage</name>
+			<param><type>VkImage</type>* <name>pImage</name>
 			</param>
-			<param><type>VmaAllocation</type> * <name>pAllocation</name>
+			<param><type>VmaAllocation</type>* <name>pAllocation</name>
 			</param>
-			<param><type>VmaAllocationInfo</type> * <name>pAllocationInfo</name>
+			<param><type>VmaAllocationInfo</type>* <name>pAllocationInfo</name>
 			</param>
 		</command>
 		<command>

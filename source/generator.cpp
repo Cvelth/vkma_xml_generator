@@ -305,9 +305,9 @@ void append_typename(pugi::xml_node &xml, std::string_view name, std::string pre
 	else if (name.size() > 6 && name.substr(name.size() - 6) == " const")
 		append_typename(xml, name.substr(0, name.size() - 6), prefix, suffix += name.substr(name.size() - 6));
 	else if (name.size() > 3 && name.substr(name.size() - 3) == " **")
-		append_typename(xml, name.substr(0, name.size() - 3), prefix, suffix += name.substr(name.size() - 3));
+		append_typename(xml, name.substr(0, name.size() - 3), prefix, suffix += name.substr(name.size() - 2));
 	else if (name.size() > 2 && name.substr(name.size() - 2) == " *")
-		append_typename(xml, name.substr(0, name.size() - 2), prefix, suffix += name.substr(name.size() - 2));
+		append_typename(xml, name.substr(0, name.size() - 2), prefix, suffix += name.substr(name.size() - 1));
 	else {
 		xml.append_child(pugi::node_pcdata).set_value(prefix.data());
 		xml.append_child("type").append_child(pugi::node_pcdata).set_value(std::string(name).data());
