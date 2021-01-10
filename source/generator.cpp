@@ -292,9 +292,7 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"SPDX-License-Identifier: Unlicense."
 	);
-	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
-		""
-	);
+	registry.append_child("comment").append_child(pugi::node_pcdata).set_value("    ");
 	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"This file was generated from xml 'doxygen' documentation for "
 		"[vk_mem_alloc.h (VulkanMemoryAllocator)](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/blob/master/src/vk_mem_alloc.h) "
@@ -323,7 +321,7 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 		type.append_child(pugi::node_pcdata).set_value((" " + define.value).data());
 	}
 
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value("");
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value("    ");
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"Bitmask types"
 	);
@@ -338,7 +336,7 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 			type.append_child(pugi::node_pcdata).set_value(";");
 		}
 
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value("");
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value("    ");
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"Handle types"
 	);
@@ -352,7 +350,7 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 		type.append_child(pugi::node_pcdata).set_value(")");
 	}
 
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value("");
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value("    ");
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"Enumeration types"
 	);
@@ -362,7 +360,7 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 		type.append_attribute("category").set_value("enum");
 	}
 
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value("");
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value("    ");
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"Function pointer typedefs"
 	);
@@ -394,7 +392,7 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 			);
 		}
 
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value("");
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value("    ");
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"Struct types"
 	);
@@ -410,7 +408,7 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 		}
 	}
 
-	registry.append_child("comment").append_child(pugi::node_pcdata).set_value("");
+	registry.append_child("comment").append_child(pugi::node_pcdata).set_value("    ");
 	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"Enumeration definitions"
 	);
@@ -426,7 +424,7 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 			}
 		}
 
-	registry.append_child("comment").append_child(pugi::node_pcdata).set_value("");
+	registry.append_child("comment").append_child(pugi::node_pcdata).set_value("    ");
 	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"Flags"
 	);
@@ -442,7 +440,7 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 			}
 		}
 
-	registry.append_child("comment").append_child(pugi::node_pcdata).set_value("");
+	registry.append_child("comment").append_child(pugi::node_pcdata).set_value("    ");
 	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"Command definitions"
 	);
