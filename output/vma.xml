@@ -1108,4 +1108,8 @@
 			</param>
 		</command>
 	</commands>
+	<feature />
+	<extensions />
+	<spirvextensions />
+	<spirvcapabilities />
 </registry>

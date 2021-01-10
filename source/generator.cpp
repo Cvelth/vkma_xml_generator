@@ -478,9 +478,16 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 	}
 
 	// Skip 'feature' if it can be avoided
+	registry.append_child("feature");
+
 	// Skip 'extensions' if it can be avoided
+	registry.append_child("extensions");
+
 	// Skip 'spirvextensions' if it can be avoided
+	registry.append_child("spirvextensions");
+
 	// Skip 'spirvcapabilities' if it can be avoided
+	registry.append_child("spirvcapabilities");
 
 	return std::move(output);
 }
