@@ -299,6 +299,22 @@ std::optional<vma_xml::detail::function_t> parse_function_pointer(vma_xml::detai
 	return std::nullopt;
 }
 
+void append_typename(pugi::xml_node &xml, std::string_view name, std::string prefix = "", std::string suffix = "") {
+	if (name.size() > 6 && name.substr(0, 6) == "const ")
+		append_typename(xml, name.substr(6), prefix += name.substr(0, 6), suffix);
+	else if (name.size() > 6 && name.substr(name.size() - 6) == " const")
+		append_typename(xml, name.substr(0, name.size() - 6), prefix, suffix += name.substr(name.size() - 6));
+	else if (name.size() > 3 && name.substr(name.size() - 3) == " **")
+		append_typename(xml, name.substr(0, name.size() - 3), prefix, suffix += name.substr(name.size() - 3));
+	else if (name.size() > 2 && name.substr(name.size() - 2) == " *")
+		append_typename(xml, name.substr(0, name.size() - 2), prefix, suffix += name.substr(name.size() - 2));
+	else {
+		xml.append_child(pugi::node_pcdata).set_value(prefix.data());
+		xml.append_child("type").append_child(pugi::node_pcdata).set_value(std::string(name).data());
+		xml.append_child(pugi::node_pcdata).set_value(suffix.data());
+	}
+}
+
 void append_header(pugi::xml_node &registry) {
 	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"\nDO NOT MODIFY MANUALLY!"
@@ -464,9 +480,10 @@ void append_function_pointer(pugi::xml_node &types, std::vector<vma_xml::detail:
 				 ; iterator != std::prev(function_pointer->parameters.end())
 				 ; ++iterator) {
 
-				type.append_child("type").append_child(pugi::node_pcdata).set_value(
-					iterator->type.data()
-				);
+				append_typename(type, iterator->type);
+				//type.append_child("type").append_child(pugi::node_pcdata).set_value(
+				//	iterator->type.data()
+				//);
 				type.append_child(pugi::node_pcdata).set_value(
 					(" " + iterator->name + ", ").data()
 				);
@@ -490,7 +507,8 @@ void append_struct(pugi::xml_node &types, std::vector<vma_xml::detail::struct_t>
 			type.append_attribute("name").set_value(structure.name.data());
 			for (auto &variable : structure.variables) {
 				auto member = type.append_child("member");
-				member.append_child("type").append_child(pugi::node_pcdata).set_value(variable.type.data());
+				append_typename(member, variable.type);
+				//member.append_child("type").append_child(pugi::node_pcdata).set_value(variable.type.data());
 				member.append_child(pugi::node_pcdata).set_value(" ");
 				member.append_child("name").append_child(pugi::node_pcdata).set_value(variable.name.data());
 			}
@@ -568,7 +586,8 @@ void append_commands(pugi::xml_node &registry, std::vector<vma_xml::detail::func
 
 		for (auto &parameter : function.parameters) {
 			auto param = command.append_child("param");
-			param.append_child("type").append_child(pugi::node_pcdata).set_value(parameter.type.data());
+			append_typename(param, parameter.type);
+			//param.append_child("type").append_child(pugi::node_pcdata).set_value(parameter.type.data());
 			param.append_child(pugi::node_pcdata).set_value(" ");
 			param.append_child("name").append_child(pugi::node_pcdata).set_value(parameter.name.data());
 		}

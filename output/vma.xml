@@ -91,310 +91,217 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		<comment>____</comment>
 		<comment>Struct types</comment>
 		<type category="struct" name="VmaAllocationCreateInfo">
-			<member>
-				<type>VmaAllocationCreateFlags</type> <name>flags</name>
+			<member><type>VmaAllocationCreateFlags</type> <name>flags</name>
 			</member>
-			<member>
-				<type>VmaMemoryUsage</type> <name>usage</name>
+			<member><type>VmaMemoryUsage</type> <name>usage</name>
 			</member>
-			<member>
-				<type>VkMemoryPropertyFlags</type> <name>requiredFlags</name>
+			<member><type>VkMemoryPropertyFlags</type> <name>requiredFlags</name>
 			</member>
-			<member>
-				<type>VkMemoryPropertyFlags</type> <name>preferredFlags</name>
+			<member><type>VkMemoryPropertyFlags</type> <name>preferredFlags</name>
 			</member>
-			<member>
-				<type>uint32_t</type> <name>memoryTypeBits</name>
+			<member><type>uint32_t</type> <name>memoryTypeBits</name>
 			</member>
-			<member>
-				<type>VmaPool</type> <name>pool</name>
+			<member><type>VmaPool</type> <name>pool</name>
 			</member>
-			<member>
-				<type>void *</type> <name>pUserData</name>
+			<member><type>void</type> * <name>pUserData</name>
 			</member>
 		</type>
 		<type category="struct" name="VmaAllocationInfo">
-			<member>
-				<type>uint32_t</type> <name>memoryType</name>
+			<member><type>uint32_t</type> <name>memoryType</name>
 			</member>
-			<member>
-				<type>VkDeviceMemory</type> <name>deviceMemory</name>
+			<member><type>VkDeviceMemory</type> <name>deviceMemory</name>
 			</member>
-			<member>
-				<type>VkDeviceSize</type> <name>offset</name>
+			<member><type>VkDeviceSize</type> <name>offset</name>
 			</member>
-			<member>
-				<type>VkDeviceSize</type> <name>size</name>
+			<member><type>VkDeviceSize</type> <name>size</name>
 			</member>
-			<member>
-				<type>void *</type> <name>pMappedData</name>
+			<member><type>void</type> * <name>pMappedData</name>
 			</member>
-			<member>
-				<type>void *</type> <name>pUserData</name>
+			<member><type>void</type> * <name>pUserData</name>
 			</member>
 		</type>
 		<type category="struct" name="VmaAllocatorCreateInfo">
-			<member>
-				<type>VmaAllocatorCreateFlags</type> <name>flags</name>
+			<member><type>VmaAllocatorCreateFlags</type> <name>flags</name>
 			</member>
-			<member>
-				<type>VkPhysicalDevice</type> <name>physicalDevice</name>
+			<member><type>VkPhysicalDevice</type> <name>physicalDevice</name>
 			</member>
-			<member>
-				<type>VkDevice</type> <name>device</name>
+			<member><type>VkDevice</type> <name>device</name>
 			</member>
-			<member>
-				<type>VkDeviceSize</type> <name>preferredLargeHeapBlockSize</name>
+			<member><type>VkDeviceSize</type> <name>preferredLargeHeapBlockSize</name>
 			</member>
-			<member>
-				<type>const VkAllocationCallbacks *</type> <name>pAllocationCallbacks</name>
+			<member>const <type>VkAllocationCallbacks</type> * <name>pAllocationCallbacks</name>
 			</member>
-			<member>
-				<type>const VmaDeviceMemoryCallbacks *</type> <name>pDeviceMemoryCallbacks</name>
+			<member>const <type>VmaDeviceMemoryCallbacks</type> * <name>pDeviceMemoryCallbacks</name>
 			</member>
-			<member>
-				<type>uint32_t</type> <name>frameInUseCount</name>
+			<member><type>uint32_t</type> <name>frameInUseCount</name>
 			</member>
-			<member>
-				<type>const VkDeviceSize *</type> <name>pHeapSizeLimit</name>
+			<member>const <type>VkDeviceSize</type> * <name>pHeapSizeLimit</name>
 			</member>
-			<member>
-				<type>const VmaVulkanFunctions *</type> <name>pVulkanFunctions</name>
+			<member>const <type>VmaVulkanFunctions</type> * <name>pVulkanFunctions</name>
 			</member>
-			<member>
-				<type>const VmaRecordSettings *</type> <name>pRecordSettings</name>
+			<member>const <type>VmaRecordSettings</type> * <name>pRecordSettings</name>
 			</member>
-			<member>
-				<type>VkInstance</type> <name>instance</name>
+			<member><type>VkInstance</type> <name>instance</name>
 			</member>
-			<member>
-				<type>uint32_t</type> <name>vulkanApiVersion</name>
+			<member><type>uint32_t</type> <name>vulkanApiVersion</name>
 			</member>
 		</type>
 		<type category="struct" name="VmaBudget">
-			<member>
-				<type>VkDeviceSize</type> <name>blockBytes</name>
+			<member><type>VkDeviceSize</type> <name>blockBytes</name>
 			</member>
-			<member>
-				<type>VkDeviceSize</type> <name>allocationBytes</name>
+			<member><type>VkDeviceSize</type> <name>allocationBytes</name>
 			</member>
-			<member>
-				<type>VkDeviceSize</type> <name>usage</name>
+			<member><type>VkDeviceSize</type> <name>usage</name>
 			</member>
-			<member>
-				<type>VkDeviceSize</type> <name>budget</name>
+			<member><type>VkDeviceSize</type> <name>budget</name>
 			</member>
 		</type>
 		<type category="struct" name="VmaDefragmentationInfo">
-			<member>
-				<type>VkDeviceSize</type> <name>maxBytesToMove</name>
+			<member><type>VkDeviceSize</type> <name>maxBytesToMove</name>
 			</member>
-			<member>
-				<type>uint32_t</type> <name>maxAllocationsToMove</name>
+			<member><type>uint32_t</type> <name>maxAllocationsToMove</name>
 			</member>
 		</type>
 		<type category="struct" name="VmaDefragmentationInfo2">
-			<member>
-				<type>VmaDefragmentationFlags</type> <name>flags</name>
+			<member><type>VmaDefragmentationFlags</type> <name>flags</name>
 			</member>
-			<member>
-				<type>uint32_t</type> <name>allocationCount</name>
+			<member><type>uint32_t</type> <name>allocationCount</name>
 			</member>
-			<member>
-				<type>VmaAllocation *</type> <name>pAllocations</name>
+			<member><type>VmaAllocation</type> * <name>pAllocations</name>
 			</member>
-			<member>
-				<type>VkBool32 *</type> <name>pAllocationsChanged</name>
+			<member><type>VkBool32</type> * <name>pAllocationsChanged</name>
 			</member>
-			<member>
-				<type>uint32_t</type> <name>poolCount</name>
+			<member><type>uint32_t</type> <name>poolCount</name>
 			</member>
-			<member>
-				<type>VmaPool *</type> <name>pPools</name>
+			<member><type>VmaPool</type> * <name>pPools</name>
 			</member>
-			<member>
-				<type>VkDeviceSize</type> <name>maxCpuBytesToMove</name>
+			<member><type>VkDeviceSize</type> <name>maxCpuBytesToMove</name>
 			</member>
-			<member>
-				<type>uint32_t</type> <name>maxCpuAllocationsToMove</name>
+			<member><type>uint32_t</type> <name>maxCpuAllocationsToMove</name>
 			</member>
-			<member>
-				<type>VkDeviceSize</type> <name>maxGpuBytesToMove</name>
+			<member><type>VkDeviceSize</type> <name>maxGpuBytesToMove</name>
 			</member>
-			<member>
-				<type>uint32_t</type> <name>maxGpuAllocationsToMove</name>
+			<member><type>uint32_t</type> <name>maxGpuAllocationsToMove</name>
 			</member>
-			<member>
-				<type>VkCommandBuffer</type> <name>commandBuffer</name>
+			<member><type>VkCommandBuffer</type> <name>commandBuffer</name>
 			</member>
 		</type>
 		<type category="struct" name="VmaDefragmentationStats">
-			<member>
-				<type>VkDeviceSize</type> <name>bytesMoved</name>
+			<member><type>VkDeviceSize</type> <name>bytesMoved</name>
 			</member>
-			<member>
-				<type>VkDeviceSize</type> <name>bytesFreed</name>
+			<member><type>VkDeviceSize</type> <name>bytesFreed</name>
 			</member>
-			<member>
-				<type>uint32_t</type> <name>allocationsMoved</name>
+			<member><type>uint32_t</type> <name>allocationsMoved</name>
 			</member>
-			<member>
-				<type>uint32_t</type> <name>deviceMemoryBlocksFreed</name>
+			<member><type>uint32_t</type> <name>deviceMemoryBlocksFreed</name>
 			</member>
 		</type>
 		<type category="struct" name="VmaDeviceMemoryCallbacks">
-			<member>
-				<type>PFN_vmaAllocateDeviceMemoryFunction</type> <name>pfnAllocate</name>
+			<member><type>PFN_vmaAllocateDeviceMemoryFunction</type> <name>pfnAllocate</name>
 			</member>
-			<member>
-				<type>PFN_vmaFreeDeviceMemoryFunction</type> <name>pfnFree</name>
+			<member><type>PFN_vmaFreeDeviceMemoryFunction</type> <name>pfnFree</name>
 			</member>
 		</type>
 		<type category="struct" name="VmaPoolCreateInfo">
-			<member>
-				<type>uint32_t</type> <name>memoryTypeIndex</name>
+			<member><type>uint32_t</type> <name>memoryTypeIndex</name>
 			</member>
-			<member>
-				<type>VmaPoolCreateFlags</type> <name>flags</name>
+			<member><type>VmaPoolCreateFlags</type> <name>flags</name>
 			</member>
-			<member>
-				<type>VkDeviceSize</type> <name>blockSize</name>
+			<member><type>VkDeviceSize</type> <name>blockSize</name>
 			</member>
-			<member>
-				<type>size_t</type> <name>minBlockCount</name>
+			<member><type>size_t</type> <name>minBlockCount</name>
 			</member>
-			<member>
-				<type>size_t</type> <name>maxBlockCount</name>
+			<member><type>size_t</type> <name>maxBlockCount</name>
 			</member>
-			<member>
-				<type>uint32_t</type> <name>frameInUseCount</name>
+			<member><type>uint32_t</type> <name>frameInUseCount</name>
 			</member>
 		</type>
 		<type category="struct" name="VmaPoolStats">
-			<member>
-				<type>VkDeviceSize</type> <name>size</name>
+			<member><type>VkDeviceSize</type> <name>size</name>
 			</member>
-			<member>
-				<type>VkDeviceSize</type> <name>unusedSize</name>
+			<member><type>VkDeviceSize</type> <name>unusedSize</name>
 			</member>
-			<member>
-				<type>size_t</type> <name>allocationCount</name>
+			<member><type>size_t</type> <name>allocationCount</name>
 			</member>
-			<member>
-				<type>size_t</type> <name>unusedRangeCount</name>
+			<member><type>size_t</type> <name>unusedRangeCount</name>
 			</member>
-			<member>
-				<type>VkDeviceSize</type> <name>unusedRangeSizeMax</name>
+			<member><type>VkDeviceSize</type> <name>unusedRangeSizeMax</name>
 			</member>
-			<member>
-				<type>size_t</type> <name>blockCount</name>
+			<member><type>size_t</type> <name>blockCount</name>
 			</member>
 		</type>
 		<type category="struct" name="VmaRecordSettings">
-			<member>
-				<type>VmaRecordFlags</type> <name>flags</name>
+			<member><type>VmaRecordFlags</type> <name>flags</name>
 			</member>
-			<member>
-				<type>const char *</type> <name>pFilePath</name>
+			<member>const <type>char</type> * <name>pFilePath</name>
 			</member>
 		</type>
 		<type category="struct" name="VmaStatInfo">
-			<member>
-				<type>uint32_t</type> <name>blockCount</name>
+			<member><type>uint32_t</type> <name>blockCount</name>
 			</member>
-			<member>
-				<type>uint32_t</type> <name>allocationCount</name>
+			<member><type>uint32_t</type> <name>allocationCount</name>
 			</member>
-			<member>
-				<type>uint32_t</type> <name>unusedRangeCount</name>
+			<member><type>uint32_t</type> <name>unusedRangeCount</name>
 			</member>
-			<member>
-				<type>VkDeviceSize</type> <name>usedBytes</name>
+			<member><type>VkDeviceSize</type> <name>usedBytes</name>
 			</member>
-			<member>
-				<type>VkDeviceSize</type> <name>unusedBytes</name>
+			<member><type>VkDeviceSize</type> <name>unusedBytes</name>
 			</member>
-			<member>
-				<type>VkDeviceSize</type> <name>allocationSizeMin</name>
+			<member><type>VkDeviceSize</type> <name>allocationSizeMin</name>
 			</member>
-			<member>
-				<type>VkDeviceSize</type> <name>allocationSizeAvg</name>
+			<member><type>VkDeviceSize</type> <name>allocationSizeAvg</name>
 			</member>
-			<member>
-				<type>VkDeviceSize</type> <name>allocationSizeMax</name>
+			<member><type>VkDeviceSize</type> <name>allocationSizeMax</name>
 			</member>
-			<member>
-				<type>VkDeviceSize</type> <name>unusedRangeSizeMin</name>
+			<member><type>VkDeviceSize</type> <name>unusedRangeSizeMin</name>
 			</member>
-			<member>
-				<type>VkDeviceSize</type> <name>unusedRangeSizeAvg</name>
+			<member><type>VkDeviceSize</type> <name>unusedRangeSizeAvg</name>
 			</member>
-			<member>
-				<type>VkDeviceSize</type> <name>unusedRangeSizeMax</name>
+			<member><type>VkDeviceSize</type> <name>unusedRangeSizeMax</name>
 			</member>
 		</type>
 		<type category="struct" name="VmaStats">
-			<member>
-				<type>VmaStatInfo</type> <name>memoryType</name>
+			<member><type>VmaStatInfo</type> <name>memoryType</name>
 			</member>
-			<member>
-				<type>VmaStatInfo</type> <name>memoryHeap</name>
+			<member><type>VmaStatInfo</type> <name>memoryHeap</name>
 			</member>
-			<member>
-				<type>VmaStatInfo</type> <name>total</name>
+			<member><type>VmaStatInfo</type> <name>total</name>
 			</member>
 		</type>
 		<type category="struct" name="VmaVulkanFunctions">
-			<member>
-				<type>PFN_vkGetPhysicalDeviceProperties</type> <name>vkGetPhysicalDeviceProperties</name>
+			<member><type>PFN_vkGetPhysicalDeviceProperties</type> <name>vkGetPhysicalDeviceProperties</name>
 			</member>
-			<member>
-				<type>PFN_vkGetPhysicalDeviceMemoryProperties</type> <name>vkGetPhysicalDeviceMemoryProperties</name>
+			<member><type>PFN_vkGetPhysicalDeviceMemoryProperties</type> <name>vkGetPhysicalDeviceMemoryProperties</name>
 			</member>
-			<member>
-				<type>PFN_vkAllocateMemory</type> <name>vkAllocateMemory</name>
+			<member><type>PFN_vkAllocateMemory</type> <name>vkAllocateMemory</name>
 			</member>
-			<member>
-				<type>PFN_vkFreeMemory</type> <name>vkFreeMemory</name>
+			<member><type>PFN_vkFreeMemory</type> <name>vkFreeMemory</name>
 			</member>
-			<member>
-				<type>PFN_vkMapMemory</type> <name>vkMapMemory</name>
+			<member><type>PFN_vkMapMemory</type> <name>vkMapMemory</name>
 			</member>
-			<member>
-				<type>PFN_vkUnmapMemory</type> <name>vkUnmapMemory</name>
+			<member><type>PFN_vkUnmapMemory</type> <name>vkUnmapMemory</name>
 			</member>
-			<member>
-				<type>PFN_vkFlushMappedMemoryRanges</type> <name>vkFlushMappedMemoryRanges</name>
+			<member><type>PFN_vkFlushMappedMemoryRanges</type> <name>vkFlushMappedMemoryRanges</name>
 			</member>
-			<member>
-				<type>PFN_vkInvalidateMappedMemoryRanges</type> <name>vkInvalidateMappedMemoryRanges</name>
+			<member><type>PFN_vkInvalidateMappedMemoryRanges</type> <name>vkInvalidateMappedMemoryRanges</name>
 			</member>
-			<member>
-				<type>PFN_vkBindBufferMemory</type> <name>vkBindBufferMemory</name>
+			<member><type>PFN_vkBindBufferMemory</type> <name>vkBindBufferMemory</name>
 			</member>
-			<member>
-				<type>PFN_vkBindImageMemory</type> <name>vkBindImageMemory</name>
+			<member><type>PFN_vkBindImageMemory</type> <name>vkBindImageMemory</name>
 			</member>
-			<member>
-				<type>PFN_vkGetBufferMemoryRequirements</type> <name>vkGetBufferMemoryRequirements</name>
+			<member><type>PFN_vkGetBufferMemoryRequirements</type> <name>vkGetBufferMemoryRequirements</name>
 			</member>
-			<member>
-				<type>PFN_vkGetImageMemoryRequirements</type> <name>vkGetImageMemoryRequirements</name>
+			<member><type>PFN_vkGetImageMemoryRequirements</type> <name>vkGetImageMemoryRequirements</name>
 			</member>
-			<member>
-				<type>PFN_vkCreateBuffer</type> <name>vkCreateBuffer</name>
+			<member><type>PFN_vkCreateBuffer</type> <name>vkCreateBuffer</name>
 			</member>
-			<member>
-				<type>PFN_vkDestroyBuffer</type> <name>vkDestroyBuffer</name>
+			<member><type>PFN_vkDestroyBuffer</type> <name>vkDestroyBuffer</name>
 			</member>
-			<member>
-				<type>PFN_vkCreateImage</type> <name>vkCreateImage</name>
+			<member><type>PFN_vkCreateImage</type> <name>vkCreateImage</name>
 			</member>
-			<member>
-				<type>PFN_vkDestroyImage</type> <name>vkDestroyImage</name>
+			<member><type>PFN_vkDestroyImage</type> <name>vkDestroyImage</name>
 			</member>
-			<member>
-				<type>PFN_vkCmdCopyBuffer</type> <name>vkCmdCopyBuffer</name>
+			<member><type>PFN_vkCmdCopyBuffer</type> <name>vkCmdCopyBuffer</name>
 			</member>
 		</type>
 	</types>
@@ -459,691 +366,539 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<proto>
 				<type>VkResult</type> <name>vmaCreateAllocator</name>
 			</proto>
-			<param>
-				<type>const VmaAllocatorCreateInfo *</type> <name>pCreateInfo</name>
+			<param>const <type>VmaAllocatorCreateInfo</type> * <name>pCreateInfo</name>
 			</param>
-			<param>
-				<type>VmaAllocator *</type> <name>pAllocator</name>
+			<param><type>VmaAllocator</type> * <name>pAllocator</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaDestroyAllocator</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaGetPhysicalDeviceProperties</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>const VkPhysicalDeviceProperties **</type> <name>ppPhysicalDeviceProperties</name>
+			<param>const <type>VkPhysicalDeviceProperties</type> ** <name>ppPhysicalDeviceProperties</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaGetMemoryProperties</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>const VkPhysicalDeviceMemoryProperties **</type> <name>ppPhysicalDeviceMemoryProperties</name>
+			<param>const <type>VkPhysicalDeviceMemoryProperties</type> ** <name>ppPhysicalDeviceMemoryProperties</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaGetMemoryTypeProperties</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>uint32_t</type> <name>memoryTypeIndex</name>
+			<param><type>uint32_t</type> <name>memoryTypeIndex</name>
 			</param>
-			<param>
-				<type>VkMemoryPropertyFlags *</type> <name>pFlags</name>
+			<param><type>VkMemoryPropertyFlags</type> * <name>pFlags</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaSetCurrentFrameIndex</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>uint32_t</type> <name>frameIndex</name>
+			<param><type>uint32_t</type> <name>frameIndex</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaCalculateStats</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaStats *</type> <name>pStats</name>
+			<param><type>VmaStats</type> * <name>pStats</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaGetBudget</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaBudget *</type> <name>pBudget</name>
+			<param><type>VmaBudget</type> * <name>pBudget</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaBuildStatsString</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>char **</type> <name>ppStatsString</name>
+			<param><type>char</type> ** <name>ppStatsString</name>
 			</param>
-			<param>
-				<type>VkBool32</type> <name>detailedMap</name>
+			<param><type>VkBool32</type> <name>detailedMap</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaFreeStatsString</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>char *</type> <name>pStatsString</name>
+			<param><type>char</type> * <name>pStatsString</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
 			<proto>
 				<type>VkResult</type> <name>vmaFindMemoryTypeIndex</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>uint32_t</type> <name>memoryTypeBits</name>
+			<param><type>uint32_t</type> <name>memoryTypeBits</name>
 			</param>
-			<param>
-				<type>const VmaAllocationCreateInfo *</type> <name>pAllocationCreateInfo</name>
+			<param>const <type>VmaAllocationCreateInfo</type> * <name>pAllocationCreateInfo</name>
 			</param>
-			<param>
-				<type>uint32_t *</type> <name>pMemoryTypeIndex</name>
+			<param><type>uint32_t</type> * <name>pMemoryTypeIndex</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
 			<proto>
 				<type>VkResult</type> <name>vmaFindMemoryTypeIndexForBufferInfo</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>const VkBufferCreateInfo *</type> <name>pBufferCreateInfo</name>
+			<param>const <type>VkBufferCreateInfo</type> * <name>pBufferCreateInfo</name>
 			</param>
-			<param>
-				<type>const VmaAllocationCreateInfo *</type> <name>pAllocationCreateInfo</name>
+			<param>const <type>VmaAllocationCreateInfo</type> * <name>pAllocationCreateInfo</name>
 			</param>
-			<param>
-				<type>uint32_t *</type> <name>pMemoryTypeIndex</name>
+			<param><type>uint32_t</type> * <name>pMemoryTypeIndex</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
 			<proto>
 				<type>VkResult</type> <name>vmaFindMemoryTypeIndexForImageInfo</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>const VkImageCreateInfo *</type> <name>pImageCreateInfo</name>
+			<param>const <type>VkImageCreateInfo</type> * <name>pImageCreateInfo</name>
 			</param>
-			<param>
-				<type>const VmaAllocationCreateInfo *</type> <name>pAllocationCreateInfo</name>
+			<param>const <type>VmaAllocationCreateInfo</type> * <name>pAllocationCreateInfo</name>
 			</param>
-			<param>
-				<type>uint32_t *</type> <name>pMemoryTypeIndex</name>
+			<param><type>uint32_t</type> * <name>pMemoryTypeIndex</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
 			<proto>
 				<type>VkResult</type> <name>vmaCreatePool</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>const VmaPoolCreateInfo *</type> <name>pCreateInfo</name>
+			<param>const <type>VmaPoolCreateInfo</type> * <name>pCreateInfo</name>
 			</param>
-			<param>
-				<type>VmaPool *</type> <name>pPool</name>
+			<param><type>VmaPool</type> * <name>pPool</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaDestroyPool</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaPool</type> <name>pool</name>
+			<param><type>VmaPool</type> <name>pool</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaGetPoolStats</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaPool</type> <name>pool</name>
+			<param><type>VmaPool</type> <name>pool</name>
 			</param>
-			<param>
-				<type>VmaPoolStats *</type> <name>pPoolStats</name>
+			<param><type>VmaPoolStats</type> * <name>pPoolStats</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaMakePoolAllocationsLost</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaPool</type> <name>pool</name>
+			<param><type>VmaPool</type> <name>pool</name>
 			</param>
-			<param>
-				<type>size_t *</type> <name>pLostAllocationCount</name>
+			<param><type>size_t</type> * <name>pLostAllocationCount</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
 			<proto>
 				<type>VkResult</type> <name>vmaCheckPoolCorruption</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaPool</type> <name>pool</name>
+			<param><type>VmaPool</type> <name>pool</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaGetPoolName</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaPool</type> <name>pool</name>
+			<param><type>VmaPool</type> <name>pool</name>
 			</param>
-			<param>
-				<type>const char **</type> <name>ppName</name>
+			<param>const <type>char</type> ** <name>ppName</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaSetPoolName</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaPool</type> <name>pool</name>
+			<param><type>VmaPool</type> <name>pool</name>
 			</param>
-			<param>
-				<type>const char *</type> <name>pName</name>
+			<param>const <type>char</type> * <name>pName</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
 			<proto>
 				<type>VkResult</type> <name>vmaAllocateMemory</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>const VkMemoryRequirements *</type> <name>pVkMemoryRequirements</name>
+			<param>const <type>VkMemoryRequirements</type> * <name>pVkMemoryRequirements</name>
 			</param>
-			<param>
-				<type>const VmaAllocationCreateInfo *</type> <name>pCreateInfo</name>
+			<param>const <type>VmaAllocationCreateInfo</type> * <name>pCreateInfo</name>
 			</param>
-			<param>
-				<type>VmaAllocation *</type> <name>pAllocation</name>
+			<param><type>VmaAllocation</type> * <name>pAllocation</name>
 			</param>
-			<param>
-				<type>VmaAllocationInfo *</type> <name>pAllocationInfo</name>
+			<param><type>VmaAllocationInfo</type> * <name>pAllocationInfo</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
 			<proto>
 				<type>VkResult</type> <name>vmaAllocateMemoryPages</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>const VkMemoryRequirements *</type> <name>pVkMemoryRequirements</name>
+			<param>const <type>VkMemoryRequirements</type> * <name>pVkMemoryRequirements</name>
 			</param>
-			<param>
-				<type>const VmaAllocationCreateInfo *</type> <name>pCreateInfo</name>
+			<param>const <type>VmaAllocationCreateInfo</type> * <name>pCreateInfo</name>
 			</param>
-			<param>
-				<type>size_t</type> <name>allocationCount</name>
+			<param><type>size_t</type> <name>allocationCount</name>
 			</param>
-			<param>
-				<type>VmaAllocation *</type> <name>pAllocations</name>
+			<param><type>VmaAllocation</type> * <name>pAllocations</name>
 			</param>
-			<param>
-				<type>VmaAllocationInfo *</type> <name>pAllocationInfo</name>
+			<param><type>VmaAllocationInfo</type> * <name>pAllocationInfo</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
 			<proto>
 				<type>VkResult</type> <name>vmaAllocateMemoryForBuffer</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VkBuffer</type> <name>buffer</name>
+			<param><type>VkBuffer</type> <name>buffer</name>
 			</param>
-			<param>
-				<type>const VmaAllocationCreateInfo *</type> <name>pCreateInfo</name>
+			<param>const <type>VmaAllocationCreateInfo</type> * <name>pCreateInfo</name>
 			</param>
-			<param>
-				<type>VmaAllocation *</type> <name>pAllocation</name>
+			<param><type>VmaAllocation</type> * <name>pAllocation</name>
 			</param>
-			<param>
-				<type>VmaAllocationInfo *</type> <name>pAllocationInfo</name>
+			<param><type>VmaAllocationInfo</type> * <name>pAllocationInfo</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
 			<proto>
 				<type>VkResult</type> <name>vmaAllocateMemoryForImage</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VkImage</type> <name>image</name>
+			<param><type>VkImage</type> <name>image</name>
 			</param>
-			<param>
-				<type>const VmaAllocationCreateInfo *</type> <name>pCreateInfo</name>
+			<param>const <type>VmaAllocationCreateInfo</type> * <name>pCreateInfo</name>
 			</param>
-			<param>
-				<type>VmaAllocation *</type> <name>pAllocation</name>
+			<param><type>VmaAllocation</type> * <name>pAllocation</name>
 			</param>
-			<param>
-				<type>VmaAllocationInfo *</type> <name>pAllocationInfo</name>
+			<param><type>VmaAllocationInfo</type> * <name>pAllocationInfo</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaFreeMemory</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaAllocation</type> <name>allocation</name>
+			<param><type>VmaAllocation</type> <name>allocation</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaFreeMemoryPages</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>size_t</type> <name>allocationCount</name>
+			<param><type>size_t</type> <name>allocationCount</name>
 			</param>
-			<param>
-				<type>VmaAllocation *</type> <name>pAllocations</name>
+			<param><type>VmaAllocation</type> * <name>pAllocations</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
 			<proto>
 				<type>VkResult</type> <name>vmaResizeAllocation</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaAllocation</type> <name>allocation</name>
+			<param><type>VmaAllocation</type> <name>allocation</name>
 			</param>
-			<param>
-				<type>VkDeviceSize</type> <name>newSize</name>
+			<param><type>VkDeviceSize</type> <name>newSize</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaGetAllocationInfo</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaAllocation</type> <name>allocation</name>
+			<param><type>VmaAllocation</type> <name>allocation</name>
 			</param>
-			<param>
-				<type>VmaAllocationInfo *</type> <name>pAllocationInfo</name>
+			<param><type>VmaAllocationInfo</type> * <name>pAllocationInfo</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>VkBool32</type> <name>vmaTouchAllocation</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaAllocation</type> <name>allocation</name>
+			<param><type>VmaAllocation</type> <name>allocation</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaSetAllocationUserData</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaAllocation</type> <name>allocation</name>
+			<param><type>VmaAllocation</type> <name>allocation</name>
 			</param>
-			<param>
-				<type>void *</type> <name>pUserData</name>
+			<param><type>void</type> * <name>pUserData</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaCreateLostAllocation</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaAllocation *</type> <name>pAllocation</name>
+			<param><type>VmaAllocation</type> * <name>pAllocation</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
 			<proto>
 				<type>VkResult</type> <name>vmaMapMemory</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaAllocation</type> <name>allocation</name>
+			<param><type>VmaAllocation</type> <name>allocation</name>
 			</param>
-			<param>
-				<type>void **</type> <name>ppData</name>
+			<param><type>void</type> ** <name>ppData</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaUnmapMemory</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaAllocation</type> <name>allocation</name>
+			<param><type>VmaAllocation</type> <name>allocation</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaFlushAllocation</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaAllocation</type> <name>allocation</name>
+			<param><type>VmaAllocation</type> <name>allocation</name>
 			</param>
-			<param>
-				<type>VkDeviceSize</type> <name>offset</name>
+			<param><type>VkDeviceSize</type> <name>offset</name>
 			</param>
-			<param>
-				<type>VkDeviceSize</type> <name>size</name>
+			<param><type>VkDeviceSize</type> <name>size</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaInvalidateAllocation</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaAllocation</type> <name>allocation</name>
+			<param><type>VmaAllocation</type> <name>allocation</name>
 			</param>
-			<param>
-				<type>VkDeviceSize</type> <name>offset</name>
+			<param><type>VkDeviceSize</type> <name>offset</name>
 			</param>
-			<param>
-				<type>VkDeviceSize</type> <name>size</name>
+			<param><type>VkDeviceSize</type> <name>size</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
 			<proto>
 				<type>VkResult</type> <name>vmaCheckCorruption</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>uint32_t</type> <name>memoryTypeBits</name>
+			<param><type>uint32_t</type> <name>memoryTypeBits</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
 			<proto>
 				<type>VkResult</type> <name>vmaDefragmentationBegin</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>const VmaDefragmentationInfo2 *</type> <name>pInfo</name>
+			<param>const <type>VmaDefragmentationInfo2</type> * <name>pInfo</name>
 			</param>
-			<param>
-				<type>VmaDefragmentationStats *</type> <name>pStats</name>
+			<param><type>VmaDefragmentationStats</type> * <name>pStats</name>
 			</param>
-			<param>
-				<type>VmaDefragmentationContext *</type> <name>pContext</name>
+			<param><type>VmaDefragmentationContext</type> * <name>pContext</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
 			<proto>
 				<type>VkResult</type> <name>vmaDefragmentationEnd</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaDefragmentationContext</type> <name>context</name>
+			<param><type>VmaDefragmentationContext</type> <name>context</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
 			<proto>
 				<type>VkResult</type> <name>vmaDefragment</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaAllocation *</type> <name>pAllocations</name>
+			<param><type>VmaAllocation</type> * <name>pAllocations</name>
 			</param>
-			<param>
-				<type>size_t</type> <name>allocationCount</name>
+			<param><type>size_t</type> <name>allocationCount</name>
 			</param>
-			<param>
-				<type>VkBool32 *</type> <name>pAllocationsChanged</name>
+			<param><type>VkBool32</type> * <name>pAllocationsChanged</name>
 			</param>
-			<param>
-				<type>const VmaDefragmentationInfo *</type> <name>pDefragmentationInfo</name>
+			<param>const <type>VmaDefragmentationInfo</type> * <name>pDefragmentationInfo</name>
 			</param>
-			<param>
-				<type>VmaDefragmentationStats *</type> <name>pDefragmentationStats</name>
+			<param><type>VmaDefragmentationStats</type> * <name>pDefragmentationStats</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
 			<proto>
 				<type>VkResult</type> <name>vmaBindBufferMemory</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaAllocation</type> <name>allocation</name>
+			<param><type>VmaAllocation</type> <name>allocation</name>
 			</param>
-			<param>
-				<type>VkBuffer</type> <name>buffer</name>
+			<param><type>VkBuffer</type> <name>buffer</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
 			<proto>
 				<type>VkResult</type> <name>vmaBindBufferMemory2</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaAllocation</type> <name>allocation</name>
+			<param><type>VmaAllocation</type> <name>allocation</name>
 			</param>
-			<param>
-				<type>VkDeviceSize</type> <name>allocationLocalOffset</name>
+			<param><type>VkDeviceSize</type> <name>allocationLocalOffset</name>
 			</param>
-			<param>
-				<type>VkBuffer</type> <name>buffer</name>
+			<param><type>VkBuffer</type> <name>buffer</name>
 			</param>
-			<param>
-				<type>const void *</type> <name>pNext</name>
+			<param>const <type>void</type> * <name>pNext</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
 			<proto>
 				<type>VkResult</type> <name>vmaBindImageMemory</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaAllocation</type> <name>allocation</name>
+			<param><type>VmaAllocation</type> <name>allocation</name>
 			</param>
-			<param>
-				<type>VkImage</type> <name>image</name>
+			<param><type>VkImage</type> <name>image</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
 			<proto>
 				<type>VkResult</type> <name>vmaBindImageMemory2</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VmaAllocation</type> <name>allocation</name>
+			<param><type>VmaAllocation</type> <name>allocation</name>
 			</param>
-			<param>
-				<type>VkDeviceSize</type> <name>allocationLocalOffset</name>
+			<param><type>VkDeviceSize</type> <name>allocationLocalOffset</name>
 			</param>
-			<param>
-				<type>VkImage</type> <name>image</name>
+			<param><type>VkImage</type> <name>image</name>
 			</param>
-			<param>
-				<type>const void *</type> <name>pNext</name>
+			<param>const <type>void</type> * <name>pNext</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
 			<proto>
 				<type>VkResult</type> <name>vmaCreateBuffer</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>const VkBufferCreateInfo *</type> <name>pBufferCreateInfo</name>
+			<param>const <type>VkBufferCreateInfo</type> * <name>pBufferCreateInfo</name>
 			</param>
-			<param>
-				<type>const VmaAllocationCreateInfo *</type> <name>pAllocationCreateInfo</name>
+			<param>const <type>VmaAllocationCreateInfo</type> * <name>pAllocationCreateInfo</name>
 			</param>
-			<param>
-				<type>VkBuffer *</type> <name>pBuffer</name>
+			<param><type>VkBuffer</type> * <name>pBuffer</name>
 			</param>
-			<param>
-				<type>VmaAllocation *</type> <name>pAllocation</name>
+			<param><type>VmaAllocation</type> * <name>pAllocation</name>
 			</param>
-			<param>
-				<type>VmaAllocationInfo *</type> <name>pAllocationInfo</name>
+			<param><type>VmaAllocationInfo</type> * <name>pAllocationInfo</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaDestroyBuffer</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VkBuffer</type> <name>buffer</name>
+			<param><type>VkBuffer</type> <name>buffer</name>
 			</param>
-			<param>
-				<type>VmaAllocation</type> <name>allocation</name>
+			<param><type>VmaAllocation</type> <name>allocation</name>
 			</param>
 		</command>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
 			<proto>
 				<type>VkResult</type> <name>vmaCreateImage</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>const VkImageCreateInfo *</type> <name>pImageCreateInfo</name>
+			<param>const <type>VkImageCreateInfo</type> * <name>pImageCreateInfo</name>
 			</param>
-			<param>
-				<type>const VmaAllocationCreateInfo *</type> <name>pAllocationCreateInfo</name>
+			<param>const <type>VmaAllocationCreateInfo</type> * <name>pAllocationCreateInfo</name>
 			</param>
-			<param>
-				<type>VkImage *</type> <name>pImage</name>
+			<param><type>VkImage</type> * <name>pImage</name>
 			</param>
-			<param>
-				<type>VmaAllocation *</type> <name>pAllocation</name>
+			<param><type>VmaAllocation</type> * <name>pAllocation</name>
 			</param>
-			<param>
-				<type>VmaAllocationInfo *</type> <name>pAllocationInfo</name>
+			<param><type>VmaAllocationInfo</type> * <name>pAllocationInfo</name>
 			</param>
 		</command>
 		<command>
 			<proto>
 				<type>void</type> <name>vmaDestroyImage</name>
 			</proto>
-			<param>
-				<type>VmaAllocator</type> <name>allocator</name>
+			<param><type>VmaAllocator</type> <name>allocator</name>
 			</param>
-			<param>
-				<type>VkImage</type> <name>image</name>
+			<param><type>VkImage</type> <name>image</name>
 			</param>
-			<param>
-				<type>VmaAllocation</type> <name>allocation</name>
+			<param><type>VmaAllocation</type> <name>allocation</name>
 			</param>
 		</command>
 	</commands>
