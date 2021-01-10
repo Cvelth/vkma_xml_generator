@@ -68,14 +68,14 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaDefragmentationFlags</name>;</type>
 		<comment>____</comment>
 		<comment>Handle types</comment>
-		<type category="handle" objtypeenum="VMA_OBJECT_TYPE_ALLOCATOR">
-			<type>VK_DEFINE_HANDLE</type>(<name>VmaAllocator</name>)</type>
-		<type category="handle" objtypeenum="VMA_OBJECT_TYPE_POOL">
-			<type>VK_DEFINE_HANDLE</type>(<name>VmaPool</name>)</type>
 		<type category="handle" objtypeenum="VMA_OBJECT_TYPE_ALLOCATION">
 			<type>VK_DEFINE_HANDLE</type>(<name>VmaAllocation</name>)</type>
+		<type category="handle" objtypeenum="VMA_OBJECT_TYPE_ALLOCATOR">
+			<type>VK_DEFINE_HANDLE</type>(<name>VmaAllocator</name>)</type>
 		<type category="handle" objtypeenum="VMA_OBJECT_TYPE_DEFRAGMENTATION_CONTEXT">
 			<type>VK_DEFINE_HANDLE</type>(<name>VmaDefragmentationContext</name>)</type>
+		<type category="handle" objtypeenum="VMA_OBJECT_TYPE_POOL">
+			<type>VK_DEFINE_HANDLE</type>(<name>VmaPool</name>)</type>
 		<comment>____</comment>
 		<comment>Enumeration types</comment>
 		<type name="VmaAllocatorCreateFlagBits" category="enum" />

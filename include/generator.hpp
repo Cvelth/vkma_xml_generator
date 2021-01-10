@@ -6,6 +6,8 @@
 
 #include <filesystem>
 #include <optional>
+#include <set>
+#include <vector>
 
 namespace vma_xml {
 	namespace detail {
@@ -47,8 +49,8 @@ namespace vma_xml {
 			std::vector<function_t> functions;
 			std::vector<enum_t> enums;
 
-			std::vector<std::string> handle_names;
-			std::vector<std::string> vulkan_type_names;
+			std::set<std::string> handle_names;
+			std::set<std::string> vulkan_type_names;
 		};
 		
 		std::optional<pugi::xml_document> load_xml(std::filesystem::path const &file);

@@ -6,7 +6,6 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
-#include <set>
 #include <string_view>
 using namespace std::literals;
 
@@ -175,13 +174,13 @@ bool vma_xml::detail::parse_compound(std::string_view refid, std::filesystem::pa
 	return false;
 }
 
-std::vector<std::string> get_handles(std::string_view source_view) {
-	std::vector<std::string> output;
+std::set<std::string> get_handles(std::string_view source_view) {
+	std::set<std::string> output;
 
 	static constexpr auto pattern = ctll::fixed_string{ R"(VK_DEFINE_HANDLE\(([A-Za-z_0-9]+)\))" };
 	auto search_result = ctre::search<pattern>(source_view);
 	while (search_result) {
-		output.push_back(std::string(search_result.get<1>().to_string()));
+		output.emplace(search_result.get<1>().to_string());
 		search_result = ctre::search<pattern>(search_result.get<1>().end(), source_view.end());
 	}
 
@@ -200,7 +199,7 @@ void extract_vk_name(std::string_view type, std::set<std::string> &output) {
 		if (type.size() > 2 && type.substr(0, 2) == "Vk")
 			output.emplace(std::string(type));
 }
-std::vector<std::string> extract_vk_names(vma_xml::detail::data_t const &data) {
+std::set<std::string> extract_vk_names(vma_xml::detail::data_t const &data) {
 	std::set<std::string> output;
 	for (auto &structure : data.structs)
 		for (auto &variable : structure.variables)
@@ -210,11 +209,7 @@ std::vector<std::string> extract_vk_names(vma_xml::detail::data_t const &data) {
 		for (auto &parameter : function.parameters)
 			extract_vk_name(parameter.type, output);
 	}
-
-	std::vector<std::string> vector_output;
-	vector_output.reserve(output.size());
-	std::ranges::move(output, std::back_inserter(vector_output));
-	return vector_output;
+	return output;
 }
 bool vma_xml::detail::parse_header(std::filesystem::path const &path, detail::data_t &data) {
 	std::ifstream stream(path, std::fstream::ate);
@@ -394,7 +389,7 @@ void append_basic(pugi::xml_node &types) {
 	type_int.append_attribute("name").set_value("int");
 }
 
-void append_vulkan(pugi::xml_node &types, std::vector<std::string> const &vulkan_type_names) {
+void append_vulkan(pugi::xml_node &types, std::set<std::string> const &vulkan_type_names) {
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("Vulkan types");
 	for (auto &type_name : vulkan_type_names) {
@@ -419,7 +414,7 @@ void append_bitmask(pugi::xml_node &types, std::vector<vma_xml::detail::typedef_
 		}
 }
 
-void append_handle(pugi::xml_node &types, std::vector<std::string> handle_names) {
+void append_handle(pugi::xml_node &types, std::set<std::string> handle_names) {
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("Handle types");
 	for (auto &handle : handle_names) {
