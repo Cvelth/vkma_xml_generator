@@ -273,10 +273,7 @@ std::optional<vma_xml::detail::function_t> parse_function_pointer(vma_xml::detai
 	return std::nullopt;
 }
 
-std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) {
-	auto output = std::make_optional<pugi::xml_document>();
-	auto registry = output->append_child("registry");
-
+void append_header(pugi::xml_node &registry) {
 	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"\nDO NOT MODIFY MANUALLY!"
 		"\nThis file was generated using [generator](https://github.com/Cvelth/vma_xml_generator)."
@@ -307,27 +304,28 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 	tag.append_attribute("name").set_value("WC");
 	tag.append_attribute("author").set_value("Who cares?");
 	tag.append_attribute("contact").set_value("@cvelth");
+}
 
-	auto types = registry.append_child("types");
-	types.append_attribute("comment").set_value("VMA type definitions");
-
+void append_includes(pugi::xml_node &types) {
 	auto vulkan_include = types.append_child("type");
 	vulkan_include.append_attribute("name").set_value("vulkan");
 	vulkan_include.append_attribute("category").set_value("include");
 	vulkan_include.append_child(pugi::node_pcdata).set_value("#include \"vulkan/vulkan.h\"");
+}
 
-	for (auto &define : data.defines) {
+void append_defines(pugi::xml_node &types, std::vector<vma_xml::detail::define_t> const &defines) {
+	for (auto &define : defines) {
 		auto type = types.append_child("type");
 		type.append_attribute("category").set_value("define");
 		type.append_child(pugi::node_pcdata).set_value("#define ");
 		type.append_child("name").append_child(pugi::node_pcdata).set_value(define.name.data());
 		type.append_child(pugi::node_pcdata).set_value((" " + define.value).data());
 	}
+}
 
+void append_basic(pugi::xml_node &types) {
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
-		"Basic C types"
-	);
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value("Basic C types");
 	auto type_void = types.append_child("type");
 	type_void.append_attribute("requires").set_value("vulkan");
 	type_void.append_attribute("name").set_value("void");
@@ -363,12 +361,12 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 	type_size_t.append_attribute("name").set_value("size_t");
 	auto type_int = types.append_child("type");
 	type_int.append_attribute("name").set_value("int");
+}
 
+void append_bitmask(pugi::xml_node &types, std::vector<vma_xml::detail::typedef_t> const &typedefs) {
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
-		"Bitmask types"
-	);
-	for (auto &type_def : data.typedefs)
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value("Bitmask types");
+	for (auto &type_def : typedefs)
 		if (type_def.type == "VkFlags") {
 			auto type = types.append_child("type");
 			type.append_attribute("category").set_value("bitmask");
@@ -378,12 +376,12 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 			type.append_child("name").append_child(pugi::node_pcdata).set_value(type_def.name.data());
 			type.append_child(pugi::node_pcdata).set_value(";");
 		}
+}
 
+void append_handle(pugi::xml_node &types, std::vector<std::string> handle_names) {
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
-		"Handle types"
-	);
-	for (auto &handle : data.handle_names) {
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value("Handle types");
+	for (auto &handle : handle_names) {
 		auto type = types.append_child("type");
 		type.append_attribute("category").set_value("handle");
 		type.append_attribute("objtypeenum").set_value(to_objtypeenum(handle).data());
@@ -392,22 +390,24 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 		type.append_child("name").append_child(pugi::node_pcdata).set_value(handle.data());
 		type.append_child(pugi::node_pcdata).set_value(")");
 	}
+}
 
+void append_enum(pugi::xml_node &types, std::vector<vma_xml::detail::enum_t> const &enums) {
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
-		"Enumeration types"
-	);
-	for (auto &enumeration : data.enums) {
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value("Enumeration types");
+	for (auto &enumeration : enums) {
 		auto type = types.append_child("type");
 		type.append_attribute("name").set_value(enumeration.name.data());
 		type.append_attribute("category").set_value("enum");
 	}
+}
 
+void append_function_pointer(pugi::xml_node &types, std::vector<vma_xml::detail::typedef_t> const &typedefs) {
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"Function pointer typedefs"
 	);
-	for (auto &type_def : data.typedefs)
+	for (auto &type_def : typedefs)
 		if (auto function_pointer = parse_function_pointer(type_def); function_pointer) {
 			auto type = types.append_child("type");
 			type.append_attribute("category").set_value("funcpointer");
@@ -434,12 +434,11 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 				(" " + function_pointer->parameters.back().name + ");").data()
 			);
 		}
-
+}
+void append_struct(pugi::xml_node &types, std::vector<vma_xml::detail::struct_t> const &structs) {
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
-		"Struct types"
-	);
-	for (auto &structure : data.structs) {
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value("Struct types");
+	for (auto &structure : structs) {
 		auto type = types.append_child("type");
 		type.append_attribute("category").set_value("struct");
 		type.append_attribute("name").set_value(structure.name.data());
@@ -450,12 +449,14 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 			member.append_child("name").append_child(pugi::node_pcdata).set_value(variable.name.data());
 		}
 	}
+}
 
+void append_enumerations(pugi::xml_node &registry, std::vector<vma_xml::detail::enum_t> const &enumerations) {
 	registry.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
 	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"Enumeration definitions"
 	);
-	for (auto &enumeration : data.enums) 
+	for (auto &enumeration : enumerations)
 		if (std::string_view(enumeration.name).substr(enumeration.name.size() - 8) != "FlagBits") {
 			auto enums = registry.append_child("enums");
 			enums.append_attribute("name").set_value(enumeration.name.data());
@@ -471,7 +472,7 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"Flags"
 	);
-	for (auto &enumeration : data.enums)
+	for (auto &enumeration : enumerations)
 		if (std::string_view(enumeration.name).substr(enumeration.name.size() - 8) == "FlagBits") {
 			auto enums = registry.append_child("enums");
 			enums.append_attribute("name").set_value(enumeration.name.data());
@@ -482,7 +483,9 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 				enum_.append_attribute("name").set_value(enumerator.name.data());
 			}
 		}
+}
 
+void append_commands(pugi::xml_node &registry, std::vector<vma_xml::detail::function_t> const &functions) {
 	registry.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
 	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"Command definitions"
@@ -506,7 +509,7 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 		"VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT";
 	auto commands = registry.append_child("commands");
 	commands.append_attribute("comment").set_value("VMA command definitions");
-	for (auto &function : data.functions) {
+	for (auto &function : functions) {
 		auto command = commands.append_child("command");
 		if (function.return_type == "VkResult") {
 			command.append_attribute("successcodes").set_value("VK_SUCCESS");
@@ -524,7 +527,9 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 			param.append_child("name").append_child(pugi::node_pcdata).set_value(parameter.name.data());
 		}
 	}
+}
 
+void append_misc(pugi::xml_node &registry) {
 	// Skip 'feature' if it can be avoided
 	auto feature = registry.append_child("feature");
 	feature.append_attribute("comment").set_value("empty");
@@ -540,6 +545,28 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 	// Skip 'spirvcapabilities' if it can be avoided
 	auto spirvcapabilities = registry.append_child("spirvcapabilities");
 	spirvcapabilities.append_attribute("comment").set_value("empty");
+}
+std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) {
+	auto output = std::make_optional<pugi::xml_document>();
+	auto registry = output->append_child("registry");
+
+	append_header(registry);
+	{
+		auto types = registry.append_child("types");
+		types.append_attribute("comment").set_value("VMA type definitions");
+
+		append_includes(types);
+		append_defines(types, data.defines);
+		append_basic(types);
+		append_bitmask(types, data.typedefs);
+		append_handle(types, data.handle_names);
+		append_enum(types, data.enums);
+		append_function_pointer(types, data.typedefs);
+		append_struct(types, data.structs);
+	}
+	append_enumerations(registry, data.enums);
+	append_commands(registry, data.functions);
+	append_misc(registry);
 
 	return std::move(output);
 }
