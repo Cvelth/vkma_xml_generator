@@ -3,6 +3,7 @@
 
 #include "generator.hpp"
 
+#include <array>
 #include <fstream>
 #include <iostream>
 #include <iterator>
@@ -196,7 +197,9 @@ void extract_vk_name(std::string_view type, std::set<std::string> &output) {
 	else if (type.size() > 2 && type.substr(type.size() - 2) == " *")
 		extract_vk_name(type.substr(0, type.size() - 2), output);
 	else
-		if (type.size() > 2 && type.substr(0, 2) == "Vk")
+		if (type.size() > 2
+				&& (type.substr(0, 2) == "Vk" || type.substr(0, 6) == "PFN_vk")
+				&& type != "VkResult")
 			output.emplace(std::string(type));
 }
 std::set<std::string> extract_vk_names(vma_xml::detail::data_t const &data) {
@@ -266,7 +269,7 @@ std::string to_upper_case(std::string_view input) {
 std::string to_objtypeenum(std::string_view input) {
 	std::string output = to_upper_case(input);
 	if (std::string_view(output).substr(0, 4) == "VMA_")
-		return output.insert(4, "OBJECT_TYPE_");
+		return output.insert(0, "VK_OBJECT_TYPE_");
 	return output;
 }
 
@@ -317,12 +320,12 @@ void append_typename(pugi::xml_node &xml, std::string_view name, std::string pre
 
 void append_header(pugi::xml_node &registry) {
 	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
-		"\nDO NOT MODIFY MANUALLY!"
+		"\nCopyright (c) 2021 Cvelth (cvelth.mail@gmail.com)"
+		"\nSPDX-License-Identifier: Unlicense."
+		"\n\nDO NOT MODIFY MANUALLY!"
 		"\nThis file was generated using [generator](https://github.com/Cvelth/vma_xml_generator)."
 		"\nGenerated files are licensed under [The Unlicense](https://unlicense.org)."
 		"\nThe generator itself is licensed under [MIT License](https://www.mit.edu/~amini/LICENSE.md)."
-		"\n\nCopyright (c) 2021 Cvelth (cvelth.mail@gmail.com)"
-		"\nSPDX-License-Identifier: Unlicense."
 	);
 	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"\nThis file was generated from xml 'doxygen' documentation for "
@@ -363,6 +366,14 @@ void append_defines(pugi::xml_node &types, std::vector<vma_xml::detail::define_t
 		type.append_child("name").append_child(pugi::node_pcdata).set_value(define.name.data());
 		type.append_child(pugi::node_pcdata).set_value((" " + define.value).data());
 	}
+
+	auto flags = types.append_child("type");
+	flags.append_attribute("category").set_value("basetype");
+	flags.append_child(pugi::node_pcdata).set_value("typedef ");
+	flags.append_child("type").append_child(pugi::node_pcdata).set_value("uint32_t");
+	flags.append_child(pugi::node_pcdata).set_value(" ");
+	flags.append_child("name").append_child(pugi::node_pcdata).set_value("VkFlags");
+	flags.append_child(pugi::node_pcdata).set_value(";");
 }
 
 void append_basic(pugi::xml_node &types) {
@@ -460,6 +471,31 @@ void append_enum(pugi::xml_node &types, std::vector<vma_xml::detail::enum_t> con
 		type.append_attribute("name").set_value(enumeration.name.data());
 		type.append_attribute("category").set_value("enum");
 	}
+
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
+		"enums required by Vulkan-HPP"
+	);
+
+	auto result = types.append_child("type");
+	result.append_attribute("name").set_value("VkResult");
+	result.append_attribute("category").set_value("enum");
+
+	auto structure_type = types.append_child("type");
+	structure_type.append_attribute("name").set_value("VkStructureType");
+	structure_type.append_attribute("category").set_value("enum");
+
+	auto object_type = types.append_child("type");
+	object_type.append_attribute("name").set_value("VkObjectType");
+	object_type.append_attribute("category").set_value("enum");
+
+	auto index_type = types.append_child("type");
+	index_type.append_attribute("name").set_value("VkIndexType");
+	index_type.append_attribute("category").set_value("enum");
+
+	auto debug_object_type = types.append_child("type");
+	debug_object_type.append_attribute("name").set_value("VkDebugReportObjectTypeEXT");
+	debug_object_type.append_attribute("category").set_value("enum");
 }
 
 void append_function_pointer(pugi::xml_node &types, std::vector<vma_xml::detail::typedef_t> const &typedefs) {
@@ -515,6 +551,92 @@ void append_struct(pugi::xml_node &types, std::vector<vma_xml::detail::struct_t>
 		}
 }
 
+struct constexpr_enum_value_t {
+	std::string_view name, value;
+};
+constexpr std::array result_codes {
+	constexpr_enum_value_t{ "VK_SUCCESS", "0" },
+	constexpr_enum_value_t{ "VK_NOT_READY", "1" },
+	constexpr_enum_value_t{ "VK_TIMEOUT", "2" },
+	constexpr_enum_value_t{ "VK_EVENT_SET", "3" },
+	constexpr_enum_value_t{ "VK_EVENT_RESET", "4" },
+	constexpr_enum_value_t{ "VK_INCOMPLETE", "5" },
+	constexpr_enum_value_t{ "VK_ERROR_OUT_OF_HOST_MEMORY", "-1" },
+	constexpr_enum_value_t{ "VK_ERROR_OUT_OF_DEVICE_MEMORY", "-2" },
+	constexpr_enum_value_t{ "VK_ERROR_INITIALIZATION_FAILED", "-3" },
+	constexpr_enum_value_t{ "VK_ERROR_DEVICE_LOST", "-4" },
+	constexpr_enum_value_t{ "VK_ERROR_MEMORY_MAP_FAILED", "-5" },
+	constexpr_enum_value_t{ "VK_ERROR_LAYER_NOT_PRESENT", "-6" },
+	constexpr_enum_value_t{ "VK_ERROR_EXTENSION_NOT_PRESENT", "-7" },
+	constexpr_enum_value_t{ "VK_ERROR_FEATURE_NOT_PRESENT", "-8" },
+	constexpr_enum_value_t{ "VK_ERROR_INCOMPATIBLE_DRIVER", "-9" },
+	constexpr_enum_value_t{ "VK_ERROR_TOO_MANY_OBJECTS", "-10" },
+	constexpr_enum_value_t{ "VK_ERROR_FORMAT_NOT_SUPPORTED", "-11" },
+	constexpr_enum_value_t{ "VK_ERROR_FRAGMENTED_POOL", "-12" },
+	constexpr_enum_value_t{ "VK_ERROR_SURFACE_LOST_KHR", "-1000000000" },
+	constexpr_enum_value_t{ "VK_ERROR_NATIVE_WINDOW_IN_USE_KHR", "-1000000001" },
+	constexpr_enum_value_t{ "VK_SUBOPTIMAL_KHR", "1000001003" },
+	constexpr_enum_value_t{ "VK_ERROR_OUT_OF_DATE_KHR", "-1000001004" },
+	constexpr_enum_value_t{ "VK_ERROR_INCOMPATIBLE_DISPLAY_KHR", "-1000003001" },
+	constexpr_enum_value_t{ "VK_ERROR_VALIDATION_FAILED_EXT", "-1000011001" },
+	constexpr_enum_value_t{ "VK_ERROR_INVALID_SHADER_NV", "-1000012000" }
+};
+constexpr std::string_view result_code_list = "VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, "
+	"VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, "
+	"VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, "
+	"VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, "
+	"VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, "
+	"VK_ERROR_FRAGMENTED_POOL, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, "
+	"VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, "
+	"VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV";
+
+constexpr std::array index_types {
+	constexpr_enum_value_t{ "VK_INDEX_TYPE_UINT16", "0" },
+	constexpr_enum_value_t{ "VK_INDEX_TYPE_UINT32", "1" }
+};
+
+void append_vk_enums(pugi::xml_node &registry, std::set<std::string> const &handle_names) {
+	registry.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
+	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
+		"enums required by Vulkan-HPP"
+	);
+
+	auto result = registry.append_child("enums");
+	result.append_attribute("name").set_value("VkResult");
+	result.append_attribute("type").set_value("enum");
+	for (auto &code : result_codes) {
+		auto temp = result.append_child("enum");
+		temp.append_attribute("value").set_value(code.value.data());
+		temp.append_attribute("name").set_value(code.name.data());
+	}
+
+	auto structure_type = registry.append_child("enums");
+	structure_type.append_attribute("name").set_value("VkStructureType");
+	structure_type.append_attribute("type").set_value("enum");
+
+	auto object_type = registry.append_child("enums");
+	object_type.append_attribute("name").set_value("VkObjectType");
+	object_type.append_attribute("type").set_value("enum");
+	for (size_t counter = 1'000; auto &handle : handle_names) {
+		auto temp = object_type.append_child("enum");
+		temp.append_attribute("value").set_value(std::to_string(counter++).data());
+		temp.append_attribute("name").set_value(to_objtypeenum(handle).data());
+	}
+
+	auto index_type = registry.append_child("enums");
+	index_type.append_attribute("name").set_value("VkIndexType");
+	index_type.append_attribute("type").set_value("enum");
+	for (auto &type : index_types) {
+		auto temp = index_type.append_child("enum");
+		temp.append_attribute("value").set_value(type.value.data());
+		temp.append_attribute("name").set_value(type.name.data());
+	}
+
+	auto debug_object_type = registry.append_child("enums");
+	debug_object_type.append_attribute("name").set_value("VkDebugReportObjectTypeEXT");
+	debug_object_type.append_attribute("type").set_value("enum");
+}
+
 void append_enumerations(pugi::xml_node &registry, std::vector<vma_xml::detail::enum_t> const &enumerations) {
 	registry.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
 	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
@@ -554,30 +676,13 @@ void append_commands(pugi::xml_node &registry, std::vector<vma_xml::detail::func
 	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"Command definitions"
 	);
-	constexpr std::string_view error_codes =
-		"VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, "
-		"VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, "
-		"VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, "
-		"VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, "
-		"VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, "
-		"VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, "
-		"VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, "
-		"VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, "
-		"VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, "
-		"VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, "
-		"VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, "
-		"VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, "
-		"VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, "
-		"VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, "
-		"VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, "
-		"VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT";
 	auto commands = registry.append_child("commands");
 	commands.append_attribute("comment").set_value("VMA command definitions");
 	for (auto &function : functions) {
 		auto command = commands.append_child("command");
 		if (function.return_type == "VkResult") {
 			command.append_attribute("successcodes").set_value("VK_SUCCESS");
-			command.append_attribute("errorcodes").set_value(error_codes.data());
+			command.append_attribute("errorcodes").set_value(result_code_list.data());
 		}
 		auto proto = command.append_child("proto");
 		proto.append_child("type").append_child(pugi::node_pcdata).set_value(function.return_type.data());
@@ -594,19 +699,53 @@ void append_commands(pugi::xml_node &registry, std::vector<vma_xml::detail::func
 	}
 }
 
-void append_misc(pugi::xml_node &registry) {
-	// Skip 'feature' if it can be avoided
+void append_api(pugi::xml_node &registry, vma_xml::detail::data_t const &data) {
 	auto feature = registry.append_child("feature");
-	feature.append_attribute("comment").set_value("empty");
+	feature.append_attribute("api").set_value("vulkan");
+	feature.append_attribute("name").set_value("VK_VERSION_9999999_9999999");
+	feature.append_attribute("number").set_value("9999999.9999999");
+	feature.append_attribute("comment").set_value("VMA API interface definitions");
+	
+	auto headers = feature.append_child("require");
+	headers.append_attribute("comment").set_value("headers");
+	headers.append_child("type").append_attribute("name").set_value("vulkan");
+	
+	auto structs = feature.append_child("require");
+	structs.append_attribute("comment").set_value("structs");
+	for (auto &structure : data.structs)
+		structs.append_child("type").append_attribute("name").set_value(structure.name.data());
+	
+	auto defines = feature.append_child("require");
+	defines.append_attribute("comment").set_value("defines");
+	for (auto &define : data.defines)
+		defines.append_child("type").append_attribute("name").set_value(define.name.data());
+	
+	auto typedefs = feature.append_child("require");
+	typedefs.append_attribute("comment").set_value("typedefs");
+	for (auto &type_def : data.typedefs)
+		typedefs.append_child("type").append_attribute("name").set_value(type_def.name.data());
+	
+	auto functions = feature.append_child("require");
+	functions.append_attribute("comment").set_value("functions");
+	for (auto &function : data.functions)
+		functions.append_child("command").append_attribute("name").set_value(function.name.data());
+}
 
-	// Skip 'extensions' if it can be avoided
+void append_misc(pugi::xml_node &registry) {
 	auto extensions = registry.append_child("extensions");
 	extensions.append_attribute("comment").set_value("empty");
+	auto extension = extensions.append_child("extension");
+	extension.append_attribute("name").set_value("VK_WC_why_y_y_y_y");
+	extension.append_attribute("number").set_value("1");
+	extension.append_attribute("type").set_value("instance");
+	extension.append_attribute("author").set_value("WC");
+	extension.append_attribute("contact").set_value("@cvelth");
+	extension.append_attribute("supported").set_value("disabled");
 
 	// Skip 'spirvextensions' if it can be avoided
 	auto spirvextensions = registry.append_child("spirvextensions");
 	spirvextensions.append_attribute("comment").set_value("empty");
-
+	
 	// Skip 'spirvcapabilities' if it can be avoided
 	auto spirvcapabilities = registry.append_child("spirvcapabilities");
 	spirvcapabilities.append_attribute("comment").set_value("empty");
@@ -632,7 +771,9 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 		append_struct(types, data.structs, data.handle_names);
 	}
 	append_enumerations(registry, data.enums);
+	append_vk_enums(registry, data.handle_names);
 	append_commands(registry, data.functions);
+	append_api(registry, data);
 	append_misc(registry);
 
 	return std::move(output);
