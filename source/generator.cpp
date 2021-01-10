@@ -305,7 +305,7 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 	tags.append_attribute("comment").set_value("empty");
 	auto tag = tags.append_child("tag");
 	tag.append_attribute("name").set_value("WC");
-	tag.append_attribute("protect").set_value("Who cares?");
+	tag.append_attribute("author").set_value("Who cares?");
 	tag.append_attribute("contact").set_value("@cvelth");
 
 	auto types = registry.append_child("types");

@@ -16,7 +16,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		<platform name="does_not_matter" protect="VMA_DOES_NOT_MATTER" comment="Why am I even required to specify this?" />
 	</platforms>
 	<tags comment="empty">
-		<tag name="WC" protect="Who cares?" contact="@cvelth" />
+		<tag name="WC" author="Who cares?" contact="@cvelth" />
 	</tags>
 	<types comment="VMA type definitions">
 		<type category="define">#define <name>VMA_RECORDING_ENABLED</name> 0</type>
