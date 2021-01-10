@@ -9,6 +9,7 @@
 	<comment>This file was generated from xml 'doxygen' documentation for [vk_mem_alloc.h (VulkanMemoryAllocator)](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/blob/master/src/vk_mem_alloc.h) header.</comment>
 	<comment>It is intended to be used as [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hpp) generator input.</comment>
 	<comment>The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hpp/blob/master/vulkan/vulkan.hpp) compatible header - an improved c++ interface.</comment>
+	<platforms />
 	<types>
 		<type category="define">#define <name>VMA_RECORDING_ENABLED</name> 0</type>
 		<type category="define">#define <name>VMA_VULKAN_VERSION</name> 1000000</type>
