@@ -5,7 +5,7 @@
 	<comment>Generated files are licensed under [The Unlicense](https://unlicense.org).</comment>
 	<comment>The generator itself is licensed under [MIT License](https://www.mit.edu/~amini/LICENSE.md).</comment>
 	<comment>SPDX-License-Identifier: Unlicense.</comment>
-	<comment>    </comment>
+	<comment>____</comment>
 	<comment>This file was generated from xml 'doxygen' documentation for [vk_mem_alloc.h (VulkanMemoryAllocator)](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/blob/master/src/vk_mem_alloc.h) header.</comment>
 	<comment>It is intended to be used as [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hpp) generator input.</comment>
 	<comment>The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hpp/blob/master/vulkan/vulkan.hpp) compatible header - an improved c++ interface.</comment>
@@ -18,14 +18,14 @@
 		<type category="define">#define <name>VMA_BIND_MEMORY2</name> 0</type>
 		<type category="define">#define <name>VMA_MEMORY_BUDGET</name> 0</type>
 		<type category="define">#define <name>VMA_STATS_STRING_ENABLED</name> 1</type>
-		<comment>    </comment>
+		<comment>____</comment>
 		<comment>Bitmask types</comment>
 		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaAllocatorCreateFlags</name>;</type>
 		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaRecordFlags</name>;</type>
 		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaAllocationCreateFlags</name>;</type>
 		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaPoolCreateFlags</name>;</type>
 		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaDefragmentationFlags</name>;</type>
-		<comment>    </comment>
+		<comment>____</comment>
 		<comment>Handle types</comment>
 		<type category="handle" objtypeenum="VMA_OBJECT_TYPE_ALLOCATOR">
 			<type>VK_DEFINE_HANDLE</type>(<name>VmaAllocator</name>)</type>
@@ -35,7 +35,7 @@
 			<type>VK_DEFINE_HANDLE</type>(<name>VmaAllocation</name>)</type>
 		<type category="handle" objtypeenum="VMA_OBJECT_TYPE_DEFRAGMENTATION_CONTEXT">
 			<type>VK_DEFINE_HANDLE</type>(<name>VmaDefragmentationContext</name>)</type>
-		<comment>    </comment>
+		<comment>____</comment>
 		<comment>Enumeration types</comment>
 		<type name="VmaAllocatorCreateFlagBits" category="enum" />
 		<type name="VmaRecordFlagBits" category="enum" />
@@ -43,11 +43,11 @@
 		<type name="VmaAllocationCreateFlagBits" category="enum" />
 		<type name="VmaPoolCreateFlagBits" category="enum" />
 		<type name="VmaDefragmentationFlagBits" category="enum" />
-		<comment>    </comment>
+		<comment>____</comment>
 		<comment>Function pointer typedefs</comment>
 		<type category="funcpointer">typedef void(VKAPI_PTR *<name>PFN_vmaAllocateDeviceMemoryFunction</name>)(<type>VmaAllocator</type> allocator, <type>uint32_t</type> memoryType, <type>VkDeviceMemory</type> memory, <type>VkDeviceSize</type> size);</type>
 		<type category="funcpointer">typedef void(VKAPI_PTR *<name>PFN_vmaFreeDeviceMemoryFunction</name>)(<type>VmaAllocator</type> allocator, <type>uint32_t</type> memoryType, <type>VkDeviceMemory</type> memory, <type>VkDeviceSize</type> size);</type>
-		<comment>    </comment>
+		<comment>____</comment>
 		<comment>Struct types</comment>
 		<type category="struct" name="VmaAllocation" />
 		<type category="struct" name="VmaAllocationCreateInfo">
@@ -361,7 +361,7 @@
 			</member>
 		</type>
 	</types>
-	<comment>    </comment>
+	<comment>____</comment>
 	<comment>Enumeration definitions</comment>
 	<enums name="VmaMemoryUsage" type="enum">
 		<enum value="0" name="VMA_MEMORY_USAGE_UNKNOWN" />
@@ -373,7 +373,7 @@
 		<enum value="6" name="VMA_MEMORY_USAGE_GPU_LAZILY_ALLOCATED" />
 		<enum value="0x7FFFFFFF" name="VMA_MEMORY_USAGE_MAX_ENUM" />
 	</enums>
-	<comment>    </comment>
+	<comment>____</comment>
 	<comment>Flags</comment>
 	<enums name="VmaAllocatorCreateFlagBits" type="bitmask">
 		<enum value="0x00000001" name="VMA_ALLOCATOR_CREATE_EXTERNALLY_SYNCHRONIZED_BIT" />
@@ -415,7 +415,7 @@
 	<enums name="VmaDefragmentationFlagBits" type="bitmask">
 		<enum value="0x7FFFFFFF" name="VMA_DEFRAGMENTATION_FLAG_BITS_MAX_ENUM" />
 	</enums>
-	<comment>    </comment>
+	<comment>____</comment>
 	<comment>Command definitions</comment>
 	<commands>
 		<command successcodes="VK_SUCCESS" errorcodes="VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT">
