@@ -436,6 +436,52 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 			}
 		}
 
+	registry.append_child("comment").append_child(pugi::node_pcdata).set_value("");
+	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
+		"Command definitions"
+	);
+	constexpr std::string_view error_codes =
+		"VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, VK_EVENT_RESET, VK_INCOMPLETE, "
+		"VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_INITIALIZATION_FAILED, "
+		"VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, VK_ERROR_LAYER_NOT_PRESENT, "
+		"VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, VK_ERROR_INCOMPATIBLE_DRIVER, "
+		"VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, VK_ERROR_FRAGMENTED_POOL, "
+		"VK_ERROR_UNKNOWN, VK_ERROR_OUT_OF_POOL_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE, "
+		"VK_ERROR_FRAGMENTATION, VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS, "
+		"VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, VK_SUBOPTIMAL_KHR, "
+		"VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, "
+		"VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV, "
+		"VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT, VK_ERROR_NOT_PERMITTED_EXT, "
+		"VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, VK_THREAD_IDLE_KHR, VK_THREAD_DONE_KHR, "
+		"VK_OPERATION_DEFERRED_KHR, VK_OPERATION_NOT_DEFERRED_KHR, VK_PIPELINE_COMPILE_REQUIRED_EXT, "
+		"VK_ERROR_OUT_OF_POOL_MEMORY_KHR, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR, "
+		"VK_ERROR_FRAGMENTATION_EXT, VK_ERROR_INVALID_DEVICE_ADDRESS_EXT, "
+		"VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR, VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT";
+	auto commands = registry.append_child("commands");
+	for (auto &function : data.functions) {
+		auto command = commands.append_child("command");
+		if (function.return_type == "VkResult") {
+			command.append_attribute("successcodes").set_value("VK_SUCCESS");
+			command.append_attribute("errorcodes").set_value(error_codes.data());
+		}
+		auto proto = command.append_child("proto");
+		proto.append_child("type").append_child(pugi::node_pcdata).set_value(function.return_type.data());
+		proto.append_child(pugi::node_pcdata).set_value(" ");
+		proto.append_child("name").append_child(pugi::node_pcdata).set_value(function.name.data());
+
+		for (auto &parameter : function.parameters) {
+			auto param = command.append_child("param");
+			param.append_child("type").append_child(pugi::node_pcdata).set_value(parameter.type.data());
+			param.append_child(pugi::node_pcdata).set_value(" ");
+			param.append_child("name").append_child(pugi::node_pcdata).set_value(parameter.name.data());
+		}
+	}
+
+	// Skip 'feature' if it can be avoided
+	// Skip 'extensions' if it can be avoided
+	// Skip 'spirvextensions' if it can be avoided
+	// Skip 'spirvcapabilities' if it can be avoided
+
 	return std::move(output);
 }
 
