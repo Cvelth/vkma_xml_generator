@@ -294,13 +294,17 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 		"compatible header - an improved c++ interface."
 	);
 
-	// Skip 'platforms' if it can be avoided
 	auto platforms = registry.append_child("platforms");
-	platforms.append_attribute("comment").set_value("empty");
+	auto platform = platforms.append_child("platform");
+	platform.append_attribute("name").set_value("does_not_matter");
+	platform.append_attribute("protect").set_value("VMA_DOES_NOT_MATTER");
+	platform.append_attribute("comment").set_value("Why am I even required to specify this?");
 
-	// Skip 'tags' if it can be avoided
 	auto tags = registry.append_child("tags");
-	tags.append_attribute("comment").set_value("empty");
+	auto tag = tags.append_child("tag");
+	tag.append_attribute("name").set_value("WC");
+	tag.append_attribute("protect").set_value("Who cares?");
+	tag.append_attribute("contact").set_value("@cvelth");
 
 	auto types = registry.append_child("types");
 	types.append_attribute("comment").set_value("VMA type definitions");

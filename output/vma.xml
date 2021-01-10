@@ -12,8 +12,12 @@ SPDX-License-Identifier: Unlicense.</comment>
 This file was generated from xml 'doxygen' documentation for [vk_mem_alloc.h (VulkanMemoryAllocator)](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/blob/master/src/vk_mem_alloc.h) header.
 It is intended to be used as [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hpp) generator input.
 The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hpp/blob/master/vulkan/vulkan.hpp) compatible header - an improved c++ interface.</comment>
-	<platforms comment="empty" />
-	<tags comment="empty" />
+	<platforms>
+		<platform name="does_not_matter" protect="VMA_DOES_NOT_MATTER" comment="Why am I even required to specify this?" />
+	</platforms>
+	<tags>
+		<tag name="WC" protect="Who cares?" contact="@cvelth" />
+	</tags>
 	<types comment="VMA type definitions">
 		<type category="define">#define <name>VMA_RECORDING_ENABLED</name> 0</type>
 		<type category="define">#define <name>VMA_VULKAN_VERSION</name> 1000000</type>
