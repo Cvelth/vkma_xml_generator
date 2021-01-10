@@ -19,12 +19,27 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		<tag name="WC" author="Who cares?" contact="@cvelth" />
 	</tags>
 	<types comment="VMA type definitions">
+		<type name="vulkan" category="include">#include "vulkan/vulkan.h"</type>
 		<type category="define">#define <name>VMA_RECORDING_ENABLED</name> 0</type>
 		<type category="define">#define <name>VMA_VULKAN_VERSION</name> 1000000</type>
 		<type category="define">#define <name>VMA_DEDICATED_ALLOCATION</name> 0</type>
 		<type category="define">#define <name>VMA_BIND_MEMORY2</name> 0</type>
 		<type category="define">#define <name>VMA_MEMORY_BUDGET</name> 0</type>
 		<type category="define">#define <name>VMA_STATS_STRING_ENABLED</name> 1</type>
+		<comment>____</comment>
+		<comment>Basic C types</comment>
+		<type requires="vulkan" name="void" />
+		<type requires="vulkan" name="char" />
+		<type requires="vulkan" name="float" />
+		<type requires="vulkan" name="double" />
+		<type requires="vulkan" name="uint8_t" />
+		<type requires="vulkan" name="uint16_t" />
+		<type requires="vulkan" name="uint32_t" />
+		<type requires="vulkan" name="uint64_t" />
+		<type requires="vulkan" name="int32_t" />
+		<type requires="vulkan" name="int64_t" />
+		<type requires="vulkan" name="size_t" />
+		<type name="int" />
 		<comment>____</comment>
 		<comment>Bitmask types</comment>
 		<type category="bitmask">typedef <type>VkFlags</type> <name>VmaAllocatorCreateFlags</name>;</type>

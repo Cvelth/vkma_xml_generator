@@ -310,6 +310,12 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 
 	auto types = registry.append_child("types");
 	types.append_attribute("comment").set_value("VMA type definitions");
+
+	auto vulkan_include = types.append_child("type");
+	vulkan_include.append_attribute("name").set_value("vulkan");
+	vulkan_include.append_attribute("category").set_value("include");
+	vulkan_include.append_child(pugi::node_pcdata).set_value("#include \"vulkan/vulkan.h\"");
+
 	for (auto &define : data.defines) {
 		auto type = types.append_child("type");
 		type.append_attribute("category").set_value("define");
@@ -317,6 +323,46 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 		type.append_child("name").append_child(pugi::node_pcdata).set_value(define.name.data());
 		type.append_child(pugi::node_pcdata).set_value((" " + define.value).data());
 	}
+
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
+		"Basic C types"
+	);
+	auto type_void = types.append_child("type");
+	type_void.append_attribute("requires").set_value("vulkan");
+	type_void.append_attribute("name").set_value("void");
+	auto type_char = types.append_child("type");
+	type_char.append_attribute("requires").set_value("vulkan");
+	type_char.append_attribute("name").set_value("char");
+	auto type_float = types.append_child("type");
+	type_float.append_attribute("requires").set_value("vulkan");
+	type_float.append_attribute("name").set_value("float");
+	auto type_double = types.append_child("type");
+	type_double.append_attribute("requires").set_value("vulkan");
+	type_double.append_attribute("name").set_value("double");
+	auto type_uint8_t = types.append_child("type");
+	type_uint8_t.append_attribute("requires").set_value("vulkan");
+	type_uint8_t.append_attribute("name").set_value("uint8_t");
+	auto type_uint16_t = types.append_child("type");
+	type_uint16_t.append_attribute("requires").set_value("vulkan");
+	type_uint16_t.append_attribute("name").set_value("uint16_t");
+	auto type_uint32_t = types.append_child("type");
+	type_uint32_t.append_attribute("requires").set_value("vulkan");
+	type_uint32_t.append_attribute("name").set_value("uint32_t");
+	auto type_uint64_t = types.append_child("type");
+	type_uint64_t.append_attribute("requires").set_value("vulkan");
+	type_uint64_t.append_attribute("name").set_value("uint64_t");
+	auto type_int32_t = types.append_child("type");
+	type_int32_t.append_attribute("requires").set_value("vulkan");
+	type_int32_t.append_attribute("name").set_value("int32_t");
+	auto type_int64_t = types.append_child("type");
+	type_int64_t.append_attribute("requires").set_value("vulkan");
+	type_int64_t.append_attribute("name").set_value("int64_t");
+	auto type_size_t = types.append_child("type");
+	type_size_t.append_attribute("requires").set_value("vulkan");
+	type_size_t.append_attribute("name").set_value("size_t");
+	auto type_int = types.append_child("type");
+	type_int.append_attribute("name").set_value("int");
 
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
