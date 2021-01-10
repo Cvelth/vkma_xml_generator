@@ -1,14 +1,17 @@
 <?xml version="1.0"?>
 <registry>
-	<comment>DO NOT MODIFY MANUALLY!</comment>
-	<comment>This file was generated using [generator](https://github.com/Cvelth/vma_xml_generator).</comment>
-	<comment>Generated files are licensed under [The Unlicense](https://unlicense.org).</comment>
-	<comment>The generator itself is licensed under [MIT License](https://www.mit.edu/~amini/LICENSE.md).</comment>
-	<comment>SPDX-License-Identifier: Unlicense.</comment>
-	<comment>____</comment>
-	<comment>This file was generated from xml 'doxygen' documentation for [vk_mem_alloc.h (VulkanMemoryAllocator)](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/blob/master/src/vk_mem_alloc.h) header.</comment>
-	<comment>It is intended to be used as [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hpp) generator input.</comment>
-	<comment>The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hpp/blob/master/vulkan/vulkan.hpp) compatible header - an improved c++ interface.</comment>
+	<comment>
+DO NOT MODIFY MANUALLY!
+This file was generated using [generator](https://github.com/Cvelth/vma_xml_generator).
+Generated files are licensed under [The Unlicense](https://unlicense.org).
+The generator itself is licensed under [MIT License](https://www.mit.edu/~amini/LICENSE.md).
+
+Copyright (c) 2021 Cvelth (cvelth.mail@gmail.com)
+SPDX-License-Identifier: Unlicense.</comment>
+	<comment>
+This file was generated from xml 'doxygen' documentation for [vk_mem_alloc.h (VulkanMemoryAllocator)](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/blob/master/src/vk_mem_alloc.h) header.
+It is intended to be used as [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hpp) generator input.
+The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hpp/blob/master/vulkan/vulkan.hpp) compatible header - an improved c++ interface.</comment>
 	<platforms />
 	<tags />
 	<types>

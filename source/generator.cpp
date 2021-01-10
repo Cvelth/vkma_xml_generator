@@ -278,31 +278,19 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 	auto registry = output->append_child("registry");
 
 	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
-		"DO NOT MODIFY MANUALLY!"
+		"\nDO NOT MODIFY MANUALLY!"
+		"\nThis file was generated using [generator](https://github.com/Cvelth/vma_xml_generator)."
+		"\nGenerated files are licensed under [The Unlicense](https://unlicense.org)."
+		"\nThe generator itself is licensed under [MIT License](https://www.mit.edu/~amini/LICENSE.md)."
+		"\n\nCopyright (c) 2021 Cvelth (cvelth.mail@gmail.com)"
+		"\nSPDX-License-Identifier: Unlicense."
 	);
 	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
-		"This file was generated using [generator](https://github.com/Cvelth/vma_xml_generator)."
-	);
-	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
-		"Generated files are licensed under [The Unlicense](https://unlicense.org)."
-	);
-	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
-		"The generator itself is licensed under [MIT License](https://www.mit.edu/~amini/LICENSE.md)."
-	);
-	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
-		"SPDX-License-Identifier: Unlicense."
-	);
-	registry.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
-	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
-		"This file was generated from xml 'doxygen' documentation for "
+		"\nThis file was generated from xml 'doxygen' documentation for "
 		"[vk_mem_alloc.h (VulkanMemoryAllocator)](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/blob/master/src/vk_mem_alloc.h) "
 		"header."
-	);
-	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
-		"It is intended to be used as [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hpp) generator input."
-	);
-	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
-		"The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hpp/blob/master/vulkan/vulkan.hpp) "
+		"\nIt is intended to be used as [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hpp) generator input."
+		"\nThe goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hpp/blob/master/vulkan/vulkan.hpp) "
 		"compatible header - an improved c++ interface."
 	);
 
