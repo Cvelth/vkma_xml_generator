@@ -24,6 +24,21 @@ std::optional<pugi::xml_document> vma_xml::detail::load_xml(std::filesystem::pat
 	return std::nullopt;
 }
 
+std::string optimize(std::string &&input) {
+	static std::locale locale("en_US.UTF8");
+
+	std::string output;
+	output.reserve(input.size());
+	for (size_t i = 0; i < input.size(); ++i)
+		if (input[i] == '\n') {
+			input[i] = ' '; --i;
+		} else if (i != 0 && std::isblank(input[i], locale) && std::isblank(input[i - 1], locale)) {
+			// Skip the consecutive blank character.
+		} else
+			output += input[i];
+	return std::move(output);
+}
+
 std::string to_string(pugi::xml_node const &xml) {
 	std::string output;
 	for (auto &child : xml.children())
@@ -33,7 +48,7 @@ std::string to_string(pugi::xml_node const &xml) {
 			output += child.child_value();
 		else
 			std::cout << "Warning: Ignore an unknown tag: '" << child.name() << "'.\n";
-	return output;
+	return optimize(std::move(output));
 }
 
 std::optional<vma_xml::detail::variable_t> vma_xml::detail::parse_variable(pugi::xml_node const &xml) {
@@ -245,7 +260,7 @@ std::optional<vma_xml::detail::function_t> parse_function_pointer(vma_xml::detai
 				auto space_pos = type.find(" ", offset);
 				auto comma_pos = type.find(", ", space_pos);
 				if (comma_pos == std::string_view::npos)
-					comma_pos = type.size();
+					comma_pos = type.size() - 1;
 				output.parameters.emplace_back(
 					std::string(type.begin() + space_pos + 1, type.begin() + comma_pos),
 					std::string(type.begin() + offset, type.begin() + space_pos)
@@ -302,6 +317,7 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 		type.append_child(pugi::node_pcdata).set_value((" " + define.value).data());
 	}
 
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value("");
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"Bitmask types"
 	);
@@ -316,6 +332,7 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 			type.append_child(pugi::node_pcdata).set_value(";");
 		}
 
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value("");
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"Handle types"
 	);
@@ -329,6 +346,7 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 		type.append_child(pugi::node_pcdata).set_value(")");
 	}
 
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value("");
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"Enumeration types"
 	);
@@ -338,6 +356,7 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 		type.append_attribute("category").set_value("enum");
 	}
 
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value("");
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"Function pointer typedefs"
 	);
@@ -349,7 +368,7 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 				("typedef " + function_pointer->return_type + "(VKAPI_PTR *").data()
 			);
 			type.append_child("name").append_child(pugi::node_pcdata).set_value(function_pointer->name.data());
-			type.append_child(pugi::node_pcdata).set_value("(");
+			type.append_child(pugi::node_pcdata).set_value(")(");
 			for (auto iterator = function_pointer->parameters.begin()
 				 ; iterator != std::prev(function_pointer->parameters.end())
 				 ; ++iterator) {
@@ -369,9 +388,53 @@ std::optional<pugi::xml_document> vma_xml::generate(detail::data_t const &data) 
 			);
 		}
 
+	types.append_child("comment").append_child(pugi::node_pcdata).set_value("");
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
 		"Struct types"
 	);
+	for (auto &structure : data.structs) {
+		auto type = types.append_child("type");
+		type.append_attribute("category").set_value("struct");
+		type.append_attribute("name").set_value(structure.name.data());
+		for (auto &variable : structure.variables) {
+			auto member = type.append_child("member");
+			member.append_child("type").append_child(pugi::node_pcdata).set_value(variable.type.data());
+			member.append_child(pugi::node_pcdata).set_value(" ");
+			member.append_child("name").append_child(pugi::node_pcdata).set_value(variable.name.data());
+		}
+	}
+
+	registry.append_child("comment").append_child(pugi::node_pcdata).set_value("");
+	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
+		"Enumeration definitions"
+	);
+	for (auto &enumeration : data.enums) 
+		if (std::string_view(enumeration.name).substr(enumeration.name.size() - 8) != "FlagBits") {
+			auto enums = registry.append_child("enums");
+			enums.append_attribute("name").set_value(enumeration.name.data());
+			enums.append_attribute("type").set_value("enum");
+			for (auto &enumerator : enumeration.values) {
+				auto enum_ = enums.append_child("enum");
+				enum_.append_attribute("value").set_value(enumerator.value.data());
+				enum_.append_attribute("name").set_value(enumerator.name.data());
+			}
+		}
+
+	registry.append_child("comment").append_child(pugi::node_pcdata).set_value("");
+	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
+		"Flags"
+	);
+	for (auto &enumeration : data.enums)
+		if (std::string_view(enumeration.name).substr(enumeration.name.size() - 8) == "FlagBits") {
+			auto enums = registry.append_child("enums");
+			enums.append_attribute("name").set_value(enumeration.name.data());
+			enums.append_attribute("type").set_value("bitmask");
+			for (auto &enumerator : enumeration.values) {
+				auto enum_ = enums.append_child("enum");
+				enum_.append_attribute("value").set_value(enumerator.value.data());
+				enum_.append_attribute("name").set_value(enumerator.name.data());
+			}
+		}
 
 	return std::move(output);
 }
