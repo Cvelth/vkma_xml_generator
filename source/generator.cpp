@@ -701,9 +701,9 @@ void append_commands(pugi::xml_node &registry, std::vector<vma_xml::detail::func
 
 void append_api(pugi::xml_node &registry, vma_xml::detail::data_t const &data) {
 	auto feature = registry.append_child("feature");
-	feature.append_attribute("api").set_value("vulkan");
-	feature.append_attribute("name").set_value("VK_VERSION_9999999_9999999");
-	feature.append_attribute("number").set_value("9999999.9999999");
+	feature.append_attribute("api").set_value("vma");
+	feature.append_attribute("name").set_value("VMA_VERSION_2_3");
+	feature.append_attribute("number").set_value("2.3");
 	feature.append_attribute("comment").set_value("VMA API interface definitions");
 	
 	auto headers = feature.append_child("require");

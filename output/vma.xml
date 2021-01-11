@@ -967,7 +967,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</param>
 		</command>
 	</commands>
-	<feature api="vulkan" name="VK_VERSION_9999999_9999999" number="9999999.9999999" comment="VMA API interface definitions">
+	<feature api="vma" name="VMA_VERSION_2_3" number="2.3" comment="VMA API interface definitions">
 		<require comment="headers">
 			<type name="vulkan" />
 		</require>
