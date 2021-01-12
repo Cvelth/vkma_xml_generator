@@ -59,19 +59,16 @@ namespace vkma_xml {
 			std::set<std::string> vulkan_type_names;
 		};
 
-		std::optional<define_t> parse_define(pugi::xml_node const &xml);
-		std::optional<enum_value_t> parse_enum_value(pugi::xml_node const &xml);
-		std::optional<enum_t> parse_enum(pugi::xml_node const &xml);
-		std::optional<typedef_t> parse_typedef(pugi::xml_node const &xml);
-		std::optional<variable_t> parse_function_parameter(pugi::xml_node const &xml);
-		std::optional<function_t> parse_function(pugi::xml_node const &xml);
-
 		bool parse_header(std::filesystem::path const &path, detail::data_t &data);
 		*/
 
 		struct variable_t {
 			std::string name;
 			std::string type;
+		};
+		struct constant_t {
+			std::string name;
+			std::string value;
 		};
 
 		namespace type {
@@ -81,6 +78,17 @@ namespace vkma_xml {
 			};
 			struct handle {};
 			struct external {};
+			struct macro {
+				std::string value;
+			};
+			struct enumeration {
+				std::optional<std::string> type;
+				std::vector<constant_t> values;
+			};
+			struct function {
+				std::string return_type;
+				std::vector<variable_t> parameters;
+			};
 			struct alias {
 				std::string real_name;
 			};
@@ -90,8 +98,20 @@ namespace vkma_xml {
 			type::structure,
 			type::handle,
 			type::external,
+			type::macro,
+			type::enumeration,
+			type::function,
 			type::alias
 		>;
+
+		struct enum_t {
+			std::string name;
+			type::enumeration state;
+		};
+		struct function_t {
+			std::string name;
+			type::function state;
+		};
 
 		class type_registry {
 		protected:
@@ -109,8 +129,22 @@ namespace vkma_xml {
 														 underlying_hash_t,
 														 underlying_comparator_t>;
 		public:
-			inline underlying_t::iterator get(std::string_view name);
-			inline underlying_t::iterator add(std::string_view name, type_t &&type_data);
+			underlying_t::iterator get(std::string &&name);
+			underlying_t::iterator add(std::string &&name, type_t &&type_data);
+
+			underlying_t::iterator get(std::string_view name) {
+				std::string temp(name);
+				return get(std::move(temp));
+			}
+			underlying_t::iterator add(std::string_view name, type_t &&type_data) {
+				std::string temp(name);
+				return add(std::move(temp), std::move(type_data));
+			}
+
+			auto begin() const { return underlying.begin(); }
+			auto end() const { return underlying.end(); }
+			auto empty() const { return underlying.empty(); }
+			auto size() const { return underlying.size(); }
 
 		protected:
 			underlying_t underlying;
@@ -119,16 +153,66 @@ namespace vkma_xml {
 
 		struct api_t {
 			static std::optional<variable_t> load_variable(pugi::xml_node const &xml);
+			static std::optional<constant_t> load_define(pugi::xml_node const &xml);
+			static std::optional<constant_t> load_enum_value(pugi::xml_node const &xml);
+			static std::optional<enum_t> load_enum(pugi::xml_node const &xml);
+			static std::optional<variable_t> load_typedef(pugi::xml_node const &xml);
+			static std::optional<variable_t> load_function_parameter(pugi::xml_node const &xml);
+			static std::optional<function_t> load_function(pugi::xml_node const &xml);
 
 			bool load_struct(pugi::xml_node const &xml);
 			bool load_file(pugi::xml_node const &xml);
 			bool load_compound(std::string_view refid, std::filesystem::path const &directory);
 
 		public:
-			type_registry types;
+			type_registry registry;
 		};
 
 		std::optional<pugi::xml_document> load_xml(std::filesystem::path const &file);
+
+		struct type_t_printer {
+			std::ostream &stream_ref;
+			std::string const &name_ref;
+
+			void operator()(vkma_xml::detail::type::undefined const &) {
+				stream_ref << "- " << name_ref << " - an undefined type.\n";
+			}
+			void operator()(vkma_xml::detail::type::structure const &structure) {
+				stream_ref << "- " << name_ref << " - a struct {\n";
+				for (auto const &member : structure.members)
+					stream_ref << "    " << member.type << ' ' << member.name << ";\n";
+				stream_ref << "};\n";
+			}
+			void operator()(vkma_xml::detail::type::handle const &) {
+				stream_ref << "- " << name_ref << " - an object handle.\n";
+			}
+			void operator()(vkma_xml::detail::type::external const &) {
+				stream_ref << "- " << name_ref << " - an external type.\n";
+			}
+			void operator()(vkma_xml::detail::type::macro const &macro) {
+				stream_ref << "- " << name_ref << " - a preprocessor macro.\n"
+					<< "    " << macro.value << "\n";
+			}
+			void operator()(vkma_xml::detail::type::enumeration const &enumeration) {
+				stream_ref << "- " << name_ref << " - an enumeration";
+				if (enumeration.type)
+					stream_ref << " : " << *enumeration.type;
+				stream_ref << " {\n";
+				for (auto const &enumerator : enumeration.values)
+					stream_ref << "    " << enumerator.name << " = " << enumerator.value << ";\n";
+				stream_ref << "};\n";
+			}
+			void operator()(vkma_xml::detail::type::function const &function) {
+				stream_ref << "- " << name_ref << " - a function: "
+					<< function.return_type << "(&)(\n";
+				for (auto const &parameter : function.parameters)
+					stream_ref << "    " << parameter.type << ' ' << parameter.name << ",\n";
+				stream_ref << ");\n";
+			}
+			void operator()(vkma_xml::detail::type::alias const alias) {
+				stream_ref << "- " << name_ref << " - an alias for " << alias.real_name << "\n";
+			}
+		};
 	}
 
 	struct input {

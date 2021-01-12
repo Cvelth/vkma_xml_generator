@@ -28,63 +28,6 @@ std::optional<pugi::xml_document> vkma_xml::detail::load_xml(std::filesystem::pa
 #include "ctre.hpp"
 #pragma warning(pop)
 
-std::optional<vkma_xml::detail::define_t> vkma_xml::detail::parse_define(pugi::xml_node const &xml) {
-	if (auto name = xml.child("name"), value = xml.child("initializer"); name && value)
-		return std::make_optional<define_t>(to_string(name), to_string(value));
-	return std::nullopt;
-}
-std::optional<vkma_xml::detail::enum_value_t> vkma_xml::detail::parse_enum_value(pugi::xml_node const &xml) {
-	if (auto name = xml.child("name"), value = xml.child("initializer"); name && value)
-		if (auto value_str = to_string(value); std::string_view(value_str).substr(0, 2) == "= ")
-			return std::make_optional<enum_value_t>(to_string(name), value_str.substr(2));
-		else
-			return std::make_optional<enum_value_t>(to_string(name), value_str);
-	return std::nullopt;
-}
-std::optional<vkma_xml::detail::enum_t> vkma_xml::detail::parse_enum(pugi::xml_node const &xml) {
-	enum_t output;
-	for (auto &child : xml.children())
-		if (child.name() == "type"sv)
-			if (auto string = to_string(child); string != "")
-				output.type = string;
-			else
-				output.type = std::nullopt;
-		else if (child.name() == "name"sv)
-			output.name = to_string(child);
-		else if (child.name() == "enumvalue"sv)
-			if (auto value = parse_enum_value(child); value)
-				output.values.emplace_back(*value);
-	if (output.name != "")
-		return output;
-	else
-		return std::nullopt;
-}
-std::optional<vkma_xml::detail::typedef_t> vkma_xml::detail::parse_typedef(pugi::xml_node const &xml) {
-	if (auto name = xml.child("name"), type = xml.child("type"), args = xml.child("argsstring"); name && type && args)
-		return std::make_optional<typedef_t>(to_string(name), to_string(type) + to_string(args));
-	return std::nullopt;
-}
-std::optional<vkma_xml::detail::variable_t> vkma_xml::detail::parse_function_parameter(pugi::xml_node const &xml) {
-	if (auto name = xml.child("declname"), type = xml.child("type"); name && type)
-		return std::make_optional<variable_t>(to_string(name), to_string(type));
-	return std::nullopt;
-}
-std::optional<vkma_xml::detail::function_t> vkma_xml::detail::parse_function(pugi::xml_node const &xml) {
-	function_t output;
-	for (auto &child : xml.children())
-		if (child.name() == "type"sv)
-			output.return_type = to_string(child);
-		else if (child.name() == "name"sv)
-			output.name = to_string(child);
-		else if (child.name() == "param"sv)
-			if (auto parameter = parse_function_parameter(child); parameter)
-				output.parameters.emplace_back(*parameter);
-	if (output.name != "" && output.return_type != "")
-		return output;
-	else
-		return std::nullopt;
-}
-
 std::set<std::string> get_handles(std::string_view source_view) {
 	std::set<std::string> output;
 
@@ -667,62 +610,31 @@ std::optional<pugi::xml_document> vkma_xml::generate(detail::data_t const &data)
 
 	return std::move(output);
 }
-
-#ifndef VMA_XML_NO_MAIN
-int main(int argc, char **argv) {
-	std::string_view xml_input_path = "../doxygen_xml/";
-	std::string_view header_path = "../VulkanMemoryAllocator/src/vk_mem_alloc.h";
-	std::string_view xml_output_path = "../output/";
-	if (argc >= 2)
-		xml_input_path = argv[1];
-	if (argc >= 3)
-		header_path = argv[2];
-	if (argc >= 4)
-		xml_output_path = argv[3];
-	if (argc > 3)
-		std::cout << "Warning: All the argument after the first two are ignored.\n";
-	if (argc == 1)
-		std::cout << "Warning: No paths provided. Using default values:\n"
-		<< "input index: '" << xml_input_path << "'.\n"
-		<< "output: '" << xml_output_path << "'.\n";
-
-	if (auto output = vkma_xml::generate(xml_input_path, header_path); output) {
-		std::filesystem::create_directory(xml_output_path);
-		std::filesystem::path output_file = xml_output_path; output_file /= "vma.xml";
-		if (auto result = output->save_file(output_file.c_str()); result)
-			std::cout << "\nSuccess: " << std::filesystem::absolute(output_file) << "\n";
-		else
-			std::cout << "Error: Unable to save '" << std::filesystem::absolute(output_file) << "'.";
-	} else
-		std::cout << "Error: Generation failed.";
-	return 0;
-}
-#endif
 */
 
 inline vkma_xml::detail::type_registry::underlying_t::iterator
-vkma_xml::detail::type_registry::get(std::string_view name) {
+vkma_xml::detail::type_registry::get(std::string &&name) {
 	auto [iterator, result] = underlying.try_emplace(
-		std::string(name),
+		std::move(name),
 		type::undefined{}
 	);
 	if (result) ++incomplete_type_counter;
 	return iterator;
 }
 inline vkma_xml::detail::type_registry::underlying_t::iterator
-vkma_xml::detail::type_registry::add(std::string_view name, type_t &&type_data) {
+vkma_xml::detail::type_registry::add(std::string &&name, type_t &&type_data) {
 	auto [iterator, result] = underlying.try_emplace(
-		std::string(name),
+		std::move(name),
 		std::move(type_data)
 	);
 
 	if (!result) 
 		if (std::holds_alternative<type::undefined>(iterator->second)) {
 			iterator->second = std::move(type_data);
-			if (!std::holds_alternative<type::alias>(iterator->second))
+			if (!std::holds_alternative<type::undefined>(iterator->second))
 				--incomplete_type_counter;
 		} else {
-			std::cout << "Warning: Attempt to define a typename '" << name
+			std::cout << "Warning: Attempt to define a typename '" << iterator->first
 				<< "' more than once: second definition ignored.";
 			return iterator;
 		}
@@ -737,6 +649,16 @@ vkma_xml::detail::type_registry::add(std::string_view name, type_t &&type_data) 
 		}
 		void operator()(type::handle const &) {}
 		void operator()(type::external const &) {}
+		void operator()(type::macro const &) {}
+		void operator()(type::enumeration const &enumeration) {
+			if (enumeration.type)
+				registry_ref.get(*enumeration.type);
+		}
+		void operator()(type::function const &function) {
+			registry_ref.get(function.return_type);
+			for (auto const &parameter : function.parameters)
+				registry_ref.get(parameter.type);
+		}
 		void operator()(type::alias const alias) {
 			registry_ref.get(alias.real_name);
 		}
@@ -777,6 +699,68 @@ vkma_xml::detail::api_t::load_variable(pugi::xml_node const &xml) {
 		return std::make_optional<variable_t>(to_string(name), to_string(type));
 	return std::nullopt;
 }
+std::optional<vkma_xml::detail::constant_t> 
+vkma_xml::detail::api_t::load_define(pugi::xml_node const &xml) {
+	if (auto name = xml.child("name"), value = xml.child("initializer"); name && value)
+		return std::make_optional<constant_t>(to_string(name), to_string(value));
+	return std::nullopt;
+}
+std::optional<vkma_xml::detail::constant_t> 
+vkma_xml::detail::api_t::load_enum_value(pugi::xml_node const &xml) {
+	if (auto name = xml.child("name"), value = xml.child("initializer"); name && value)
+		if (auto value_str = to_string(value); std::string_view(value_str).substr(0, 2) == "= ")
+			return std::make_optional<constant_t>(to_string(name), value_str.substr(2));
+		else
+			return std::make_optional<constant_t>(to_string(name), value_str);
+	return std::nullopt;
+}
+std::optional<vkma_xml::detail::enum_t>
+vkma_xml::detail::api_t::load_enum(pugi::xml_node const &xml) {
+	enum_t output;
+	for (auto &child : xml.children())
+		if (child.name() == "type"sv)
+			if (auto string = to_string(child); string != "")
+				output.state.type = string;
+			else
+				output.state.type = std::nullopt;
+		else if (child.name() == "name"sv)
+			output.name = to_string(child);
+		else if (child.name() == "enumvalue"sv)
+			if (auto value = load_enum_value(child); value)
+				output.state.values.emplace_back(*value);
+	if (output.name != "")
+		return output;
+	else
+		return std::nullopt;
+}
+std::optional<vkma_xml::detail::variable_t> 
+vkma_xml::detail::api_t::load_typedef(pugi::xml_node const &xml) {
+	if (auto name = xml.child("name"), type = xml.child("type"), args = xml.child("argsstring"); name && type && args)
+		return std::make_optional<variable_t>(to_string(name), to_string(type) + to_string(args));
+	return std::nullopt;
+}
+std::optional<vkma_xml::detail::variable_t> 
+vkma_xml::detail::api_t::load_function_parameter(pugi::xml_node const &xml) {
+	if (auto name = xml.child("declname"), type = xml.child("type"); name && type)
+		return std::make_optional<variable_t>(to_string(name), to_string(type));
+	return std::nullopt;
+}
+std::optional<vkma_xml::detail::function_t>
+vkma_xml::detail::api_t::load_function(pugi::xml_node const &xml) {
+	function_t output;
+	for (auto &child : xml.children())
+		if (child.name() == "type"sv)
+			output.state.return_type = to_string(child);
+		else if (child.name() == "name"sv)
+			output.name = to_string(child);
+		else if (child.name() == "param"sv)
+			if (auto parameter = load_function_parameter(child); parameter)
+				output.state.parameters.emplace_back(*parameter);
+	if (output.name != "" && output.state.return_type != "")
+		return output;
+	else
+		return std::nullopt;
+}
 
 bool vkma_xml::detail::api_t::load_struct(pugi::xml_node const &xml) {
 	std::string_view name;
@@ -797,7 +781,7 @@ bool vkma_xml::detail::api_t::load_struct(pugi::xml_node const &xml) {
 					std::cout << "Warning: Ignore an unknown struct member: '" << member.name() << "'.\n";
 
 	if (name != "") {
-		types.add(name, std::move(structure));
+		registry.add(name, std::move(structure));
 		return true;
 	} else
 		std::cout << "Warning: Ignore a struct compound without a name.\n";
@@ -809,19 +793,22 @@ bool vkma_xml::detail::api_t::load_file(pugi::xml_node const &xml) {
 		if (child.name() == "sectiondef"sv)
 			for (auto &member : child.children())
 				if (member.name() == "memberdef"sv) {
-					//if (auto kind = member.attribute("kind").value(); kind == "define"sv) {
-					//	if (auto define = parse_define(member); define)
-					//		data.defines.emplace_back(*define);
-					//} else if (kind == "enum"sv) {
-					//	if (auto enumeration = parse_enum(member); enumeration)
-					//		data.enums.emplace_back(*enumeration);
-					//} else if (kind == "typedef"sv) {
-					//	if (auto type_def = parse_typedef(member); type_def)
-					//		data.typedefs.emplace_back(*type_def);
-					//} else if (kind == "function"sv) {
-					//	if (auto function = parse_function(member); function)
-					//		data.functions.emplace_back(*function);
-					//}
+					if (auto kind = member.attribute("kind").value(); kind == "define"sv) {
+						if (auto define = load_define(member); define)
+							registry.add(std::move(define->name), type::macro{ std::move(define->value) });
+					} else if (kind == "enum"sv) {
+						if (auto enumeration = load_enum(member); enumeration)
+							registry.add(std::move(enumeration->name),
+									  type::enumeration{ std::move(enumeration->state) });
+					} else if (kind == "typedef"sv) {
+						if (auto type_def = load_typedef(member); type_def)
+							registry.add(std::move(type_def->name), type::alias{ std::move(type_def->type) });
+					} else if (kind == "function"sv) {
+						if (auto function = load_function(member); function)
+							registry.add(std::move(function->name),
+									  type::function{ std::move(function->state) });
+					} else
+						std::cout << "Ignore an unknown file entry '" << kind << "'.\n";
 				}
 	return false;
 }
@@ -881,8 +868,10 @@ std::optional<pugi::xml_document> vkma_xml::generate(detail::api_t const &data) 
 	auto output = std::make_optional<pugi::xml_document>();
 	auto registry = output->append_child("registry");
 
-	static_cast<void>(data);
-	// TODO: Implement!
+	for (auto const &type : data.registry)
+		std::visit(vkma_xml::detail::type_t_printer{ std::cout, type.first }, type.second);
+
+	// TODO: Implement the generator
 
 	return std::move(output);
 }
@@ -906,7 +895,7 @@ int main() {
 		"../input/Vulkan-Headers/include/vulkan/vk_platform.h"
 	};
 
-	std::filesystem::path const output_path = "../ouput/vkma.hpp";
+	std::filesystem::path const output_path = "../ouput/vkma.xml";
 
 	auto output = vkma_xml::generate(
 		vkma_xml::input {
