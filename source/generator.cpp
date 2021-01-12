@@ -645,22 +645,22 @@ vkma_xml::detail::type_registry::add(std::string &&name, type_t &&type_data) {
 		void operator()(type::undefined const &) {}
 		void operator()(type::structure const &structure) {
 			for (auto const &member : structure.members)
-				registry_ref.get(member.type);
+				registry_ref.get(member.type.name);
 		}
 		void operator()(type::handle const &) {}
 		void operator()(type::external const &) {}
 		void operator()(type::macro const &) {}
 		void operator()(type::enumeration const &enumeration) {
 			if (enumeration.type)
-				registry_ref.get(*enumeration.type);
+				registry_ref.get(enumeration.type->name);
 		}
 		void operator()(type::function const &function) {
-			registry_ref.get(function.return_type);
+			registry_ref.get(function.return_type.name);
 			for (auto const &parameter : function.parameters)
-				registry_ref.get(parameter.type);
+				registry_ref.get(parameter.type.name);
 		}
 		void operator()(type::alias const alias) {
-			registry_ref.get(alias.real_name);
+			registry_ref.get(alias.real_type.name);
 		}
 	};
 	std::visit(on_add_visitor{ *this }, iterator->second);
@@ -691,6 +691,32 @@ static std::string to_string(pugi::xml_node const &xml) {
 		else
 			std::cout << "Warning: Ignore an unknown tag: '" << child.name() << "'.\n";
 	return optimize(std::move(output));
+}
+
+vkma_xml::detail::decorated_typename_t::decorated_typename_t(std::string input) : name(input) {
+	while (true) {
+		if (name.size() > 1 && (name[0] == '*' || name[0] == ' ' || name[0] == '&')) {
+			prefix += name[0];
+			name.erase(0, 1);
+		} else if (name.size() > 5 && std::string_view(name).substr(0, 5) == "const") {
+			prefix += std::string_view(name).substr(0, 5);
+			name.erase(0, 5);
+		} else
+			break;
+	}
+	while (true) {
+		if (size_t last = name.size() - 1; name.size() > 1 && (
+			name[last] == '*' || name[last] == ' ' || name[last] == '&'
+		)) {
+			postfix.insert(0, &name[last], 1);
+			name.erase(last, 1);
+		} else if (size_t post = name.size() - 5; name.size() > 5 && 
+				   std::string_view(name).substr(post) == "const") {
+			postfix.insert(0, std::string_view(name).substr(post));
+			name.erase(post, 5);
+		} else
+			break;
+	}
 }
 
 std::optional<vkma_xml::detail::variable_t> 
@@ -756,7 +782,7 @@ vkma_xml::detail::api_t::load_function(pugi::xml_node const &xml) {
 		else if (child.name() == "param"sv)
 			if (auto parameter = load_function_parameter(child); parameter)
 				output.state.parameters.emplace_back(*parameter);
-	if (output.name != "" && output.state.return_type != "")
+	if (output.name != "" && output.state.return_type)
 		return output;
 	else
 		return std::nullopt;

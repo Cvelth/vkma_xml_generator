@@ -62,13 +62,32 @@ namespace vkma_xml {
 		bool parse_header(std::filesystem::path const &path, detail::data_t &data);
 		*/
 
+		using identifier_t = std::string;
+		using value_t = std::string;
+		struct decorated_typename_t {
+			std::string prefix;
+			identifier_t name;
+			std::string postfix;
+
+			decorated_typename_t() = default;
+			decorated_typename_t(std::string input);
+			operator std::string() {
+				return prefix + name + postfix;
+			}
+			operator bool() const { return !name.empty(); }
+			bool operator!() const { return name.empty(); }
+		};
+		inline std::ostream &operator<<(std::ostream &stream, decorated_typename_t const &type) {
+			return stream << type.prefix << type.name << type.postfix;
+		}
+
 		struct variable_t {
-			std::string name;
-			std::string type;
+			identifier_t name;
+			decorated_typename_t type;
 		};
 		struct constant_t {
-			std::string name;
-			std::string value;
+			identifier_t name;
+			value_t value;
 		};
 
 		namespace type {
@@ -79,18 +98,18 @@ namespace vkma_xml {
 			struct handle {};
 			struct external {};
 			struct macro {
-				std::string value;
+				value_t value;
 			};
 			struct enumeration {
-				std::optional<std::string> type;
+				std::optional<decorated_typename_t> type;
 				std::vector<constant_t> values;
 			};
 			struct function {
-				std::string return_type;
+				decorated_typename_t return_type;
 				std::vector<variable_t> parameters;
 			};
 			struct alias {
-				std::string real_name;
+				decorated_typename_t real_type;
 			};
 		}
 		using type_t = std::variant<
@@ -105,11 +124,11 @@ namespace vkma_xml {
 		>;
 
 		struct enum_t {
-			std::string name;
+			identifier_t name;
 			type::enumeration state;
 		};
 		struct function_t {
-			std::string name;
+			identifier_t name;
 			type::function state;
 		};
 
@@ -125,19 +144,19 @@ namespace vkma_xml {
 				size_t operator()(std::string const &txt) const { return std::hash<std::string_view>{}(txt); }
 				size_t operator()(char const *txt) const { return std::hash<std::string_view>{}(txt); }
 			};
-			using underlying_t = std::pmr::unordered_map<std::string, type_t,
+			using underlying_t = std::pmr::unordered_map<identifier_t, type_t,
 														 underlying_hash_t,
 														 underlying_comparator_t>;
 		public:
-			underlying_t::iterator get(std::string &&name);
-			underlying_t::iterator add(std::string &&name, type_t &&type_data);
+			underlying_t::iterator get(identifier_t &&name);
+			underlying_t::iterator add(identifier_t &&name, type_t &&type_data);
 
 			underlying_t::iterator get(std::string_view name) {
-				std::string temp(name);
+				identifier_t temp(name);
 				return get(std::move(temp));
 			}
 			underlying_t::iterator add(std::string_view name, type_t &&type_data) {
-				std::string temp(name);
+				identifier_t temp(name);
 				return add(std::move(temp), std::move(type_data));
 			}
 
@@ -172,7 +191,7 @@ namespace vkma_xml {
 
 		struct type_t_printer {
 			std::ostream &stream_ref;
-			std::string const &name_ref;
+			identifier_t const &name_ref;
 
 			void operator()(vkma_xml::detail::type::undefined const &) {
 				stream_ref << "- " << name_ref << " - an undefined type.\n";
@@ -210,7 +229,7 @@ namespace vkma_xml {
 				stream_ref << ");\n";
 			}
 			void operator()(vkma_xml::detail::type::alias const alias) {
-				stream_ref << "- " << name_ref << " - an alias for " << alias.real_name << "\n";
+				stream_ref << "- " << name_ref << " - an alias for " << alias.real_type << "\n";
 			}
 		};
 	}
