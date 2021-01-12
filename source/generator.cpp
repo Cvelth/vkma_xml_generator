@@ -4,6 +4,7 @@
 #include "generator.hpp"
 
 #include <iostream>
+#include <set>
 #include <vector>
 #include <string_view>
 using namespace std::literals;
@@ -820,22 +821,30 @@ std::optional<vkma_xml::detail::api_t> vkma_xml::parse(input main_api, std::init
 				else
 					std::cout << "Warning: Ignore an unknown node: " << compound.name() << '\n';
 	
-			auto handles = detail::load_handle_list(main_api.header_files);
-			for (auto const &handle : handles)
+			for (auto &&handle : detail::load_handle_list(main_api.header_files))
 				api.registry.add(std::move(handle.first), detail::type::handle{ handle.second });
 
-			// TODO: Use helpers to verify and extend the api
+			std::set<std::string> undefined;
+			for (auto const &type : api.registry)
+				if (std::holds_alternative<detail::type::undefined>(type.second))
+					undefined.insert(type.first);
+			
+			std::cout << "Undefined:\n";
+			for (auto const &name : undefined)
+				std::cout << "- " << name << "\n";
+
+			// TODO: Use helper APIs to fill in undefined types.
 	
 			return api;
 		}
 	return std::nullopt;
 }
 
-std::optional<pugi::xml_document> vkma_xml::generate(detail::api_t const &data) {
+std::optional<pugi::xml_document> vkma_xml::generate(detail::api_t const &api) {
 	auto output = std::make_optional<pugi::xml_document>();
 	auto registry = output->append_child("registry");
 
-	for (auto const &type : data.registry)
+	for (auto const &type : api.registry)
 		std::visit(vkma_xml::detail::type_t_printer{ std::cout, type.first }, type.second);
 
 	// TODO: Implement the generator
