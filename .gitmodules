@@ -11,3 +11,7 @@
 [submodule "vkma_bindings"]
 	path = input/vkma_bindings
 	url = https://github.com/Cvelth/vkma_bindings
+[submodule "input/Vulkan-Headers"]
+	path = input/Vulkan-Headers
+	url = https://github.com/KhronosGroup/Vulkan-Headers
+	branch = v1.2.166
