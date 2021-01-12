@@ -15,10 +15,20 @@ templated.vpaths = {
 	{ ["include"] = "include/**.h*" }
 }
 
-templated.workspace "vma_xml"
+templated.workspace "vkma_xml"
+
+project "doxygen"
+	kind "Utility"
+	prebuildcommands {
+		"doxygen " .. _MAIN_SCRIPT_DIR .. "/doxygen/Vulkan-Headers",
+		"doxygen " .. _MAIN_SCRIPT_DIR .. "/doxygen/VulkanMemoryAllocator",
+		"doxygen " .. _MAIN_SCRIPT_DIR .. "/doxygen/vkma_bindings"
+	}
 
 templated.project "generator"
     templated.kind "ConsoleApp"
     templated.files ""
     targetdir "bin/%{cfg.system}_%{cfg.buildcfg}"
-    depends { "pugixml", "ctre" }
+	links "doxygen"
+	depends { "pugixml", "ctre" }
+	
