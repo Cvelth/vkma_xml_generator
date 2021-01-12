@@ -1,5 +1,5 @@
 [submodule "VulkanMemoryAllocator"]
-	path = VulkanMemoryAllocator
+	path = input/VulkanMemoryAllocator
 	url = https://github.com/gpuopen-librariesandsdks/VulkanMemoryAllocator/
 	branch = v2.3.0
 [submodule "script/premake"]
@@ -9,5 +9,5 @@
 	path = third_party
 	url = https://github.com/cvelth/third_party
 [submodule "vkma_bindings"]
-	path = vkma_bindings
+	path = input/vkma_bindings
 	url = https://github.com/Cvelth/vkma_bindings
