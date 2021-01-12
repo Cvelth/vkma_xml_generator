@@ -7,12 +7,12 @@
 #include <concepts>
 #include <filesystem>
 #include <initializer_list>
+#include <map>
 #include <optional>
 #include <type_traits>
 #include <variant>
 #include <vector>
 #include <unordered_map>
-//#include <set>
 
 namespace vkma_xml {
 	namespace detail {
@@ -95,7 +95,9 @@ namespace vkma_xml {
 			struct structure {
 				std::vector<variable_t> members;
 			};
-			struct handle {};
+			struct handle {
+				bool dispatchable;
+			};
 			struct external {};
 			struct macro {
 				value_t value;
@@ -188,6 +190,7 @@ namespace vkma_xml {
 		};
 
 		std::optional<pugi::xml_document> load_xml(std::filesystem::path const &file);
+		std::map<identifier_t, bool> load_handle_list(std::vector<std::filesystem::path> const &files);
 
 		struct type_t_printer {
 			std::ostream &stream_ref;
@@ -202,8 +205,10 @@ namespace vkma_xml {
 					stream_ref << "    " << member.type << ' ' << member.name << ";\n";
 				stream_ref << "};\n";
 			}
-			void operator()(vkma_xml::detail::type::handle const &) {
-				stream_ref << "- " << name_ref << " - an object handle.\n";
+			void operator()(vkma_xml::detail::type::handle const &handle) {
+				stream_ref << "- " << name_ref << " - an "
+					<< (handle.dispatchable ? "" : "non-dispatchable ")
+					<< "object handle.\n";
 			}
 			void operator()(vkma_xml::detail::type::external const &) {
 				stream_ref << "- " << name_ref << " - an external type.\n";

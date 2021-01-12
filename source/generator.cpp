@@ -20,69 +20,6 @@ std::optional<pugi::xml_document> vkma_xml::detail::load_xml(std::filesystem::pa
 
 /*
 #include <array>
-#include <fstream>
-#include <iterator>
-
-#pragma warning(push)
-#pragma warning(disable: 4702)
-#include "ctre.hpp"
-#pragma warning(pop)
-
-std::set<std::string> get_handles(std::string_view source_view) {
-	std::set<std::string> output;
-
-	static constexpr auto pattern = ctll::fixed_string{ R"(VK_DEFINE_HANDLE\(([A-Za-z_0-9]+)\))" };
-	auto search_result = ctre::search<pattern>(source_view);
-	while (search_result) {
-		output.emplace(search_result.get<1>().to_string());
-		search_result = ctre::search<pattern>(search_result.get<1>().end(), source_view.end());
-	}
-
-	return output;
-}
-void extract_vk_name(std::string_view type, std::set<std::string> &output) {
-	if (type.size() > 6 && type.substr(0, 6) == "const ")
-		extract_vk_name(type.substr(6), output);
-	else if (type.size() > 6 && type.substr(type.size() - 6) == " const")
-		extract_vk_name(type.substr(0, type.size() - 6), output);
-	else if (type.size() > 2 && type.substr(type.size() - 3) == " **")
-		extract_vk_name(type.substr(0, type.size() - 3), output);
-	else if (type.size() > 2 && type.substr(type.size() - 2) == " *")
-		extract_vk_name(type.substr(0, type.size() - 2), output);
-	else
-		if (type.size() > 2
-				&& (type.substr(0, 2) == "Vk" || type.substr(0, 6) == "PFN_vk")
-				&& type != "VkResult")
-			output.emplace(std::string(type));
-}
-std::set<std::string> extract_vk_names(vkma_xml::detail::data_t const &data) {
-	std::set<std::string> output;
-	for (auto &structure : data.structs)
-		for (auto &variable : structure.variables)
-			extract_vk_name(variable.type, output);
-	for (auto &function : data.functions) {
-		extract_vk_name(function.return_type, output);
-		for (auto &parameter : function.parameters)
-			extract_vk_name(parameter.type, output);
-	}
-	return output;
-}
-bool vkma_xml::detail::parse_header(std::filesystem::path const &path, detail::data_t &data) {
-	std::ifstream stream(path, std::fstream::ate);
-	if (stream) {
-		size_t source_size = stream.tellg();
-		std::string source(source_size, '\0');
-		stream.seekg(0);
-		stream.read(source.data(), source_size);
-
-		data.handle_names = get_handles(source);
-		data.vulkan_type_names = extract_vk_names(data);
-
-		return true;
-	} else
-		std::cout << "Error: Unable to open '" << std::filesystem::absolute(path) << "'. Make sure it exists.";
-	return false;
-}
 
 std::string to_upper_case(std::string_view input) {
 	static std::locale locale("en_US.UTF8");
@@ -883,7 +820,11 @@ std::optional<vkma_xml::detail::api_t> vkma_xml::parse(input main_api, std::init
 				else
 					std::cout << "Warning: Ignore an unknown node: " << compound.name() << '\n';
 	
-			// TODO: Use headers and helpers to verify and extend the api
+			auto handles = detail::load_handle_list(main_api.header_files);
+			for (auto const &handle : handles)
+				api.registry.add(std::move(handle.first), detail::type::handle{ handle.second });
+
+			// TODO: Use helpers to verify and extend the api
 	
 			return api;
 		}
