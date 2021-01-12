@@ -3,9 +3,12 @@
 
 #include "generator.hpp"
 
+#include <iostream>
+#include <vector>
+
+/*
 #include <array>
 #include <fstream>
-#include <iostream>
 #include <iterator>
 #include <string_view>
 using namespace std::literals;
@@ -126,7 +129,7 @@ bool vma_xml::detail::parse_struct(pugi::xml_node const &xml, detail::data_t &da
 						if (auto variable = parse_variable(member); variable)
 							output.variables.emplace_back(*variable);
 					} else
-						std::cout << "Warning: Ignore a struct member: '" << kind 
+						std::cout << "Warning: Ignore a struct member: '" << kind
 							<< "'. Only variables are supported.\n";
 				else
 					std::cout << "Warning: Ignore unknown struct member: '" << member.name() << "'.\n";
@@ -160,7 +163,7 @@ bool vma_xml::detail::parse_file(pugi::xml_node const &xml, detail::data_t &data
 	return false;
 }
 
-bool vma_xml::detail::parse_compound(std::string_view refid, std::filesystem::path const &directory, 
+bool vma_xml::detail::parse_compound(std::string_view refid, std::filesystem::path const &directory,
 									 detail::data_t &data) {
 	std::filesystem::path file_path = directory; (file_path /= refid.data()) += ".xml";
 	if (auto compound_xml = detail::load_xml(file_path); compound_xml)
@@ -221,7 +224,7 @@ bool vma_xml::detail::parse_header(std::filesystem::path const &path, detail::da
 		std::string source(source_size, '\0');
 		stream.seekg(0);
 		stream.read(source.data(), source_size);
-		
+
 		data.handle_names = get_handles(source);
 		data.vulkan_type_names = extract_vk_names(data);
 
@@ -532,11 +535,11 @@ void append_function_pointer(pugi::xml_node &types, std::vector<vma_xml::detail:
 			);
 		}
 }
-void append_struct(pugi::xml_node &types, std::vector<vma_xml::detail::struct_t> const &structs, 
+void append_struct(pugi::xml_node &types, std::vector<vma_xml::detail::struct_t> const &structs,
 				   std::set<std::string> handle_names) {
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("Struct types");
-	for (auto &structure : structs) 
+	for (auto &structure : structs)
 		if (!handle_names.contains(structure.name)) {
 			auto type = types.append_child("type");
 			type.append_attribute("category").set_value("struct");
@@ -705,26 +708,26 @@ void append_api(pugi::xml_node &registry, vma_xml::detail::data_t const &data) {
 	feature.append_attribute("name").set_value("VMA_VERSION_2_3");
 	feature.append_attribute("number").set_value("2.3");
 	feature.append_attribute("comment").set_value("VMA API interface definitions");
-	
+
 	auto headers = feature.append_child("require");
 	headers.append_attribute("comment").set_value("headers");
 	headers.append_child("type").append_attribute("name").set_value("vulkan");
-	
+
 	auto structs = feature.append_child("require");
 	structs.append_attribute("comment").set_value("structs");
 	for (auto &structure : data.structs)
 		structs.append_child("type").append_attribute("name").set_value(structure.name.data());
-	
+
 	auto defines = feature.append_child("require");
 	defines.append_attribute("comment").set_value("defines");
 	for (auto &define : data.defines)
 		defines.append_child("type").append_attribute("name").set_value(define.name.data());
-	
+
 	auto typedefs = feature.append_child("require");
 	typedefs.append_attribute("comment").set_value("typedefs");
 	for (auto &type_def : data.typedefs)
 		typedefs.append_child("type").append_attribute("name").set_value(type_def.name.data());
-	
+
 	auto functions = feature.append_child("require");
 	functions.append_attribute("comment").set_value("functions");
 	for (auto &function : data.functions)
@@ -745,7 +748,7 @@ void append_misc(pugi::xml_node &registry) {
 	// Skip 'spirvextensions' if it can be avoided
 	auto spirvextensions = registry.append_child("spirvextensions");
 	spirvextensions.append_attribute("comment").set_value("empty");
-	
+
 	// Skip 'spirvcapabilities' if it can be avoided
 	auto spirvcapabilities = registry.append_child("spirvcapabilities");
 	spirvcapabilities.append_attribute("comment").set_value("empty");
@@ -804,6 +807,86 @@ int main(int argc, char **argv) {
 			std::cout << "\nSuccess: " << std::filesystem::absolute(output_file) << "\n";
 		else
 			std::cout << "Error: Unable to save '" << std::filesystem::absolute(output_file) << "'.";
+	} else
+		std::cout << "Error: Generation failed.";
+	return 0;
+}
+#endif
+*/
+
+std::optional<vma_xml::detail::api_t> vma_xml::parse(input main_api, std::initializer_list<input> const &helper_apis) {
+	std::cout << "Parse API located at " << main_api.xml_directory << ""
+		<< (main_api.header_files.size() ? " with headers:" : "") << "\n";
+	for (auto const &header : main_api.header_files)
+		std::cout << "    " << header << "\n";
+	if (helper_apis.size()) {
+		std::cout << "\nHelpers:\n";
+		for (auto const &helper : helper_apis) {
+			std::cout << "API located at " << helper.xml_directory << ""
+				<< (helper.header_files.size() ? " with headers:" : "") << "\n";
+			for (auto const &header : helper.header_files)
+				std::cout << "    " << header << "\n";
+		}
+	}
+	std::cout << std::endl;
+
+	// TODO: Implement!
+
+	return std::nullopt;
+}
+
+std::optional<pugi::xml_document> vma_xml::generate(detail::api_t const &data) {
+	auto output = std::make_optional<pugi::xml_document>();
+	auto registry = output->append_child("registry");
+
+	static_cast<void>(data);
+	// TODO: Implement!
+
+	return std::move(output);
+}
+
+#ifndef VMA_XML_NO_MAIN
+int main() {
+
+	std::filesystem::path const vkma_bindings_directory = "../xml/vkma_bindings";
+	std::vector<std::filesystem::path> const vkma_bindings_header_files = {
+		"../input/vkma_bindings/include/vkma_bindings.hpp"
+	};
+
+	std::filesystem::path const vma_directory = "../xml/VulkanMemoryAllocator";
+	std::vector<std::filesystem::path> const vma_header_files = {
+		"../input/VulkanMemoryAllocator/src/vk_mem_alloc.h"
+	};
+
+	std::filesystem::path const vulkan_directory = "../xml/Vulkan-Headers";
+	std::vector<std::filesystem::path> const vulkan_header_files = {
+		"../input/Vulkan-Headers/include/vulkan/vulkan_core.h",
+		"../input/Vulkan-Headers/include/vulkan/vk_platform.h"
+	};
+
+	std::filesystem::path const output_path = "../ouput/vkma.hpp";
+
+	auto output = vma_xml::generate(
+		vma_xml::input {
+			.xml_directory = vkma_bindings_directory,
+			.header_files = vkma_bindings_header_files
+		},
+		vma_xml::input {
+			.xml_directory = vma_directory,
+			.header_files = vma_header_files
+		},
+		vma_xml::input {
+			.xml_directory = vulkan_directory,
+			.header_files = vulkan_header_files
+		}
+	);
+
+	if (output) {
+		std::filesystem::create_directory(output_path.parent_path());
+		if (auto result = output->save_file(output_path.c_str()); result)
+			std::cout << "\nSuccess: " << std::filesystem::absolute(output_path) << "\n";
+		else
+			std::cout << "Error: Unable to save " << std::filesystem::absolute(output_path) << ".";
 	} else
 		std::cout << "Error: Generation failed.";
 	return 0;
