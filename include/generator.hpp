@@ -9,10 +9,12 @@
 #include <initializer_list>
 #include <optional>
 #include <type_traits>
+#include <variant>
+#include <vector>
+#include <unordered_map>
 //#include <set>
-//#include <vector>
 
-namespace vma_xml {
+namespace vkma_xml {
 	namespace detail {
 		/*
 		struct variable_t {
@@ -41,7 +43,7 @@ namespace vma_xml {
 			std::string return_type;
 			std::vector<variable_t> parameters;
 		};
-		
+
 		struct struct_t {
 			std::string name;
 			std::vector<variable_t> variables;
@@ -52,31 +54,81 @@ namespace vma_xml {
 			std::vector<typedef_t> typedefs;
 			std::vector<function_t> functions;
 			std::vector<enum_t> enums;
-		
+
 			std::set<std::string> handle_names;
 			std::set<std::string> vulkan_type_names;
 		};
-		
-		std::optional<pugi::xml_document> load_xml(std::filesystem::path const &file);
-		
-		std::optional<variable_t> parse_variable(pugi::xml_node const &xml);
+
 		std::optional<define_t> parse_define(pugi::xml_node const &xml);
 		std::optional<enum_value_t> parse_enum_value(pugi::xml_node const &xml);
 		std::optional<enum_t> parse_enum(pugi::xml_node const &xml);
 		std::optional<typedef_t> parse_typedef(pugi::xml_node const &xml);
 		std::optional<variable_t> parse_function_parameter(pugi::xml_node const &xml);
 		std::optional<function_t> parse_function(pugi::xml_node const &xml);
-		
-		bool parse_struct(pugi::xml_node const &xml, detail::data_t &data);
-		bool parse_file(pugi::xml_node const &xml, detail::data_t &data);
-		bool parse_compound(std::string_view refid, std::filesystem::path const &directory, 
-							detail::data_t &data);
+
 		bool parse_header(std::filesystem::path const &path, detail::data_t &data);
 		*/
 
-		struct api_t {
-
+		struct variable_t {
+			std::string name;
+			std::string type;
 		};
+
+		namespace type {
+			struct undefined {};
+			struct structure {
+				std::vector<variable_t> members;
+			};
+			struct handle {};
+			struct external {};
+			struct alias {
+				std::string real_name;
+			};
+		}
+		using type_t = std::variant<
+			type::undefined,
+			type::structure,
+			type::handle,
+			type::external,
+			type::alias
+		>;
+
+		class type_registry {
+		protected:
+			struct underlying_comparator_t : std::equal_to<> {
+				using is_transparent = void;
+			};
+			struct underlying_hash_t {
+				using is_transparent = underlying_comparator_t::is_transparent;
+				using transparent_key_equal = underlying_comparator_t;
+				size_t operator()(std::string_view txt) const { return std::hash<std::string_view>{}(txt); }
+				size_t operator()(std::string const &txt) const { return std::hash<std::string_view>{}(txt); }
+				size_t operator()(char const *txt) const { return std::hash<std::string_view>{}(txt); }
+			};
+			using underlying_t = std::pmr::unordered_map<std::string, type_t,
+														 underlying_hash_t,
+														 underlying_comparator_t>;
+		public:
+			inline underlying_t::iterator get(std::string_view name);
+			inline underlying_t::iterator add(std::string_view name, type_t &&type_data);
+
+		protected:
+			underlying_t underlying;
+			size_t incomplete_type_counter = 0u;
+		};
+
+		struct api_t {
+			static std::optional<variable_t> load_variable(pugi::xml_node const &xml);
+
+			bool load_struct(pugi::xml_node const &xml);
+			bool load_file(pugi::xml_node const &xml);
+			bool load_compound(std::string_view refid, std::filesystem::path const &directory);
+
+		public:
+			type_registry types;
+		};
+
+		std::optional<pugi::xml_document> load_xml(std::filesystem::path const &file);
 	}
 
 	struct input {
