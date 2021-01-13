@@ -61,6 +61,7 @@ namespace vkma_xml {
 			};
 			struct handle {
 				bool dispatchable;
+				std::optional<identifier_t> parent;
 			};
 			struct macro {
 				value_t value;
@@ -178,7 +179,7 @@ namespace vkma_xml {
 		};
 
 		std::optional<pugi::xml_document> load_xml(std::filesystem::path const &file);
-		std::map<identifier_t, bool> load_handle_list(std::vector<std::filesystem::path> const &files);
+		std::map<identifier_t, type::handle> load_handle_list(std::vector<std::filesystem::path> const &files);
 
 		using namespace std::string_view_literals;
 		constexpr std::array base_types = {
