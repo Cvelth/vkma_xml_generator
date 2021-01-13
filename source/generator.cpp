@@ -731,7 +731,8 @@ static std::string to_objtypeenum(std::string_view input) {
 
 vkma_xml::detail::generator_t::generator_t(api_t const &api)
 	: api(api), output(std::make_optional<pugi::xml_document>())
-	, registry(output->append_child("registry")) {}
+	, registry(output->append_child("registry"))
+	, appended({ "void" }) {}
 
 void vkma_xml::detail::generator_t::append_typename(pugi::xml_node &xml, 
 													decorated_typename_t const &type) {
@@ -923,7 +924,11 @@ void vkma_xml::detail::generator_t::append_types() {
 			}
 		}
 		inline void operator()(vkma_xml::detail::type::base const &) {
-			std::cout << "Warning: Not implemented!\n";
+			if (!generator_ref.appended.contains(name_ref)) {
+				auto type = types_ref.append_child("type");
+				type.append_attribute("name").set_value(name_ref.data());
+				generator_ref.appended.emplace(name_ref);
+			}
 		}
 	};
 

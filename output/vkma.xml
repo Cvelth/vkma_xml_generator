@@ -19,7 +19,11 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		<tag name="WC" author="Who cares?" contact="@cvelth" />
 	</tags>
 	<types comment="VMA type definitions">
+		<type name="uint32_t" />
 		<type category="bitmask" requires="VkmaPoolCreateFlagBits">typedef <type>VkFlags</type> <name>VkmaPoolCreateFlags</name>;</type>
+		<type name="VkDeviceSize" />
+		<type name="size_t" />
+		<type name="float" />
 		<type category="struct" name="VkmaPoolCreateInfo">
 			<member><type>uint32_t</type> <name>memoryTypeIndex</name>
 			</member>
@@ -38,6 +42,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		</type>
 		<type name="VkmaMemoryUsage" category="enum" />
 		<type category="bitmask" requires="VkmaAllocationCreateFlagBits">typedef <type>VkFlags</type> <name>VkmaAllocationCreateFlags</name>;</type>
+		<type name="VkMemoryPropertyFlags" />
 		<type category="handle" parent="VkmaAllocator" objtypeenum="VKMA_POOL">
 			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkmaPool</name>)</type>
 		<type category="struct" name="VkmaAllocationCreateInfo">
@@ -113,6 +118,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</member>
 		</type>
 		<type category="bitmask" requires="VkmaRecordFlagBits">typedef <type>VkFlags</type> <name>VkmaRecordFlags</name>;</type>
+		<type name="char" />
 		<type category="struct" name="VkmaRecordSettings">
 			<member><type>VkmaRecordFlags</type> <name>flags</name>
 			</member>
@@ -163,6 +169,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		<type category="bitmask" requires="VkmaDefragmentationFlagBits">typedef <type>VkFlags</type> <name>VkmaDefragmentationFlags</name>;</type>
 		<type category="handle" parent="VkmaAllocator" objtypeenum="VKMA_ALLOCATION">
 			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkmaAllocation</name>)</type>
+		<type name="VkBool32" />
 		<type category="basetype">
 			<type>VK_DEFINE_HANDLE</type>(<name>VkCommandBuffer</name>)</type>
 		<type category="struct" name="VkmaDefragmentationInfo2">
