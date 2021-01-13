@@ -176,6 +176,7 @@ namespace vkma_xml {
 
 			void append_header();
 			void append_types();
+			void append_enumerations();
 
 		public:
 			generator_t(api_t const &api);

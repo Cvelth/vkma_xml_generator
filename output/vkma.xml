@@ -19,6 +19,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		<tag name="WC" author="Who cares?" contact="@cvelth" />
 	</tags>
 	<types comment="VMA type definitions">
+		<type name="vma" category="include">#include "vk_mem_alloc.h"</type>
 		<type name="uint32_t" />
 		<type category="bitmask" requires="VkmaPoolCreateFlagBits">typedef <type>VkFlags</type> <name>VkmaPoolCreateFlags</name>;</type>
 		<type name="VkDeviceSize" />
@@ -283,4 +284,93 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		<type category="handle" parent="VkmaAllocator" objtypeenum="VKMA_IMAGE">
 			<type>VK_DEFINE_HANDLE</type>(<name>VkmaImage</name>)</type>
 	</types>
+	<enums name="VkmaMemoryUsage" type="enum">
+		<enum value="0" name="VMA_MEMORY_USAGE_UNKNOWN" />
+		<enum value="1" name="VMA_MEMORY_USAGE_GPU_ONLY" />
+		<enum value="2" name="VMA_MEMORY_USAGE_CPU_ONLY" />
+		<enum value="3" name="VMA_MEMORY_USAGE_CPU_TO_GPU" />
+		<enum value="4" name="VMA_MEMORY_USAGE_GPU_TO_CPU" />
+		<enum value="5" name="VMA_MEMORY_USAGE_CPU_COPY" />
+		<enum value="6" name="VMA_MEMORY_USAGE_GPU_LAZILY_ALLOCATED" />
+	</enums>
+	<enums name="VkmaDefragmentationFlagBits" type="bitmask" />
+	<enums name="VkmaRecordFlagBits" type="bitmask">
+		<enum value="0x00000001" name="VMA_RECORD_FLUSH_AFTER_CALL_BIT" />
+	</enums>
+	<enums name="VkmaResult" type="enum">
+		<enum value="0" name="VK_SUCCESS" />
+		<enum value="1" name="VK_NOT_READY" />
+		<enum value="2" name="VK_TIMEOUT" />
+		<enum value="3" name="VK_EVENT_SET" />
+		<enum value="4" name="VK_EVENT_RESET" />
+		<enum value="5" name="VK_INCOMPLETE" />
+		<enum value="-1" name="VK_ERROR_OUT_OF_HOST_MEMORY" />
+		<enum value="-2" name="VK_ERROR_OUT_OF_DEVICE_MEMORY" />
+		<enum value="-3" name="VK_ERROR_INITIALIZATION_FAILED" />
+		<enum value="-4" name="VK_ERROR_DEVICE_LOST" />
+		<enum value="-5" name="VK_ERROR_MEMORY_MAP_FAILED" />
+		<enum value="-6" name="VK_ERROR_LAYER_NOT_PRESENT" />
+		<enum value="-7" name="VK_ERROR_EXTENSION_NOT_PRESENT" />
+		<enum value="-8" name="VK_ERROR_FEATURE_NOT_PRESENT" />
+		<enum value="-9" name="VK_ERROR_INCOMPATIBLE_DRIVER" />
+		<enum value="-10" name="VK_ERROR_TOO_MANY_OBJECTS" />
+		<enum value="-11" name="VK_ERROR_FORMAT_NOT_SUPPORTED" />
+		<enum value="-12" name="VK_ERROR_FRAGMENTED_POOL" />
+		<enum value="-13" name="VK_ERROR_UNKNOWN" />
+		<enum value="-1000069000" name="VK_ERROR_OUT_OF_POOL_MEMORY" />
+		<enum value="-1000072003" name="VK_ERROR_INVALID_EXTERNAL_HANDLE" />
+		<enum value="-1000161000" name="VK_ERROR_FRAGMENTATION" />
+		<enum value="-1000257000" name="VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS" />
+		<enum value="-1000000000" name="VK_ERROR_SURFACE_LOST_KHR" />
+		<enum value="-1000000001" name="VK_ERROR_NATIVE_WINDOW_IN_USE_KHR" />
+		<enum value="1000001003" name="VK_SUBOPTIMAL_KHR" />
+		<enum value="-1000001004" name="VK_ERROR_OUT_OF_DATE_KHR" />
+		<enum value="-1000003001" name="VK_ERROR_INCOMPATIBLE_DISPLAY_KHR" />
+		<enum value="-1000011001" name="VK_ERROR_VALIDATION_FAILED_EXT" />
+		<enum value="-1000012000" name="VK_ERROR_INVALID_SHADER_NV" />
+		<enum value="-1000158000" name="VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT" />
+		<enum value="-1000174001" name="VK_ERROR_NOT_PERMITTED_EXT" />
+		<enum value="-1000255000" name="VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT" />
+		<enum value="1000268000" name="VK_THREAD_IDLE_KHR" />
+		<enum value="1000268001" name="VK_THREAD_DONE_KHR" />
+		<enum value="1000268002" name="VK_OPERATION_DEFERRED_KHR" />
+		<enum value="1000268003" name="VK_OPERATION_NOT_DEFERRED_KHR" />
+		<enum value="1000297000" name="VK_PIPELINE_COMPILE_REQUIRED_EXT" />
+		<enum value="VK_ERROR_OUT_OF_POOL_MEMORY" name="VK_ERROR_OUT_OF_POOL_MEMORY_KHR" />
+		<enum value="VK_ERROR_INVALID_EXTERNAL_HANDLE" name="VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR" />
+		<enum value="VK_ERROR_FRAGMENTATION" name="VK_ERROR_FRAGMENTATION_EXT" />
+		<enum value="VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS" name="VK_ERROR_INVALID_DEVICE_ADDRESS_EXT" />
+		<enum value="VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS" name="VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR" />
+		<enum value="VK_PIPELINE_COMPILE_REQUIRED_EXT" name="VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT" />
+	</enums>
+	<enums name="VkmaAllocatorCreateFlagBits" type="bitmask">
+		<enum value="0x00000001" name="VMA_ALLOCATOR_CREATE_EXTERNALLY_SYNCHRONIZED_BIT" />
+		<enum value="0x00000002" name="VMA_ALLOCATOR_CREATE_KHR_DEDICATED_ALLOCATION_BIT" />
+		<enum value="0x00000004" name="VMA_ALLOCATOR_CREATE_KHR_BIND_MEMORY2_BIT" />
+		<enum value="0x00000008" name="VMA_ALLOCATOR_CREATE_EXT_MEMORY_BUDGET_BIT" />
+	</enums>
+	<enums name="VkmaAllocationCreateFlagBits" type="bitmask">
+		<enum value="0x00000001" name="VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT" />
+		<enum value="0x00000002" name="VMA_ALLOCATION_CREATE_NEVER_ALLOCATE_BIT" />
+		<enum value="0x00000004" name="VMA_ALLOCATION_CREATE_MAPPED_BIT" />
+		<enum value="0x00000008" name="VMA_ALLOCATION_CREATE_CAN_BECOME_LOST_BIT" />
+		<enum value="0x00000010" name="VMA_ALLOCATION_CREATE_CAN_MAKE_OTHER_LOST_BIT" />
+		<enum value="0x00000020" name="VMA_ALLOCATION_CREATE_USER_DATA_COPY_STRING_BIT" />
+		<enum value="0x00000040" name="VMA_ALLOCATION_CREATE_UPPER_ADDRESS_BIT" />
+		<enum value="0x00000080" name="VMA_ALLOCATION_CREATE_DONT_BIND_BIT" />
+		<enum value="0x00000100" name="VMA_ALLOCATION_CREATE_WITHIN_BUDGET_BIT" />
+		<enum value="0x00010000" name="VMA_ALLOCATION_CREATE_STRATEGY_BEST_FIT_BIT" />
+		<enum value="0x00020000" name="VMA_ALLOCATION_CREATE_STRATEGY_WORST_FIT_BIT" />
+		<enum value="0x00040000" name="VMA_ALLOCATION_CREATE_STRATEGY_FIRST_FIT_BIT" />
+		<enum value="VMA_ALLOCATION_CREATE_STRATEGY_BEST_FIT_BIT" name="VMA_ALLOCATION_CREATE_STRATEGY_MIN_MEMORY_BIT" />
+		<enum value="VMA_ALLOCATION_CREATE_STRATEGY_FIRST_FIT_BIT" name="VMA_ALLOCATION_CREATE_STRATEGY_MIN_TIME_BIT" />
+		<enum value="VMA_ALLOCATION_CREATE_STRATEGY_WORST_FIT_BIT" name="VMA_ALLOCATION_CREATE_STRATEGY_MIN_FRAGMENTATION_BIT" />
+		<enum value="VMA_ALLOCATION_CREATE_STRATEGY_BEST_FIT_BIT | VMA_ALLOCATION_CREATE_STRATEGY_WORST_FIT_BIT | VMA_ALLOCATION_CREATE_STRATEGY_FIRST_FIT_BIT" name="VMA_ALLOCATION_CREATE_STRATEGY_MASK" />
+	</enums>
+	<enums name="VkmaPoolCreateFlagBits" type="bitmask">
+		<enum value="0x00000002" name="VMA_POOL_CREATE_IGNORE_BUFFER_IMAGE_GRANULARITY_BIT" />
+		<enum value="0x00000004" name="VMA_POOL_CREATE_LINEAR_ALGORITHM_BIT" />
+		<enum value="0x00000008" name="VMA_POOL_CREATE_BUDDY_ALGORITHM_BIT" />
+		<enum value="VMA_POOL_CREATE_LINEAR_ALGORITHM_BIT | VMA_POOL_CREATE_BUDDY_ALGORITHM_BIT" name="VMA_POOL_CREATE_ALGORITHM_MASK" />
+	</enums>
 </registry>
