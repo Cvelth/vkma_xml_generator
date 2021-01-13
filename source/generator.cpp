@@ -73,24 +73,6 @@ void append_includes(pugi::xml_node &types) {
 	vulkan_include.append_child(pugi::node_pcdata).set_value("#include \"vulkan/vulkan.h\"");
 }
 
-void append_defines(pugi::xml_node &types, std::vector<vkma_xml::detail::define_t> const &defines) {
-	for (auto &define : defines) {
-		auto type = types.append_child("type");
-		type.append_attribute("category").set_value("define");
-		type.append_child(pugi::node_pcdata).set_value("#define ");
-		type.append_child("name").append_child(pugi::node_pcdata).set_value(define.name.data());
-		type.append_child(pugi::node_pcdata).set_value((" " + define.value).data());
-	}
-
-	auto flags = types.append_child("type");
-	flags.append_attribute("category").set_value("basetype");
-	flags.append_child(pugi::node_pcdata).set_value("typedef ");
-	flags.append_child("type").append_child(pugi::node_pcdata).set_value("uint32_t");
-	flags.append_child(pugi::node_pcdata).set_value(" ");
-	flags.append_child("name").append_child(pugi::node_pcdata).set_value("VkFlags");
-	flags.append_child(pugi::node_pcdata).set_value(";");
-}
-
 void append_basic(pugi::xml_node &types) {
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("Basic C types");
@@ -929,8 +911,22 @@ void vkma_xml::detail::generator_t::append_types() {
 				generator_ref.appended.emplace(name_ref);
 			}
 		}
-		inline void operator()(vkma_xml::detail::type::macro const &) {
-			std::cout << "Warning: Not implemented!\n";
+		inline void operator()(vkma_xml::detail::type::macro const &macro) {
+			if (!generator_ref.appended.contains(name_ref)) {
+				auto type = types_ref.append_child("type");
+				if (tag == type_tag::core) {
+					type.append_attribute("category").set_value("define");
+					type.append_child(pugi::node_pcdata).set_value("#define ");
+					type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
+					type.append_child(pugi::node_pcdata).set_value((" " + macro.value).data());
+				} else {
+					type.append_attribute("category").set_value("basetype");
+					type.append_child(pugi::node_pcdata).set_value("#define ");
+					type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
+					type.append_child(pugi::node_pcdata).set_value((" " + macro.value).data());
+				}
+				generator_ref.appended.emplace(name_ref);
+			}
 		}
 		inline void operator()(vkma_xml::detail::type::enumeration const &) {
 			std::cout << "Warning: Not implemented!\n";
