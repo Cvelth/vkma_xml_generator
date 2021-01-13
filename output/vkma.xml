@@ -865,4 +865,87 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</param>
 		</command>
 	</commands>
+	<feature api="vkma" name="VKMA_VERSION_2_3" number="2.3" comment="VKMA API interface definitions">
+		<require comment="a mess, isn't it?">
+			<type name="vma" />
+			<type name="VkmaStatInfo" />
+			<type name="PFN_vkmaFreeDeviceMemoryFunction" />
+			<type name="VkmaAllocationCreateInfo" />
+			<type name="VkmaPoolCreateInfo" />
+			<type name="VkmaMemoryUsage" />
+			<type name="VkmaPool" />
+			<type name="PFN_vkmaAllocateDeviceMemoryFunction" />
+			<type name="VkmaDeviceMemoryCallbacks" />
+			<type name="VkmaVulkanFunctions" />
+			<type name="VkmaRecordSettings" />
+			<type name="VkmaAllocatorCreateInfo" />
+			<type name="VkmaBudget" />
+			<type name="VkmaDefragmentationInfo2" />
+			<type name="VkmaDefragmentationFlagBits" />
+			<type name="VkmaAllocationInfo" />
+			<type name="VkmaAllocation" />
+			<type name="VkmaRecordFlagBits" />
+			<type name="VkmaDefragmentationStats" />
+			<type name="VkmaStats" />
+			<type name="VkmaResult" />
+			<type name="VkmaAllocatorCreateFlagBits" />
+			<type name="VkmaAllocationCreateFlagBits" />
+			<type name="VkmaPoolCreateFlagBits" />
+			<type name="VkmaAllocator" />
+			<type name="VkmaPoolStats" />
+			<type name="VkmaDefragmentationContext" />
+			<type name="VkmaBuffer" />
+			<type name="VkmaImage" />
+			<command name="vkmaCreateAllocator" />
+			<command name="vkmaDestroyAllocator" />
+			<command name="vkmaGetBuffer" />
+			<command name="vkmaResizeAllocation" />
+			<command name="vkmaBuildStatsString" />
+			<command name="vkmaGetMemoryProperties" />
+			<command name="vkmaCreateBuffer" />
+			<command name="vkmaGetPhysicalDeviceProperties" />
+			<command name="vkmaGetMemoryTypeProperties" />
+			<command name="vkmaCreatePool" />
+			<command name="vkmaSetCurrentFrameIndex" />
+			<command name="vkmaDestroyImage" />
+			<command name="vkmaBindImageMemory" />
+			<command name="vkmaCalculateStats" />
+			<command name="vkmaGetBudget" />
+			<command name="vkmaAllocateMemoryPages" />
+			<command name="vkmaFreeStatsString" />
+			<command name="vkmaCreateLostAllocation" />
+			<command name="vkmaFindMemoryTypeIndex" />
+			<command name="vkmaFindMemoryTypeIndexForBufferInfo" />
+			<command name="vkmaFindMemoryTypeIndexForImageInfo" />
+			<command name="vkmaAllocateMemory" />
+			<command name="vkmaDestroyPool" />
+			<command name="vkmaMapMemory" />
+			<command name="vkmaGetPoolStats" />
+			<command name="vkmaMakePoolAllocationsLost" />
+			<command name="vkmaCheckPoolCorruption" />
+			<command name="vkmaGetPoolName" />
+			<command name="vkmaTouchAllocation" />
+			<command name="vkmaSetPoolName" />
+			<command name="vkmaDefragmentationEnd" />
+			<command name="vkmaDefragmentationBegin" />
+			<command name="vkmaAllocateMemoryForBuffer" />
+			<command name="vkmaAllocateMemoryForImage" />
+			<command name="vkmaFreeMemory" />
+			<command name="vkmaFreeMemoryPages" />
+			<command name="vkmaGetAllocationInfo" />
+			<command name="vkmaCreateImage" />
+			<command name="vkmaSetAllocationUserData" />
+			<command name="vkmaGetBufferAllocation" />
+			<command name="vkmaUnmapMemory" />
+			<command name="vkmaBindBufferMemory2" />
+			<command name="vkmaFlushAllocation" />
+			<command name="vkmaInvalidateAllocation" />
+			<command name="vkmaCheckCorruption" />
+			<command name="vkmaBindBufferMemory" />
+			<command name="vkmaBindImageMemory2" />
+			<command name="vkmaDestroyBuffer" />
+			<command name="vkmaGetImage" />
+			<command name="vkmaGetImageAllocation" />
+		</require>
+	</feature>
 </registry>

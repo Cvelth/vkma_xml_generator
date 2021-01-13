@@ -68,38 +68,6 @@ void append_vk_enums(pugi::xml_node &registry, std::set<std::string> const &hand
 	debug_object_type.append_attribute("type").set_value("enum");
 }
 
-void append_api(pugi::xml_node &registry, vkma_xml::detail::data_t const &data) {
-	auto feature = registry.append_child("feature");
-	feature.append_attribute("api").set_value("vma");
-	feature.append_attribute("name").set_value("VMA_VERSION_2_3");
-	feature.append_attribute("number").set_value("2.3");
-	feature.append_attribute("comment").set_value("VMA API interface definitions");
-
-	auto headers = feature.append_child("require");
-	headers.append_attribute("comment").set_value("headers");
-	headers.append_child("type").append_attribute("name").set_value("vulkan");
-
-	auto structs = feature.append_child("require");
-	structs.append_attribute("comment").set_value("structs");
-	for (auto &structure : data.structs)
-		structs.append_child("type").append_attribute("name").set_value(structure.name.data());
-
-	auto defines = feature.append_child("require");
-	defines.append_attribute("comment").set_value("defines");
-	for (auto &define : data.defines)
-		defines.append_child("type").append_attribute("name").set_value(define.name.data());
-
-	auto typedefs = feature.append_child("require");
-	typedefs.append_attribute("comment").set_value("typedefs");
-	for (auto &type_def : data.typedefs)
-		typedefs.append_child("type").append_attribute("name").set_value(type_def.name.data());
-
-	auto functions = feature.append_child("require");
-	functions.append_attribute("comment").set_value("functions");
-	for (auto &function : data.functions)
-		functions.append_child("command").append_attribute("name").set_value(function.name.data());
-}
-
 void append_misc(pugi::xml_node &registry) {
 	auto extensions = registry.append_child("extensions");
 	extensions.append_attribute("comment").set_value("empty");
@@ -559,7 +527,7 @@ static std::string to_objtypeenum(std::string_view input) {
 vkma_xml::detail::generator_t::generator_t(api_t const &api)
 	: api(api), output(std::make_optional<pugi::xml_document>())
 	, registry(output->append_child("registry"))
-	, appended({ "void" }) {}
+	, appended_basetypes({ "void" }) {}
 
 void vkma_xml::detail::generator_t::append_typename(pugi::xml_node &xml, 
 													decorated_typename_t const &type) {
@@ -618,14 +586,14 @@ void vkma_xml::detail::generator_t::append_types() {
 				<< name_ref << "'.\n";
 		}
 		inline void operator()(vkma_xml::detail::type::structure const &structure) {
-			if (!generator_ref.appended.contains(name_ref)) {
-				if (tag == type_tag::core) {
+			if (tag == type_tag::core) {
+				if (!generator_ref.appended_types.contains(name_ref)) {
 					for (auto const &member : structure.members)
 						if (auto iterator = generator_ref.api.registry.find(member.type.name);
-							iterator != generator_ref.api.registry.end())
-							std::visit(append_types_visitor{
+								 iterator != generator_ref.api.registry.end())
+							std::visit(append_types_visitor {
 								member.type.name, iterator->second.tag, types_ref, generator_ref
-									   }, iterator->second.state);
+							}, iterator->second.state);
 
 					auto type = types_ref.append_child("type");
 					type.append_attribute("category").set_value("struct");
@@ -634,28 +602,42 @@ void vkma_xml::detail::generator_t::append_types() {
 						auto output = type.append_child("member");
 						append_typename(output, member.type);
 						output.append_child(pugi::node_pcdata).set_value(" ");
-						output.append_child("name").append_child(pugi::node_pcdata).set_value(member.name.data());
+						output.append_child("name").append_child(pugi::node_pcdata)
+							.set_value(member.name.data());
 					}
-				} else {
-					auto type = types_ref.append_child("type");
-					type.append_attribute("category").set_value("basetype");
-					type.append_child(pugi::node_pcdata).set_value("struct ");
-					type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
-					type.append_child(pugi::node_pcdata).set_value(";");
+					generator_ref.appended_types.emplace(name_ref);
 				}
-				generator_ref.appended.emplace(name_ref);
+			} else if (!generator_ref.appended_basetypes.contains(name_ref)) {
+				auto type = types_ref.append_child("type");
+				type.append_attribute("category").set_value("basetype");
+				type.append_child(pugi::node_pcdata).set_value("struct ");
+				type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
+				type.append_child(pugi::node_pcdata).set_value(";");
+				generator_ref.appended_basetypes.emplace(name_ref);
 			}
 		}
 		inline void operator()(vkma_xml::detail::type::handle const &handle) {
-			if (!generator_ref.appended.contains(name_ref)) {
-				auto type = types_ref.append_child("type");
-				if (tag == type_tag::core) {
+			if (tag == type_tag::core) {
+				if (!generator_ref.appended_types.contains(name_ref)) {
+					auto type = types_ref.append_child("type");
 					type.append_attribute("category").set_value("handle");
 					if (handle.parent)
 						type.append_attribute("parent").set_value(handle.parent->data());
 					type.append_attribute("objtypeenum").set_value(to_objtypeenum(name_ref).data());
-				} else
-					type.append_attribute("category").set_value("basetype");
+					if (handle.dispatchable)
+						type.append_child("type").append_child(pugi::node_pcdata)
+							.set_value("VK_DEFINE_HANDLE");
+					else
+						type.append_child("type").append_child(pugi::node_pcdata)
+							.set_value("VK_DEFINE_NON_DISPATCHABLE_HANDLE");
+					type.append_child(pugi::node_pcdata).set_value("(");
+					type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
+					type.append_child(pugi::node_pcdata).set_value(")");
+					generator_ref.appended_types.emplace(name_ref);
+				}
+			} else if (!generator_ref.appended_basetypes.contains(name_ref)) {
+				auto type = types_ref.append_child("type");
+				type.append_attribute("category").set_value("basetype");
 				if (handle.dispatchable)
 					type.append_child("type").append_child(pugi::node_pcdata)
 						.set_value("VK_DEFINE_HANDLE");
@@ -665,71 +647,73 @@ void vkma_xml::detail::generator_t::append_types() {
 				type.append_child(pugi::node_pcdata).set_value("(");
 				type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
 				type.append_child(pugi::node_pcdata).set_value(")");
-				generator_ref.appended.emplace(name_ref);
+				generator_ref.appended_basetypes.emplace(name_ref);
 			}
 		}
 		inline void operator()(vkma_xml::detail::type::macro const &macro) {
-			if (!generator_ref.appended.contains(name_ref)) {
-				auto type = types_ref.append_child("type");
-				if (tag == type_tag::core) {
+			if (tag == type_tag::core) {
+				if (!generator_ref.appended_types.contains(name_ref)) {
+					auto type = types_ref.append_child("type");
 					type.append_attribute("category").set_value("define");
 					type.append_child(pugi::node_pcdata).set_value("#define ");
 					type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
 					type.append_child(pugi::node_pcdata).set_value((" " + macro.value).data());
-				} else {
-					type.append_attribute("category").set_value("basetype");
-					type.append_child(pugi::node_pcdata).set_value("#define ");
-					type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
-					type.append_child(pugi::node_pcdata).set_value((" " + macro.value).data());
+					generator_ref.appended_types.emplace(name_ref);
 				}
-				generator_ref.appended.emplace(name_ref);
+			} else if (!generator_ref.appended_basetypes.contains(name_ref)) {
+				auto type = types_ref.append_child("type");
+				type.append_attribute("category").set_value("basetype");
+				type.append_child(pugi::node_pcdata).set_value("#define ");
+				type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
+				type.append_child(pugi::node_pcdata).set_value((" " + macro.value).data());
+				generator_ref.appended_basetypes.emplace(name_ref);
 			}
 		}
 		inline void operator()(vkma_xml::detail::type::enumeration const &) {
-			if (!generator_ref.appended.contains(name_ref)) {
-				auto type = types_ref.append_child("type");
-				if (tag == type_tag::core) {
+			if (tag == type_tag::core) {
+				if (!generator_ref.appended_types.contains(name_ref)) {
+					auto type = types_ref.append_child("type");
 					type.append_attribute("name").set_value(name_ref.data());
 					type.append_attribute("category").set_value("enum");
-				} else {
-					type.append_attribute("category").set_value("basetype");
-					type.append_child(pugi::node_pcdata).set_value("enum ");
-					type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
-					type.append_child(pugi::node_pcdata).set_value(";");
+					generator_ref.appended_types.emplace(name_ref);
 				}
-				generator_ref.appended.emplace(name_ref);
+			} else if (!generator_ref.appended_basetypes.contains(name_ref)) {
+				auto type = types_ref.append_child("type");
+				type.append_attribute("category").set_value("basetype");
+				type.append_child(pugi::node_pcdata).set_value("enum ");
+				type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
+				type.append_child(pugi::node_pcdata).set_value(";");
 			}
 		}
 		inline void operator()(vkma_xml::detail::type::function const &) {}
 		inline void operator()(vkma_xml::detail::type::function_pointer const &function_pointer) {
-			if (!generator_ref.appended.contains(name_ref)) {
-				if (tag == type_tag::core) {
-					auto type = types_ref.append_child("type");
-					type.append_attribute("category").set_value("funcpointer");
-					type.append_child(pugi::node_pcdata).set_value(
-						("typedef " + function_pointer.return_type.to_string() + "(*").data()
-					);
-					type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
-					type.append_child(pugi::node_pcdata).set_value(")(");
-					for (auto iterator = function_pointer.parameters.begin()
-						 ; iterator != std::prev(function_pointer.parameters.end())
-						 ; ++iterator) {
+			if (tag == type_tag::core && !generator_ref.appended_types.contains(name_ref)) {
+				auto type = types_ref.append_child("type");
+				type.append_attribute("category").set_value("funcpointer");
+				type.append_child(pugi::node_pcdata).set_value(
+					("typedef " + function_pointer.return_type.to_string() + "(*").data()
+				);
+				type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
+				type.append_child(pugi::node_pcdata).set_value(")(");
+				for (auto iterator = function_pointer.parameters.begin()
+					 ; iterator != std::prev(function_pointer.parameters.end())
+					 ; ++iterator) {
 
-						append_typename(type, iterator->type);
-						type.append_child(pugi::node_pcdata).set_value(
-							(" " + iterator->name + ", ").data()
-						);
-					}
-					append_typename(type, function_pointer.parameters.back().type);
+					append_typename(type, iterator->type);
 					type.append_child(pugi::node_pcdata).set_value(
-						(" " + function_pointer.parameters.back().name + ");").data()
+						(" " + iterator->name + ", ").data()
 					);
 				}
-				generator_ref.appended.emplace(name_ref);
+				append_typename(type, function_pointer.parameters.back().type);
+				type.append_child(pugi::node_pcdata).set_value(
+					(" " + function_pointer.parameters.back().name + ");").data()
+				);
+				generator_ref.appended_types.emplace(name_ref);
 			}
 		}
 		inline void operator()(vkma_xml::detail::type::alias const &alias) {
-			if (!generator_ref.appended.contains(name_ref)) {
+			if (!generator_ref.appended_types.contains(name_ref)
+			 && !generator_ref.appended_basetypes.contains(name_ref)) {
 				if (tag == type_tag::core && alias.real_type.name == "VkFlags" &&
 						std::string_view(name_ref).substr(name_ref.size() - 5) == "Flags") {
 					auto type = types_ref.append_child("type");
@@ -754,10 +738,10 @@ void vkma_xml::detail::generator_t::append_types() {
 			}
 		}
 		inline void operator()(vkma_xml::detail::type::base const &) {
-			if (!generator_ref.appended.contains(name_ref)) {
+			if (!generator_ref.appended_basetypes.contains(name_ref)) {
 				auto type = types_ref.append_child("type");
 				type.append_attribute("name").set_value(name_ref.data());
-				generator_ref.appended.emplace(name_ref);
+				generator_ref.appended_basetypes.emplace(name_ref);
 			}
 		}
 	};
@@ -891,6 +875,7 @@ void vkma_xml::detail::generator_t::append_commands() {
 				param.append_child(pugi::node_pcdata).set_value(" ");
 				param.append_child("name").append_child(pugi::node_pcdata).set_value(parameter.name.data());
 			}
+			generator_ref.appended_commands.emplace(name_ref);
 		}
 		inline void operator()(vkma_xml::detail::type::function_pointer const &) {}
 		inline void operator()(vkma_xml::detail::type::alias const &) {}
@@ -907,6 +892,31 @@ void vkma_xml::detail::generator_t::append_commands() {
 	}
 }
 
+void vkma_xml::detail::generator_t::append_feature() {
+	if (registry) {
+		auto feature = registry->append_child("feature");
+		feature.append_attribute("api").set_value("vkma");
+		feature.append_attribute("name").set_value("VKMA_VERSION_2_3");
+		feature.append_attribute("number").set_value("2.3");
+		feature.append_attribute("comment").set_value("VKMA API interface definitions");
+
+		if (registry) {
+			auto required = feature.append_child("require");
+			required.append_attribute("comment").set_value("a mess, isn't it?");
+			required.append_child("type").append_attribute("name").set_value("vma");
+
+			for (auto const &type_name : appended_types) {
+				auto type = required.append_child("type");
+				type.append_attribute("name").set_value(type_name.data());
+			}
+			for (auto const &command_name : appended_commands) {
+				auto command = required.append_child("command");
+				command.append_attribute("name").set_value(command_name.data());
+			}
+		}
+	}
+}
+
 std::optional<pugi::xml_document> vkma_xml::generate(detail::api_t const &api) {
 	detail::generator_t generator = api;
 
@@ -914,6 +924,7 @@ std::optional<pugi::xml_document> vkma_xml::generate(detail::api_t const &api) {
 	generator.append_types();
 	generator.append_enumerations();
 	generator.append_commands();
+	generator.append_feature();
 
 	return std::move(generator.output);
 }

@@ -178,12 +178,15 @@ namespace vkma_xml {
 			void append_types();
 			void append_enumerations();
 			void append_commands();
+			void append_feature();
 
 		public:
 			generator_t(api_t const &api);
 		public:
 			api_t const &api;
-			std::unordered_set<std::string_view> appended;
+			std::unordered_set<std::string_view> appended_basetypes;
+			std::unordered_set<std::string_view> appended_types;
+			std::unordered_set<std::string_view> appended_commands;
 			std::optional<pugi::xml_document> output;
 			std::optional<pugi::xml_node> registry;
 		};
