@@ -19,6 +19,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		<tag name="WC" author="Who cares?" contact="@cvelth" />
 	</tags>
 	<types comment="VMA type definitions">
+		<type category="bitmask" requires="VkmaPoolCreateFlagBits">typedef <type>VkFlags</type> <name>VkmaPoolCreateFlags</name>;</type>
 		<type category="struct" name="VkmaPoolCreateInfo">
 			<member><type>uint32_t</type> <name>memoryTypeIndex</name>
 			</member>
@@ -36,6 +37,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</member>
 		</type>
 		<type name="VkmaMemoryUsage" category="enum" />
+		<type category="bitmask" requires="VkmaAllocationCreateFlagBits">typedef <type>VkFlags</type> <name>VkmaAllocationCreateFlags</name>;</type>
 		<type category="handle" parent="VkmaAllocator" objtypeenum="VKMA_POOL">
 			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkmaPool</name>)</type>
 		<type category="struct" name="VkmaAllocationCreateInfo">
@@ -56,6 +58,8 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>float</type> <name>priority</name>
 			</member>
 		</type>
+		<type category="bitmask" requires="VkmaPoolCreateFlagBits">typedef <type>VkFlags</type> <name>VkmaPoolCreateFlags</name>;</type>
+		<type category="bitmask" requires="VkmaAllocationCreateFlagBits">typedef <type>VkFlags</type> <name>VkmaAllocationCreateFlags</name>;</type>
 		<type category="struct" name="VkmaDeviceMemoryCallbacks">
 			<member><type>PFN_vkmaAllocateDeviceMemoryFunction</type> <name>pfnAllocate</name>
 			</member>
@@ -64,6 +68,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>void</type> * <name>pUserData</name>
 			</member>
 		</type>
+		<type category="bitmask" requires="VkmaAllocatorCreateFlagBits">typedef <type>VkFlags</type> <name>VkmaAllocatorCreateFlags</name>;</type>
 		<type category="basetype">
 			<type>VK_DEFINE_HANDLE</type>(<name>VkPhysicalDevice</name>)</type>
 		<type category="basetype">
@@ -105,6 +110,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>PFN_vkCmdCopyBuffer</type> <name>vkCmdCopyBuffer</name>
 			</member>
 		</type>
+		<type category="bitmask" requires="VkmaRecordFlagBits">typedef <type>VkFlags</type> <name>VkmaRecordFlags</name>;</type>
 		<type category="struct" name="VkmaRecordSettings">
 			<member><type>VkmaRecordFlags</type> <name>flags</name>
 			</member>
@@ -139,6 +145,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>uint32_t</type> <name>vulkanApiVersion</name>
 			</member>
 		</type>
+		<type category="bitmask" requires="VkmaAllocatorCreateFlagBits">typedef <type>VkFlags</type> <name>VkmaAllocatorCreateFlags</name>;</type>
 		<type category="struct" name="VkmaBudget">
 			<member><type>VkDeviceSize</type> <name>blockBytes</name>
 			</member>
@@ -149,7 +156,9 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>VkDeviceSize</type> <name>budget</name>
 			</member>
 		</type>
+		<type category="bitmask" requires="VkmaRecordFlagBits">typedef <type>VkFlags</type> <name>VkmaRecordFlags</name>;</type>
 		<type name="VkmaDefragmentationFlagBits" category="enum" />
+		<type category="bitmask" requires="VkmaDefragmentationFlagBits">typedef <type>VkFlags</type> <name>VkmaDefragmentationFlags</name>;</type>
 		<type category="handle" parent="VkmaAllocator" objtypeenum="VKMA_ALLOCATION">
 			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkmaAllocation</name>)</type>
 		<type category="basetype">
@@ -178,6 +187,7 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>VkCommandBuffer</type> <name>commandBuffer</name>
 			</member>
 		</type>
+		<type category="bitmask" requires="VkmaDefragmentationFlagBits">typedef <type>VkFlags</type> <name>VkmaDefragmentationFlags</name>;</type>
 		<type category="basetype">
 			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkDeviceMemory</name>)</type>
 		<type category="struct" name="VkmaAllocationInfo">

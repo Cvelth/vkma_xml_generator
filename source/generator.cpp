@@ -123,29 +123,6 @@ void append_vulkan(pugi::xml_node &types, std::set<std::string> const &vulkan_ty
 	}
 }
 
-void append_bitmask(pugi::xml_node &types, std::vector<vkma_xml::detail::typedef_t> const &typedefs,
-					std::vector<vkma_xml::detail::enum_t> const &enums) {
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value("Bitmask types");
-	for (auto &type_def : typedefs)
-		if (type_def.type == "VkFlags") {
-			auto type = types.append_child("type");
-			type.append_attribute("category").set_value("bitmask");
-			if (auto iterator = std::ranges::find_if(enums, [&type_def](auto const &enumeration) {
-				return std::string_view(type_def.name).substr(type_def.name.size() - 5) == "Flags"
-					&& enumeration.name == (type_def.name.substr(0, type_def.name.size() - 1) + "Bits");
-			}); iterator != enums.end())
-				type.append_attribute("requires").set_value(iterator->name.data());
-			else
-				type.append_attribute("requires").set_value("none");
-			type.append_child(pugi::node_pcdata).set_value("typedef ");
-			type.append_child("type").append_child(pugi::node_pcdata).set_value("VkFlags");
-			type.append_child(pugi::node_pcdata).set_value(" ");
-			type.append_child("name").append_child(pugi::node_pcdata).set_value(type_def.name.data());
-			type.append_child(pugi::node_pcdata).set_value(";");
-		}
-}
-
 void append_enum(pugi::xml_node &types, std::vector<vkma_xml::detail::enum_t> const &enums) {
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("Enumeration types");
@@ -948,8 +925,23 @@ void vkma_xml::detail::generator_t::append_types() {
 		}
 		inline void operator()(vkma_xml::detail::type::alias const &alias) {
 			if (!generator_ref.appended.contains(name_ref)) {
-				if (auto iterator = generator_ref.api.registry.find(alias.real_type.name);
-						 iterator != generator_ref.api.registry.end())
+				if (tag == type_tag::core && alias.real_type.name == "VkFlags" &&
+						std::string_view(name_ref).substr(name_ref.size() - 5) == "Flags") {
+					auto type = types_ref.append_child("type");
+					type.append_attribute("category").set_value("bitmask");
+					if (auto iterator = generator_ref.api.registry.find(
+						name_ref.substr(0, name_ref.size() - 1) + "Bits"
+					); iterator != generator_ref.api.registry.end())
+						type.append_attribute("requires").set_value(iterator->first.data());
+					else
+						type.append_attribute("requires").set_value("none");
+					type.append_child(pugi::node_pcdata).set_value("typedef ");
+					type.append_child("type").append_child(pugi::node_pcdata).set_value("VkFlags");
+					type.append_child(pugi::node_pcdata).set_value(" ");
+					type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
+					type.append_child(pugi::node_pcdata).set_value(";");
+				} else if (auto iterator = generator_ref.api.registry.find(alias.real_type.name);
+						   iterator != generator_ref.api.registry.end())
 					std::visit(append_types_visitor{ name_ref, tag, types_ref, generator_ref },
 							   iterator->second.state);
 				else
