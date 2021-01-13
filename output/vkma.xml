@@ -60,6 +60,8 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		</type>
 		<type category="bitmask" requires="VkmaPoolCreateFlagBits">typedef <type>VkFlags</type> <name>VkmaPoolCreateFlags</name>;</type>
 		<type category="bitmask" requires="VkmaAllocationCreateFlagBits">typedef <type>VkFlags</type> <name>VkmaAllocationCreateFlags</name>;</type>
+		<type category="funcpointer">typedef void(*<name>PFN_vkmaAllocateDeviceMemoryFunction</name>)(<type>VkmaAllocator</type> allocator, <type>uint32_t</type> memoryType, <type>VkDeviceMemory</type> memory, <type>VkDeviceSize</type> size, <type>void</type> *pUserData);</type>
+		<type category="funcpointer">typedef void(*<name>PFN_vkmaFreeDeviceMemoryFunction</name>)(<type>VkmaAllocator</type> allocator, <type>uint32_t</type> memoryType, <type>VkDeviceMemory</type> memory, <type>VkDeviceSize</type> size, <type>void</type> *pUserData);</type>
 		<type category="struct" name="VkmaDeviceMemoryCallbacks">
 			<member><type>PFN_vkmaAllocateDeviceMemoryFunction</type> <name>pfnAllocate</name>
 			</member>

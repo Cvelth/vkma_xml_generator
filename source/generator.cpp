@@ -21,35 +21,6 @@ std::optional<pugi::xml_document> vkma_xml::detail::load_xml(std::filesystem::pa
 }
 
 /*
-std::optional<vkma_xml::detail::function_t> parse_function_pointer(vkma_xml::detail::typedef_t input) {
-	auto name = std::string_view(input.name);
-	auto type = std::string_view(input.type);
-	if (name.substr(0, 4) == "PFN_") {
-		vkma_xml::detail::function_t output;
-		output.name = name;
-
-		size_t open_br_pos = type.find("(");
-		output.return_type = std::string(type.substr(0, open_br_pos));
-
-		if (type.substr(open_br_pos, 14) == "(VKAPI_PTR *)(" && type.substr(type.size() - 1) == ")") {
-			size_t offset = open_br_pos + 14;
-			while (offset < type.size()) {
-				auto space_pos = type.find(" ", offset);
-				auto comma_pos = type.find(", ", space_pos);
-				if (comma_pos == std::string_view::npos)
-					comma_pos = type.size() - 1;
-				output.parameters.emplace_back(
-					std::string(type.begin() + space_pos + 1, type.begin() + comma_pos),
-					std::string(type.begin() + offset, type.begin() + space_pos)
-				);
-				offset = comma_pos + 2;
-			}
-			return output;
-		}
-	}
-	return std::nullopt;
-}
-
 void append_typename(pugi::xml_node &xml, std::string_view name, std::string prefix = "", std::string suffix = "") {
 	if (name.size() > 6 && name.substr(0, 6) == "const ")
 		append_typename(xml, name.substr(6), prefix += name.substr(0, 6), suffix);
@@ -121,41 +92,6 @@ void append_vulkan(pugi::xml_node &types, std::set<std::string> const &vulkan_ty
 		type.append_attribute("requires").set_value("vulkan");
 		type.append_attribute("name").set_value(type_name.data());
 	}
-}
-
-void append_function_pointer(pugi::xml_node &types, std::vector<vkma_xml::detail::typedef_t> const &typedefs) {
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
-		"Function pointer typedefs"
-	);
-	for (auto &type_def : typedefs)
-		if (auto function_pointer = parse_function_pointer(type_def); function_pointer) {
-			auto type = types.append_child("type");
-			type.append_attribute("category").set_value("funcpointer");
-			type.append_child(pugi::node_pcdata).set_value(
-				("typedef " + function_pointer->return_type + "(VKAPI_PTR *").data()
-			);
-			type.append_child("name").append_child(pugi::node_pcdata).set_value(function_pointer->name.data());
-			type.append_child(pugi::node_pcdata).set_value(")(");
-			for (auto iterator = function_pointer->parameters.begin()
-				 ; iterator != std::prev(function_pointer->parameters.end())
-				 ; ++iterator) {
-
-				append_typename(type, iterator->type);
-				//type.append_child("type").append_child(pugi::node_pcdata).set_value(
-				//	iterator->type.data()
-				//);
-				type.append_child(pugi::node_pcdata).set_value(
-					(" " + iterator->name + ", ").data()
-				);
-			}
-			type.append_child("type").append_child(pugi::node_pcdata).set_value(
-				function_pointer->parameters.back().type.data()
-			);
-			type.append_child(pugi::node_pcdata).set_value(
-				(" " + function_pointer->parameters.back().name + ");").data()
-			);
-		}
 }
 
 struct constexpr_enum_value_t {
@@ -439,6 +375,11 @@ vkma_xml::detail::type_registry::add(identifier_t &&name, type_t &&type_data) {
 			for (auto const &parameter : function.parameters)
 				registry_ref.get(parameter.type.name);
 		}
+		void operator()(type::function_pointer const &function_pointer) {
+			registry_ref.get(function_pointer.return_type.name);
+			for (auto const &parameter : function_pointer.parameters)
+				registry_ref.get(parameter.type.name);
+		}
 		void operator()(type::alias const alias) {
 			registry_ref.get(alias.real_type.name);
 		}
@@ -565,6 +506,40 @@ vkma_xml::detail::api_t::load_function(pugi::xml_node const &xml) {
 	else
 		return std::nullopt;
 }
+std::optional<vkma_xml::detail::type::function_pointer>
+vkma_xml::detail::api_t::load_function_pointer(std::string_view type_name) {
+	type::function_pointer output;
+
+	size_t offset = type_name.find("(");
+	output.return_type = std::string(type_name.substr(0, offset));
+
+	if (type_name.substr(offset, 4) == "(*)(" && type_name.substr(type_name.size() - 1) == ")")
+		offset += 4;
+	else if (type_name.substr(offset, 14) == "(VKAPI_PTR *)(" && type_name.substr(type_name.size() - 1) == ")")
+		offset += 14;
+	else
+		return std::nullopt;
+
+	if (type_name.substr(offset, type_name.size() - offset - 1) == "void")
+		return output;
+
+	while (offset < type_name.size()) {
+		auto space_pos = type_name.find(" ", offset);
+		if (space_pos == std::string_view::npos)
+			return std::nullopt;
+
+		auto comma_pos = type_name.find(", ", space_pos);
+		if (comma_pos == std::string_view::npos)
+			comma_pos = type_name.size() - 1;
+
+		output.parameters.emplace_back(
+			std::string(type_name.begin() + space_pos + 1, type_name.begin() + comma_pos),
+			std::string(type_name.begin() + offset, type_name.begin() + space_pos)
+		);
+		offset = comma_pos + 2;
+	}
+	return output;
+}
 
 void vkma_xml::detail::api_t::load_struct(pugi::xml_node const &xml, type_tag tag) {
 	std::string_view name;
@@ -608,9 +583,18 @@ void vkma_xml::detail::api_t::load_file(pugi::xml_node const &xml, type_tag tag)
 					} else if (kind == "typedef"sv) {
 						if (auto type_def = load_typedef(member); type_def)
 							if (type_def->name != type_def->type.name)
-								registry.add(std::move(type_def->name), type_t {
-									type::alias{ std::move(type_def->type) }, tag
-								});
+								if (std::string_view(type_def->name).substr(0, 3) == "PFN")
+									if (auto pointer = load_function_pointer(type_def->type.name); pointer)
+										registry.add(std::move(type_def->name), type_t {
+											*pointer, tag
+										});
+									else
+										std::cout << "Warning: Ignore a function pointer: '"
+											<< type_def->name << "'. Parsing has failed.\n";
+								else
+									registry.add(std::move(type_def->name), type_t {
+										type::alias{ std::move(type_def->type) }, tag
+									});
 					} else if (kind == "function"sv) {
 						if (auto function = load_function(member); function)
 							registry.add(std::move(function->name), type_t {
@@ -885,8 +869,33 @@ void vkma_xml::detail::generator_t::append_types() {
 				generator_ref.appended.emplace(name_ref);
 			}
 		}
-		inline void operator()(vkma_xml::detail::type::function const &) {
-			std::cout << "Warning: Not implemented!\n";
+		inline void operator()(vkma_xml::detail::type::function const &) {}
+		inline void operator()(vkma_xml::detail::type::function_pointer const &function_pointer) {
+			if (!generator_ref.appended.contains(name_ref)) {
+				if (tag == type_tag::core) {
+					auto type = types_ref.append_child("type");
+					type.append_attribute("category").set_value("funcpointer");
+					type.append_child(pugi::node_pcdata).set_value(
+						("typedef " + function_pointer.return_type.to_string() + "(*").data()
+					);
+					type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
+					type.append_child(pugi::node_pcdata).set_value(")(");
+					for (auto iterator = function_pointer.parameters.begin()
+						 ; iterator != std::prev(function_pointer.parameters.end())
+						 ; ++iterator) {
+
+						append_typename(type, iterator->type);
+						type.append_child(pugi::node_pcdata).set_value(
+							(" " + iterator->name + ", ").data()
+						);
+					}
+					append_typename(type, function_pointer.parameters.back().type);
+					type.append_child(pugi::node_pcdata).set_value(
+						(" " + function_pointer.parameters.back().name + ");").data()
+					);
+				}
+				generator_ref.appended.emplace(name_ref);
+			}
 		}
 		inline void operator()(vkma_xml::detail::type::alias const &alias) {
 			if (!generator_ref.appended.contains(name_ref)) {

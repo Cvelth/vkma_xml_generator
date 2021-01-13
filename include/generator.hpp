@@ -35,11 +35,13 @@ namespace vkma_xml {
 
 			decorated_typename_t() = default;
 			decorated_typename_t(std::string input);
-			operator std::string() {
+			operator std::string() const {
 				return prefix + name + postfix;
 			}
 			operator bool() const { return !name.empty(); }
 			bool operator!() const { return name.empty(); }
+
+			auto to_string() const { return std::string(*this); }
 		};
 		inline std::ostream &operator<<(std::ostream &stream, decorated_typename_t const &type) {
 			return stream << type.prefix << type.name << type.postfix;
@@ -74,6 +76,10 @@ namespace vkma_xml {
 				decorated_typename_t return_type;
 				std::vector<variable_t> parameters;
 			};
+			struct function_pointer {
+				decorated_typename_t return_type;
+				std::vector<variable_t> parameters;
+			};
 			struct alias {
 				decorated_typename_t real_type;
 			};
@@ -92,6 +98,7 @@ namespace vkma_xml {
 				type::macro,
 				type::enumeration,
 				type::function,
+				type::function_pointer,
 				type::alias,
 				type::base
 			>;
@@ -153,6 +160,7 @@ namespace vkma_xml {
 			static std::optional<variable_t> load_typedef(pugi::xml_node const &xml);
 			static std::optional<variable_t> load_function_parameter(pugi::xml_node const &xml);
 			static std::optional<function_t> load_function(pugi::xml_node const &xml);
+			static std::optional<type::function_pointer> load_function_pointer(std::string_view type_name);
 
 			void load_struct(pugi::xml_node const &xml, type_tag tag);
 			void load_file(pugi::xml_node const &xml, type_tag tag);
