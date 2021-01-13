@@ -1,15 +1,21 @@
 ﻿// Copyright (c) 2021 Cvelth <cvelth.mail@gmail.com>
 // SPDX-License-Identifier: MIT
 
-#include "generator.hpp"
-
 #pragma warning(push)
 #pragma warning(disable: 4702)
 #include "ctre.hpp"
 #pragma warning(pop)
 
+#include <filesystem>
 #include <fstream>
+#include <map>
 #include <iostream>
+#include <vector>
+
+namespace vkma_xml::detail {
+	using identifier_t = std::string;
+	std::map<identifier_t, bool> load_handle_list(std::vector<std::filesystem::path> const &files);
+}
 
 static constexpr auto handle_pattern = ctll::fixed_string{ R"(VK_DEFINE_HANDLE\(([A-Za-z_0-9]+)\))" };
 static constexpr auto nd_handle_pattern = ctll::fixed_string{ 
