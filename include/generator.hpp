@@ -4,63 +4,26 @@
 #pragma once
 #include "pugixml.hpp"
 
+#include <array>
 #include <concepts>
 #include <filesystem>
 #include <initializer_list>
 #include <map>
 #include <optional>
+#include <set>
 #include <type_traits>
 #include <variant>
 #include <vector>
 #include <unordered_map>
 
 namespace vkma_xml {
+	struct input {
+		std::filesystem::path const &xml_directory;
+		std::vector<std::filesystem::path> const &header_files;
+	};
 	namespace detail {
-		/*
-		struct variable_t {
-			std::string name;
-			std::string type;
-		};
-		struct define_t {
-			std::string name;
-			std::string value;
-		};
-		struct enum_value_t {
-			std::string name;
-			std::string value;
-		};
-		struct enum_t {
-			std::string name;
-			std::optional<std::string> type;
-			std::vector<enum_value_t> values;
-		};
-		struct typedef_t {
-			std::string name;
-			std::string type;
-		};
-		struct function_t {
-			std::string name;
-			std::string return_type;
-			std::vector<variable_t> parameters;
-		};
-
-		struct struct_t {
-			std::string name;
-			std::vector<variable_t> variables;
-		};
-		struct data_t {
-			std::vector<struct_t> structs;
-			std::vector<define_t> defines;
-			std::vector<typedef_t> typedefs;
-			std::vector<function_t> functions;
-			std::vector<enum_t> enums;
-
-			std::set<std::string> handle_names;
-			std::set<std::string> vulkan_type_names;
-		};
-
-		bool parse_header(std::filesystem::path const &path, detail::data_t &data);
-		*/
+		template<typename T> concept parser_input = std::is_same<T, input>::value;
+		using transparent_set = std::set<std::string, std::less<>>;
 
 		using identifier_t = std::string;
 		using value_t = std::string;
@@ -98,7 +61,6 @@ namespace vkma_xml {
 			struct handle {
 				bool dispatchable;
 			};
-			struct external {};
 			struct macro {
 				value_t value;
 			};
@@ -113,17 +75,27 @@ namespace vkma_xml {
 			struct alias {
 				decorated_typename_t real_type;
 			};
+			struct base {};
 		}
-		using type_t = std::variant<
-			type::undefined,
-			type::structure,
-			type::handle,
-			type::external,
-			type::macro,
-			type::enumeration,
-			type::function,
-			type::alias
-		>;
+
+		enum class type_tag {
+			core,
+			helper
+		};
+		struct type_t {
+			using state_t = std::variant<
+				type::undefined,
+				type::structure,
+				type::handle,
+				type::macro,
+				type::enumeration,
+				type::function,
+				type::alias,
+				type::base
+			>;
+			state_t state;
+			type_tag tag;
+		};
 
 		struct enum_t {
 			identifier_t name;
@@ -169,7 +141,6 @@ namespace vkma_xml {
 
 		protected:
 			underlying_t underlying;
-			size_t incomplete_type_counter = 0u;
 		};
 
 		struct api_t {
@@ -181,9 +152,10 @@ namespace vkma_xml {
 			static std::optional<variable_t> load_function_parameter(pugi::xml_node const &xml);
 			static std::optional<function_t> load_function(pugi::xml_node const &xml);
 
-			bool load_struct(pugi::xml_node const &xml);
-			bool load_file(pugi::xml_node const &xml);
-			bool load_compound(std::string_view refid, std::filesystem::path const &directory);
+			void load_struct(pugi::xml_node const &xml, type_tag tag);
+			void load_file(pugi::xml_node const &xml, type_tag tag);
+			void load_compound(std::string_view refid, std::filesystem::path const &directory, type_tag tag);
+			void load_helper(input const &helper_api);
 
 		public:
 			type_registry registry;
@@ -195,56 +167,83 @@ namespace vkma_xml {
 		struct type_t_printer {
 			std::ostream &stream_ref;
 			identifier_t const &name_ref;
+			type_tag tag;
 
 			void operator()(vkma_xml::detail::type::undefined const &) {
-				stream_ref << "- " << name_ref << " - an undefined type.\n";
+				if (tag == type_tag::core)
+					stream_ref << "- " << name_ref << " - an undefined type.\n";
 			}
 			void operator()(vkma_xml::detail::type::structure const &structure) {
-				stream_ref << "- " << name_ref << " - a struct {\n";
-				for (auto const &member : structure.members)
-					stream_ref << "    " << member.type << ' ' << member.name << ";\n";
-				stream_ref << "};\n";
+				if (tag == type_tag::core) {
+					stream_ref << "- " << name_ref << " - a struct {\n";
+					for (auto const &member : structure.members)
+						stream_ref << "    " << member.type << ' ' << member.name << ";\n";
+					stream_ref << "};\n";
+				}
 			}
 			void operator()(vkma_xml::detail::type::handle const &handle) {
-				stream_ref << "- " << name_ref << " - an "
-					<< (handle.dispatchable ? "" : "non-dispatchable ")
-					<< "object handle.\n";
-			}
-			void operator()(vkma_xml::detail::type::external const &) {
-				stream_ref << "- " << name_ref << " - an external type.\n";
+				if (tag == type_tag::core)
+					stream_ref << "- " << name_ref << " - an "
+						<< (handle.dispatchable ? "" : "non-dispatchable ")
+						<< "object handle.\n";
 			}
 			void operator()(vkma_xml::detail::type::macro const &macro) {
-				stream_ref << "- " << name_ref << " - a preprocessor macro.\n"
-					<< "    " << macro.value << "\n";
+				if (tag == type_tag::core)
+					stream_ref << "- " << name_ref << " - a preprocessor macro.\n"
+						<< "    " << macro.value << "\n";
 			}
 			void operator()(vkma_xml::detail::type::enumeration const &enumeration) {
-				stream_ref << "- " << name_ref << " - an enumeration";
-				if (enumeration.type)
-					stream_ref << " : " << *enumeration.type;
-				stream_ref << " {\n";
-				for (auto const &enumerator : enumeration.values)
-					stream_ref << "    " << enumerator.name << " = " << enumerator.value << ";\n";
-				stream_ref << "};\n";
+				if (tag == type_tag::core) {
+					stream_ref << "- " << name_ref << " - an enumeration";
+					if (enumeration.type)
+						stream_ref << " : " << *enumeration.type;
+					stream_ref << " {\n";
+					for (auto const &enumerator : enumeration.values)
+						stream_ref << "    " << enumerator.name << " = " << enumerator.value << ";\n";
+					stream_ref << "};\n";
+				}
 			}
 			void operator()(vkma_xml::detail::type::function const &function) {
-				stream_ref << "- " << name_ref << " - a function: "
-					<< function.return_type << "(&)(\n";
-				for (auto const &parameter : function.parameters)
-					stream_ref << "    " << parameter.type << ' ' << parameter.name << ",\n";
-				stream_ref << ");\n";
+				if (tag == type_tag::core) {
+					stream_ref << "- " << name_ref << " - a function: "
+						<< function.return_type << "(&)(\n";
+					for (auto const &parameter : function.parameters)
+						stream_ref << "    " << parameter.type << ' ' << parameter.name << ",\n";
+					stream_ref << ");\n";
+				}
 			}
 			void operator()(vkma_xml::detail::type::alias const alias) {
-				stream_ref << "- " << name_ref << " - an alias for " << alias.real_type << "\n";
+				if (tag == type_tag::core)
+					stream_ref << "- " << name_ref << " - an alias for " << alias.real_type << "\n";
+			}
+			void operator()(vkma_xml::detail::type::base const &) {
+				if (tag == type_tag::core)
+					stream_ref << "- " << name_ref << " - a base type.\n";
 			}
 		};
-	}
 
-	struct input {
-		std::filesystem::path const &xml_directory;
-		std::vector<std::filesystem::path> const &header_files;
-	};
-	namespace detail {
-		template<typename T> concept parser_input = std::is_same<T, input>::value;
+		using namespace std::string_view_literals;
+		constexpr std::array base_types = {
+			"void"sv, "size_t"sv,
+			"char"sv, "signed char"sv, "unsigned char"sv,
+			"short"sv, "signed short"sv, "unsigned short"sv,
+			"int"sv, "signed int"sv, "unsigned int"sv,
+			"long"sv, "signed long"sv, "unsigned long"sv,
+			"long long"sv, "signed long long"sv, "unsigned long long"sv,
+			"float"sv, "double"sv, "long double"sv,
+
+			"int8_t"sv, "uint8_t"sv,
+			"int16_t"sv, "uint16_t"sv,
+			"int32_t"sv, "uint32_t"sv,
+			"int64_t"sv, "uint64_t"sv
+		};
+		constexpr std::array accepted_prefixes {
+			"*"sv, "&"sv, " "sv, "const"sv,
+			"enum"sv, "struct"sv, "union"sv
+		};
+		constexpr std::array accepted_postfixes {
+			"*"sv, "&"sv, " "sv, "const"sv
+		};
 	}
 
 	std::optional<detail::api_t> parse(input main_api, std::initializer_list<input> const &helper_apis);
@@ -253,11 +252,11 @@ namespace vkma_xml {
 		return parse(main_api, std::initializer_list<input>{ helper_apis... });
 	}
 
-	std::optional<pugi::xml_document> generate(detail::api_t const &data);
+	std::optional<pugi::xml_document> generate(detail::api_t const &api);
 	template <detail::parser_input ...helper_api_ts>
 	std::optional<pugi::xml_document> generate(input main_api, helper_api_ts ...helper_apis) {
-		if (auto data = parse(main_api, helper_apis...); data)
-			return generate(*data);
+		if (auto api = parse(main_api, helper_apis...); api)
+			return generate(*api);
 		else
 			return std::nullopt;
 	}
