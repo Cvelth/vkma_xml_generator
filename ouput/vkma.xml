@@ -19,24 +19,6 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		<tag name="WC" author="Who cares?" contact="@cvelth" />
 	</tags>
 	<types comment="VMA type definitions">
-		<type category="struct" name="VkmaDefragmentationInfo2">
-			<member><type>VkmaDefragmentationFlags</type> <name>flags</name>
-			</member>
-			<member><type>uint32_t</type> <name>allocationCount</name>
-			</member>
-			<member><type>uint32_t</type> <name>poolCount</name>
-			</member>
-			<member><type>VkDeviceSize</type> <name>maxCpuBytesToMove</name>
-			</member>
-			<member><type>uint32_t</type> <name>maxCpuAllocationsToMove</name>
-			</member>
-			<member><type>VkDeviceSize</type> <name>maxGpuBytesToMove</name>
-			</member>
-			<member><type>uint32_t</type> <name>maxGpuAllocationsToMove</name>
-			</member>
-			<member><type>VkCommandBuffer VMA_NULLABLE</type> <name>commandBuffer</name>
-			</member>
-		</type>
 		<type category="struct" name="VkmaPoolCreateInfo">
 			<member><type>uint32_t</type> <name>memoryTypeIndex</name>
 			</member>
@@ -64,57 +46,135 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</member>
 			<member><type>uint32_t</type> <name>memoryTypeBits</name>
 			</member>
-			<member><type>VkmaPool VMA_NULLABLE</type> <name>pool</name>
+			<member><type>VkmaPool</type> <name>pool</name>
 			</member>
-			<member><type>void *VMA_NULLABLE</type> <name>pUserData</name>
+			<member><type>void</type> * <name>pUserData</name>
 			</member>
 			<member><type>float</type> <name>priority</name>
 			</member>
 		</type>
 		<type category="struct" name="VkmaDeviceMemoryCallbacks">
-			<member><type>PFN_vkmaAllocateDeviceMemoryFunction VMA_NULLABLE</type> <name>pfnAllocate</name>
+			<member><type>PFN_vkmaAllocateDeviceMemoryFunction</type> <name>pfnAllocate</name>
 			</member>
-			<member><type>PFN_vkmaFreeDeviceMemoryFunction VMA_NULLABLE</type> <name>pfnFree</name>
+			<member><type>PFN_vkmaFreeDeviceMemoryFunction</type> <name>pfnFree</name>
 			</member>
-			<member><type>void *VMA_NULLABLE</type> <name>pUserData</name>
+			<member><type>void</type> * <name>pUserData</name>
+			</member>
+		</type>
+		<type category="struct" name="VkAllocationCallbacks">
+			<member><type>void</type> * <name>pUserData</name>
+			</member>
+			<member><type>PFN_vkAllocationFunction</type> <name>pfnAllocation</name>
+			</member>
+			<member><type>PFN_vkReallocationFunction</type> <name>pfnReallocation</name>
+			</member>
+			<member><type>PFN_vkFreeFunction</type> <name>pfnFree</name>
+			</member>
+			<member><type>PFN_vkInternalAllocationNotification</type> <name>pfnInternalAllocation</name>
+			</member>
+			<member><type>PFN_vkInternalFreeNotification</type> <name>pfnInternalFree</name>
+			</member>
+		</type>
+		<type category="struct" name="VkmaVulkanFunctions">
+			<member><type>PFN_vkGetPhysicalDeviceProperties</type> <name>vkGetPhysicalDeviceProperties</name>
+			</member>
+			<member><type>PFN_vkGetPhysicalDeviceMemoryProperties</type> <name>vkGetPhysicalDeviceMemoryProperties</name>
+			</member>
+			<member><type>PFN_vkAllocateMemory</type> <name>vkAllocateMemory</name>
+			</member>
+			<member><type>PFN_vkFreeMemory</type> <name>vkFreeMemory</name>
+			</member>
+			<member><type>PFN_vkMapMemory</type> <name>vkMapMemory</name>
+			</member>
+			<member><type>PFN_vkUnmapMemory</type> <name>vkUnmapMemory</name>
+			</member>
+			<member><type>PFN_vkFlushMappedMemoryRanges</type> <name>vkFlushMappedMemoryRanges</name>
+			</member>
+			<member><type>PFN_vkInvalidateMappedMemoryRanges</type> <name>vkInvalidateMappedMemoryRanges</name>
+			</member>
+			<member><type>PFN_vkBindBufferMemory</type> <name>vkBindBufferMemory</name>
+			</member>
+			<member><type>PFN_vkBindImageMemory</type> <name>vkBindImageMemory</name>
+			</member>
+			<member><type>PFN_vkGetBufferMemoryRequirements</type> <name>vkGetBufferMemoryRequirements</name>
+			</member>
+			<member><type>PFN_vkGetImageMemoryRequirements</type> <name>vkGetImageMemoryRequirements</name>
+			</member>
+			<member><type>PFN_vkCreateBuffer</type> <name>vkCreateBuffer</name>
+			</member>
+			<member><type>PFN_vkDestroyBuffer</type> <name>vkDestroyBuffer</name>
+			</member>
+			<member><type>PFN_vkCreateImage</type> <name>vkCreateImage</name>
+			</member>
+			<member><type>PFN_vkDestroyImage</type> <name>vkDestroyImage</name>
+			</member>
+			<member><type>PFN_vkCmdCopyBuffer</type> <name>vkCmdCopyBuffer</name>
+			</member>
+		</type>
+		<type category="struct" name="VkmaRecordSettings">
+			<member><type>VkmaRecordFlags</type> <name>flags</name>
+			</member>
+			<member>const <type>char</type> * <name>pFilePath</name>
 			</member>
 		</type>
 		<type category="struct" name="VkmaAllocatorCreateInfo">
 			<member><type>VkmaAllocatorCreateFlags</type> <name>flags</name>
 			</member>
-			<member><type>VkPhysicalDevice VMA_NOT_NULL</type> <name>physicalDevice</name>
+			<member><type>VkPhysicalDevice</type> <name>physicalDevice</name>
 			</member>
-			<member><type>VkDevice VMA_NOT_NULL</type> <name>device</name>
+			<member><type>VkDevice</type> <name>device</name>
 			</member>
 			<member><type>VkDeviceSize</type> <name>preferredLargeHeapBlockSize</name>
 			</member>
-			<member>const <type>VkAllocationCallbacks *VMA_NULLABLE</type> <name>pAllocationCallbacks</name>
+			<member>const <type>VkAllocationCallbacks</type> * <name>pAllocationCallbacks</name>
 			</member>
-			<member>const <type>VkmaDeviceMemoryCallbacks *VMA_NULLABLE</type> <name>pDeviceMemoryCallbacks</name>
+			<member>const <type>VkmaDeviceMemoryCallbacks</type> * <name>pDeviceMemoryCallbacks</name>
 			</member>
 			<member><type>uint32_t</type> <name>frameInUseCount</name>
 			</member>
-			<member>const <type>VkmaVulkanFunctions *VMA_NULLABLE</type> <name>pVulkanFunctions</name>
+			<member>const <type>VkDeviceSize</type> * <name>pHeapSizeLimit</name>
 			</member>
-			<member>const <type>VkmaRecordSettings *VMA_NULLABLE</type> <name>pRecordSettings</name>
+			<member>const <type>VkmaVulkanFunctions</type> * <name>pVulkanFunctions</name>
 			</member>
-			<member><type>VkInstance VMA_NOT_NULL</type> <name>instance</name>
+			<member>const <type>VkmaRecordSettings</type> * <name>pRecordSettings</name>
+			</member>
+			<member><type>VkInstance</type> <name>instance</name>
 			</member>
 			<member><type>uint32_t</type> <name>vulkanApiVersion</name>
 			</member>
 		</type>
-		<type category="struct" name="VkmaPoolStats">
-			<member><type>VkDeviceSize</type> <name>size</name>
+		<type category="struct" name="VkmaBudget">
+			<member><type>VkDeviceSize</type> <name>blockBytes</name>
 			</member>
-			<member><type>VkDeviceSize</type> <name>unusedSize</name>
+			<member><type>VkDeviceSize</type> <name>allocationBytes</name>
 			</member>
-			<member><type>size_t</type> <name>allocationCount</name>
+			<member><type>VkDeviceSize</type> <name>usage</name>
 			</member>
-			<member><type>size_t</type> <name>unusedRangeCount</name>
+			<member><type>VkDeviceSize</type> <name>budget</name>
 			</member>
-			<member><type>VkDeviceSize</type> <name>unusedRangeSizeMax</name>
+		</type>
+		<type category="struct" name="VkmaDefragmentationInfo2">
+			<member><type>VkmaDefragmentationFlags</type> <name>flags</name>
 			</member>
-			<member><type>size_t</type> <name>blockCount</name>
+			<member><type>uint32_t</type> <name>allocationCount</name>
+			</member>
+			<member>const <type>VkmaAllocation</type> * <name>pAllocations</name>
+			</member>
+			<member><type>VkBool32</type> * <name>pAllocationsChanged</name>
+			</member>
+			<member><type>uint32_t</type> <name>poolCount</name>
+			</member>
+			<member>const <type>VkmaPool</type> * <name>pPools</name>
+			</member>
+			<member><type>VkDeviceSize</type> <name>maxCpuBytesToMove</name>
+			</member>
+			<member><type>uint32_t</type> <name>maxCpuAllocationsToMove</name>
+			</member>
+			<member><type>VkDeviceSize</type> <name>maxGpuBytesToMove</name>
+			</member>
+			<member><type>uint32_t</type> <name>maxGpuAllocationsToMove</name>
+			</member>
+			<member><type>VkCommandBuffer</type> <name>commandBuffer</name>
 			</member>
 		</type>
 		<type category="struct" name="VkmaAllocationInfo">
@@ -129,12 +189,6 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>void</type> * <name>pMappedData</name>
 			</member>
 			<member><type>void</type> * <name>pUserData</name>
-			</member>
-		</type>
-		<type category="struct" name="VkmaRecordSettings">
-			<member><type>VkmaRecordFlags</type> <name>flags</name>
-			</member>
-			<member>const <type>char *VMA_NOT_NULL</type> <name>pFilePath</name>
 			</member>
 		</type>
 		<type category="struct" name="VkmaStatInfo">
@@ -179,50 +233,18 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>uint32_t</type> <name>deviceMemoryBlocksFreed</name>
 			</member>
 		</type>
-		<type category="struct" name="VkmaBudget">
-			<member><type>VkDeviceSize</type> <name>blockBytes</name>
+		<type category="struct" name="VkmaPoolStats">
+			<member><type>VkDeviceSize</type> <name>size</name>
 			</member>
-			<member><type>VkDeviceSize</type> <name>allocationBytes</name>
+			<member><type>VkDeviceSize</type> <name>unusedSize</name>
 			</member>
-			<member><type>VkDeviceSize</type> <name>usage</name>
+			<member><type>size_t</type> <name>allocationCount</name>
 			</member>
-			<member><type>VkDeviceSize</type> <name>budget</name>
+			<member><type>size_t</type> <name>unusedRangeCount</name>
 			</member>
-		</type>
-		<type category="struct" name="VkmaVulkanFunctions">
-			<member><type>PFN_vkGetPhysicalDeviceProperties</type> <name>vkGetPhysicalDeviceProperties</name>
+			<member><type>VkDeviceSize</type> <name>unusedRangeSizeMax</name>
 			</member>
-			<member><type>PFN_vkGetPhysicalDeviceMemoryProperties</type> <name>vkGetPhysicalDeviceMemoryProperties</name>
-			</member>
-			<member><type>PFN_vkAllocateMemory</type> <name>vkAllocateMemory</name>
-			</member>
-			<member><type>PFN_vkFreeMemory</type> <name>vkFreeMemory</name>
-			</member>
-			<member><type>PFN_vkMapMemory</type> <name>vkMapMemory</name>
-			</member>
-			<member><type>PFN_vkUnmapMemory</type> <name>vkUnmapMemory</name>
-			</member>
-			<member><type>PFN_vkFlushMappedMemoryRanges</type> <name>vkFlushMappedMemoryRanges</name>
-			</member>
-			<member><type>PFN_vkInvalidateMappedMemoryRanges</type> <name>vkInvalidateMappedMemoryRanges</name>
-			</member>
-			<member><type>PFN_vkBindBufferMemory</type> <name>vkBindBufferMemory</name>
-			</member>
-			<member><type>PFN_vkBindImageMemory</type> <name>vkBindImageMemory</name>
-			</member>
-			<member><type>PFN_vkGetBufferMemoryRequirements</type> <name>vkGetBufferMemoryRequirements</name>
-			</member>
-			<member><type>PFN_vkGetImageMemoryRequirements</type> <name>vkGetImageMemoryRequirements</name>
-			</member>
-			<member><type>PFN_vkCreateBuffer</type> <name>vkCreateBuffer</name>
-			</member>
-			<member><type>PFN_vkDestroyBuffer</type> <name>vkDestroyBuffer</name>
-			</member>
-			<member><type>PFN_vkCreateImage</type> <name>vkCreateImage</name>
-			</member>
-			<member><type>PFN_vkDestroyImage</type> <name>vkDestroyImage</name>
-			</member>
-			<member><type>PFN_vkCmdCopyBuffer</type> <name>vkCmdCopyBuffer</name>
+			<member><type>size_t</type> <name>blockCount</name>
 			</member>
 		</type>
 	</types>
