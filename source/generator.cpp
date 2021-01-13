@@ -21,29 +21,6 @@ std::optional<pugi::xml_document> vkma_xml::detail::load_xml(std::filesystem::pa
 }
 
 /*
-#include <array>
-
-std::string to_upper_case(std::string_view input) {
-	static std::locale locale("en_US.UTF8");
-
-	std::string output(input.substr(0, 1));
-	output.reserve(input.size());
-	for (size_t i = 1; i < input.size(); ++i) {
-		if (std::isupper(input[i], locale) && std::islower(input[i - 1], locale))
-			output += '_';
-		output += std::toupper(input[i], locale);
-	}
-
-	return output;
-}
-
-std::string to_objtypeenum(std::string_view input) {
-	std::string output = to_upper_case(input);
-	if (std::string_view(output).substr(0, 4) == "VMA_")
-		return output.insert(0, "VK_OBJECT_TYPE_");
-	return output;
-}
-
 std::optional<vkma_xml::detail::function_t> parse_function_pointer(vkma_xml::detail::typedef_t input) {
 	auto name = std::string_view(input.name);
 	auto type = std::string_view(input.type);
@@ -185,20 +162,6 @@ void append_bitmask(pugi::xml_node &types, std::vector<vkma_xml::detail::typedef
 			type.append_child("name").append_child(pugi::node_pcdata).set_value(type_def.name.data());
 			type.append_child(pugi::node_pcdata).set_value(";");
 		}
-}
-
-void append_handle(pugi::xml_node &types, std::set<std::string> handle_names) {
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value("Handle types");
-	for (auto &handle : handle_names) {
-		auto type = types.append_child("type");
-		type.append_attribute("category").set_value("handle");
-		type.append_attribute("objtypeenum").set_value(to_objtypeenum(handle).data());
-		type.append_child("type").append_child(pugi::node_pcdata).set_value("VK_DEFINE_HANDLE");
-		type.append_child(pugi::node_pcdata).set_value("(");
-		type.append_child("name").append_child(pugi::node_pcdata).set_value(handle.data());
-		type.append_child(pugi::node_pcdata).set_value(")");
-	}
 }
 
 void append_enum(pugi::xml_node &types, std::vector<vkma_xml::detail::enum_t> const &enums) {
@@ -837,6 +800,27 @@ std::optional<vkma_xml::detail::api_t> vkma_xml::parse(input main_api, std::init
 	return std::nullopt;
 }
 
+static std::string to_upper_case(std::string_view input) {
+	static std::locale locale("en_US.UTF8");
+
+	std::string output(input.substr(0, 1));
+	output.reserve(input.size());
+	for (size_t i = 1; i < input.size(); ++i) {
+		if (std::isupper(input[i], locale) && std::islower(input[i - 1], locale))
+			output += '_';
+		output += std::toupper(input[i], locale);
+	}
+
+	return output;
+}
+
+static std::string to_objtypeenum(std::string_view input) {
+	std::string output = to_upper_case(input);
+	if (std::string_view(output).substr(0, 4) == "VMA_")
+		return output.insert(0, "VK_OBJECT_TYPE_");
+	return output;
+}
+
 vkma_xml::detail::generator_t::generator_t(api_t const &api)
 	: api(api), output(std::make_optional<pugi::xml_document>())
 	, registry(output->append_child("registry")) {}
@@ -886,6 +870,7 @@ void vkma_xml::detail::generator_t::append_header() {
 void vkma_xml::detail::generator_t::append_types() {
 	struct append_types_visitor {
 		identifier_t const &name_ref;
+		type_tag const &tag;
 		pugi::xml_node &types_ref;
 		generator_t &generator_ref;
 
@@ -895,24 +880,54 @@ void vkma_xml::detail::generator_t::append_types() {
 		}
 		inline void operator()(vkma_xml::detail::type::structure const &structure) {
 			if (!generator_ref.appended.contains(name_ref)) {
-				for (auto const &member : structure.members)
-					std::visit(append_types_visitor{ member.type.name, types_ref, generator_ref },
-							   generator_ref.api.registry.find(member.type.name)->second.state);
+				if (tag == type_tag::core) {
+					for (auto const &member : structure.members)
+						if (auto iterator = generator_ref.api.registry.find(member.type.name);
+							iterator != generator_ref.api.registry.end())
+							std::visit(append_types_visitor{
+								member.type.name, iterator->second.tag, types_ref, generator_ref
+									   }, iterator->second.state);
 
-				auto type = types_ref.append_child("type");
-				type.append_attribute("category").set_value("struct");
-				type.append_attribute("name").set_value(name_ref.data());
-				for (auto &member : structure.members) {
-					auto output = type.append_child("member");
-					append_typename(output, member.type);
-					output.append_child(pugi::node_pcdata).set_value(" ");
-					output.append_child("name").append_child(pugi::node_pcdata).set_value(member.name.data());
+					auto type = types_ref.append_child("type");
+					type.append_attribute("category").set_value("struct");
+					type.append_attribute("name").set_value(name_ref.data());
+					for (auto &member : structure.members) {
+						auto output = type.append_child("member");
+						append_typename(output, member.type);
+						output.append_child(pugi::node_pcdata).set_value(" ");
+						output.append_child("name").append_child(pugi::node_pcdata).set_value(member.name.data());
+					}
+				} else {
+					auto type = types_ref.append_child("type");
+					type.append_attribute("category").set_value("basetype");
+					type.append_child(pugi::node_pcdata).set_value("struct ");
+					type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
+					type.append_child(pugi::node_pcdata).set_value(";");
 				}
 				generator_ref.appended.emplace(name_ref);
 			}
 		}
-		inline void operator()(vkma_xml::detail::type::handle const &) {
-			std::cout << "Warning: Not implemented!\n";
+		inline void operator()(vkma_xml::detail::type::handle const &handle) {
+			if (!generator_ref.appended.contains(name_ref)) {
+				auto type = types_ref.append_child("type");
+				if (tag == type_tag::core) {
+					type.append_attribute("category").set_value("handle");
+					if (handle.parent)
+						type.append_attribute("parent").set_value(handle.parent->data());
+					type.append_attribute("objtypeenum").set_value(to_objtypeenum(name_ref).data());
+				} else
+					type.append_attribute("category").set_value("basetype");
+				if (handle.dispatchable)
+					type.append_child("type").append_child(pugi::node_pcdata)
+						.set_value("VK_DEFINE_HANDLE");
+				else
+					type.append_child("type").append_child(pugi::node_pcdata)
+						.set_value("VK_DEFINE_NON_DISPATCHABLE_HANDLE");
+				type.append_child(pugi::node_pcdata).set_value("(");
+				type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
+				type.append_child(pugi::node_pcdata).set_value(")");
+				generator_ref.appended.emplace(name_ref);
+			}
 		}
 		inline void operator()(vkma_xml::detail::type::macro const &) {
 			std::cout << "Warning: Not implemented!\n";
@@ -925,8 +940,12 @@ void vkma_xml::detail::generator_t::append_types() {
 		}
 		inline void operator()(vkma_xml::detail::type::alias const &alias) {
 			if (!generator_ref.appended.contains(name_ref)) {
-				std::visit(append_types_visitor{ name_ref, types_ref, generator_ref },
-						   generator_ref.api.registry.find(alias.real_type.name)->second.state);
+				if (auto iterator = generator_ref.api.registry.find(alias.real_type.name);
+						 iterator != generator_ref.api.registry.end())
+					std::visit(append_types_visitor{ name_ref, tag, types_ref, generator_ref },
+							   iterator->second.state);
+				else
+					std::cout << "Warning: An undefined aliased type: '" << alias.real_type.name << "'.\n";
 			}
 		}
 		inline void operator()(vkma_xml::detail::type::base const &) {
@@ -940,7 +959,8 @@ void vkma_xml::detail::generator_t::append_types() {
 
 		for (auto const &type : api.registry)
 			if (type.second.tag == type_tag::core)
-				std::visit(append_types_visitor{ type.first, types, *this }, type.second.state);
+				std::visit(append_types_visitor{ type.first, type.second.tag, types, *this }, 
+						   type.second.state);
 	}
 }
 

@@ -35,6 +35,8 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>float</type> <name>priority</name>
 			</member>
 		</type>
+		<type category="handle" parent="VkmaAllocator" objtypeenum="VKMA_POOL">
+			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkmaPool</name>)</type>
 		<type category="struct" name="VkmaAllocationCreateInfo">
 			<member><type>VkmaAllocationCreateFlags</type> <name>flags</name>
 			</member>
@@ -61,20 +63,11 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>void</type> * <name>pUserData</name>
 			</member>
 		</type>
-		<type category="struct" name="VkAllocationCallbacks">
-			<member><type>void</type> * <name>pUserData</name>
-			</member>
-			<member><type>PFN_vkAllocationFunction</type> <name>pfnAllocation</name>
-			</member>
-			<member><type>PFN_vkReallocationFunction</type> <name>pfnReallocation</name>
-			</member>
-			<member><type>PFN_vkFreeFunction</type> <name>pfnFree</name>
-			</member>
-			<member><type>PFN_vkInternalAllocationNotification</type> <name>pfnInternalAllocation</name>
-			</member>
-			<member><type>PFN_vkInternalFreeNotification</type> <name>pfnInternalFree</name>
-			</member>
-		</type>
+		<type category="basetype">
+			<type>VK_DEFINE_HANDLE</type>(<name>VkPhysicalDevice</name>)</type>
+		<type category="basetype">
+			<type>VK_DEFINE_HANDLE</type>(<name>VkDevice</name>)</type>
+		<type category="basetype">struct <name>VkAllocationCallbacks</name>;</type>
 		<type category="struct" name="VkmaVulkanFunctions">
 			<member><type>PFN_vkGetPhysicalDeviceProperties</type> <name>vkGetPhysicalDeviceProperties</name>
 			</member>
@@ -117,6 +110,8 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member>const <type>char</type> * <name>pFilePath</name>
 			</member>
 		</type>
+		<type category="basetype">
+			<type>VK_DEFINE_HANDLE</type>(<name>VkInstance</name>)</type>
 		<type category="struct" name="VkmaAllocatorCreateInfo">
 			<member><type>VkmaAllocatorCreateFlags</type> <name>flags</name>
 			</member>
@@ -153,6 +148,10 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>VkDeviceSize</type> <name>budget</name>
 			</member>
 		</type>
+		<type category="handle" parent="VkmaAllocator" objtypeenum="VKMA_ALLOCATION">
+			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkmaAllocation</name>)</type>
+		<type category="basetype">
+			<type>VK_DEFINE_HANDLE</type>(<name>VkCommandBuffer</name>)</type>
 		<type category="struct" name="VkmaDefragmentationInfo2">
 			<member><type>VkmaDefragmentationFlags</type> <name>flags</name>
 			</member>
@@ -177,6 +176,8 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>VkCommandBuffer</type> <name>commandBuffer</name>
 			</member>
 		</type>
+		<type category="basetype">
+			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkDeviceMemory</name>)</type>
 		<type category="struct" name="VkmaAllocationInfo">
 			<member><type>uint32_t</type> <name>memoryType</name>
 			</member>
@@ -247,5 +248,13 @@ The goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>size_t</type> <name>blockCount</name>
 			</member>
 		</type>
+		<type category="handle" objtypeenum="VKMA_ALLOCATOR">
+			<type>VK_DEFINE_HANDLE</type>(<name>VkmaAllocator</name>)</type>
+		<type category="handle" parent="VkmaAllocator" objtypeenum="VKMA_DEFRAGMENTATION_CONTEXT">
+			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkmaDefragmentationContext</name>)</type>
+		<type category="handle" parent="VkmaAllocator" objtypeenum="VKMA_BUFFER">
+			<type>VK_DEFINE_HANDLE</type>(<name>VkmaBuffer</name>)</type>
+		<type category="handle" parent="VkmaAllocator" objtypeenum="VKMA_IMAGE">
+			<type>VK_DEFINE_HANDLE</type>(<name>VkmaImage</name>)</type>
 	</types>
 </registry>
