@@ -929,7 +929,19 @@ void vkma_xml::detail::generator_t::append_types() {
 			}
 		}
 		inline void operator()(vkma_xml::detail::type::enumeration const &) {
-			std::cout << "Warning: Not implemented!\n";
+			if (!generator_ref.appended.contains(name_ref)) {
+				auto type = types_ref.append_child("type");
+				if (tag == type_tag::core) {
+					type.append_attribute("name").set_value(name_ref.data());
+					type.append_attribute("category").set_value("enum");
+				} else {
+					type.append_attribute("category").set_value("basetype");
+					type.append_child(pugi::node_pcdata).set_value("enum ");
+					type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
+					type.append_child(pugi::node_pcdata).set_value(";");
+				}
+				generator_ref.appended.emplace(name_ref);
+			}
 		}
 		inline void operator()(vkma_xml::detail::type::function const &) {
 			std::cout << "Warning: Not implemented!\n";
