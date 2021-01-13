@@ -21,45 +21,6 @@ std::optional<pugi::xml_document> vkma_xml::detail::load_xml(std::filesystem::pa
 }
 
 /*
-struct constexpr_enum_value_t {
-	std::string_view name, value;
-};
-constexpr std::array result_codes {
-	constexpr_enum_value_t{ "VK_SUCCESS", "0" },
-	constexpr_enum_value_t{ "VK_NOT_READY", "1" },
-	constexpr_enum_value_t{ "VK_TIMEOUT", "2" },
-	constexpr_enum_value_t{ "VK_EVENT_SET", "3" },
-	constexpr_enum_value_t{ "VK_EVENT_RESET", "4" },
-	constexpr_enum_value_t{ "VK_INCOMPLETE", "5" },
-	constexpr_enum_value_t{ "VK_ERROR_OUT_OF_HOST_MEMORY", "-1" },
-	constexpr_enum_value_t{ "VK_ERROR_OUT_OF_DEVICE_MEMORY", "-2" },
-	constexpr_enum_value_t{ "VK_ERROR_INITIALIZATION_FAILED", "-3" },
-	constexpr_enum_value_t{ "VK_ERROR_DEVICE_LOST", "-4" },
-	constexpr_enum_value_t{ "VK_ERROR_MEMORY_MAP_FAILED", "-5" },
-	constexpr_enum_value_t{ "VK_ERROR_LAYER_NOT_PRESENT", "-6" },
-	constexpr_enum_value_t{ "VK_ERROR_EXTENSION_NOT_PRESENT", "-7" },
-	constexpr_enum_value_t{ "VK_ERROR_FEATURE_NOT_PRESENT", "-8" },
-	constexpr_enum_value_t{ "VK_ERROR_INCOMPATIBLE_DRIVER", "-9" },
-	constexpr_enum_value_t{ "VK_ERROR_TOO_MANY_OBJECTS", "-10" },
-	constexpr_enum_value_t{ "VK_ERROR_FORMAT_NOT_SUPPORTED", "-11" },
-	constexpr_enum_value_t{ "VK_ERROR_FRAGMENTED_POOL", "-12" },
-	constexpr_enum_value_t{ "VK_ERROR_SURFACE_LOST_KHR", "-1000000000" },
-	constexpr_enum_value_t{ "VK_ERROR_NATIVE_WINDOW_IN_USE_KHR", "-1000000001" },
-	constexpr_enum_value_t{ "VK_SUBOPTIMAL_KHR", "1000001003" },
-	constexpr_enum_value_t{ "VK_ERROR_OUT_OF_DATE_KHR", "-1000001004" },
-	constexpr_enum_value_t{ "VK_ERROR_INCOMPATIBLE_DISPLAY_KHR", "-1000003001" },
-	constexpr_enum_value_t{ "VK_ERROR_VALIDATION_FAILED_EXT", "-1000011001" },
-	constexpr_enum_value_t{ "VK_ERROR_INVALID_SHADER_NV", "-1000012000" }
-};
-constexpr std::string_view result_code_list = "VK_SUCCESS, VK_NOT_READY, VK_TIMEOUT, VK_EVENT_SET, "
-	"VK_EVENT_RESET, VK_INCOMPLETE, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, "
-	"VK_ERROR_INITIALIZATION_FAILED, VK_ERROR_DEVICE_LOST, VK_ERROR_MEMORY_MAP_FAILED, "
-	"VK_ERROR_LAYER_NOT_PRESENT, VK_ERROR_EXTENSION_NOT_PRESENT, VK_ERROR_FEATURE_NOT_PRESENT, "
-	"VK_ERROR_INCOMPATIBLE_DRIVER, VK_ERROR_TOO_MANY_OBJECTS, VK_ERROR_FORMAT_NOT_SUPPORTED, "
-	"VK_ERROR_FRAGMENTED_POOL, VK_ERROR_SURFACE_LOST_KHR, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, "
-	"VK_SUBOPTIMAL_KHR, VK_ERROR_OUT_OF_DATE_KHR, VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, "
-	"VK_ERROR_VALIDATION_FAILED_EXT, VK_ERROR_INVALID_SHADER_NV";
-
 constexpr std::array index_types {
 	constexpr_enum_value_t{ "VK_INDEX_TYPE_UINT16", "0" },
 	constexpr_enum_value_t{ "VK_INDEX_TYPE_UINT32", "1" }
@@ -105,34 +66,6 @@ void append_vk_enums(pugi::xml_node &registry, std::set<std::string> const &hand
 	auto debug_object_type = registry.append_child("enums");
 	debug_object_type.append_attribute("name").set_value("VkDebugReportObjectTypeEXT");
 	debug_object_type.append_attribute("type").set_value("enum");
-}
-
-void append_commands(pugi::xml_node &registry, std::vector<vkma_xml::detail::function_t> const &functions) {
-	registry.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
-	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
-		"Command definitions"
-	);
-	auto commands = registry.append_child("commands");
-	commands.append_attribute("comment").set_value("VMA command definitions");
-	for (auto &function : functions) {
-		auto command = commands.append_child("command");
-		if (function.return_type == "VkResult") {
-			command.append_attribute("successcodes").set_value("VK_SUCCESS");
-			command.append_attribute("errorcodes").set_value(result_code_list.data());
-		}
-		auto proto = command.append_child("proto");
-		proto.append_child("type").append_child(pugi::node_pcdata).set_value(function.return_type.data());
-		proto.append_child(pugi::node_pcdata).set_value(" ");
-		proto.append_child("name").append_child(pugi::node_pcdata).set_value(function.name.data());
-
-		for (auto &parameter : function.parameters) {
-			auto param = command.append_child("param");
-			append_typename(param, parameter.type);
-			//param.append_child("type").append_child(pugi::node_pcdata).set_value(parameter.type.data());
-			param.append_child(pugi::node_pcdata).set_value(" ");
-			param.append_child("name").append_child(pugi::node_pcdata).set_value(parameter.name.data());
-		}
-	}
 }
 
 void append_api(pugi::xml_node &registry, vkma_xml::detail::data_t const &data) {
@@ -618,7 +551,7 @@ static std::string to_upper_case(std::string_view input) {
 
 static std::string to_objtypeenum(std::string_view input) {
 	std::string output = to_upper_case(input);
-	if (std::string_view(output).substr(0, 4) == "VMA_")
+	if (std::string_view(output).substr(0, 4) == "VKMA_")
 		return output.insert(0, "VK_OBJECT_TYPE_");
 	return output;
 }
@@ -641,16 +574,19 @@ void vkma_xml::detail::generator_t::append_header() {
 			"\nCopyright (c) 2021 Cvelth (cvelth.mail@gmail.com)"
 			"\nSPDX-License-Identifier: Unlicense."
 			"\n\nDO NOT MODIFY MANUALLY!"
-			"\nThis file was generated using [generator](https://github.com/Cvelth/vma_xml_generator)."
+			"\nThis file was generated using [generator](https://github.com/Cvelth/vkma_xml_generator)."
 			"\nGenerated files are licensed under [The Unlicense](https://unlicense.org)."
 			"\nThe generator itself is licensed under [MIT License](https://www.mit.edu/~amini/LICENSE.md)."
 		);
 		registry->append_child("comment").append_child(pugi::node_pcdata).set_value(
 			"\nThis file was generated from xml 'doxygen' documentation for "
-			"[vk_mem_alloc.h (VulkanMemoryAllocator)](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/blob/master/src/vk_mem_alloc.h) "
+			"[vkma_bindings.hpp](https://github.com/Cvelth/vkma_bindings/blob/main/include/vkma_bindings.hpp) "
 			"header."
-			"\nIt is intended to be used as [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hpp) generator input."
-			"\nThe goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hpp/blob/master/vulkan/vulkan.hpp) "
+			"\nHeaders used for name lookup: "
+			"\n[vk_mem_alloc.h (VulkanMemoryAllocator)](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/blob/master/src/vk_mem_alloc.h) "
+			"\n[vulkan_core.h (Vulkan-Headers)](https://github.com/KhronosGroup/Vulkan-Headers/blob/master/include/vulkan/vulkan_core.h) "
+			"\n\nIt is intended to be used as [vulkan-hpp fork](https://github.com/Cvelth/vkma_vulkan_hpp_fork) generator input."
+			"\nThe goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hpp/blob/master/vulkan/vulkan.hpp) "
 			"compatible header - a better c++ interface for VulkanMemoryAllocator."
 		);
 
@@ -658,7 +594,7 @@ void vkma_xml::detail::generator_t::append_header() {
 		platforms.append_attribute("comment").set_value("empty");
 		auto platform = platforms.append_child("platform");
 		platform.append_attribute("name").set_value("does_not_matter");
-		platform.append_attribute("protect").set_value("VMA_DOES_NOT_MATTER");
+		platform.append_attribute("protect").set_value("VKMA_DOES_NOT_MATTER");
 		platform.append_attribute("comment").set_value("Why am I even required to specify this?");
 
 		auto tags = registry->append_child("tags");
@@ -828,7 +764,7 @@ void vkma_xml::detail::generator_t::append_types() {
 
 	if (registry) {
 		auto types = registry->append_child("types");
-		types.append_attribute("comment").set_value("VMA type definitions");
+		types.append_attribute("comment").set_value("VKMA type definitions");
 
 		auto vma_include = types.append_child("type");
 		vma_include.append_attribute("name").set_value("vma");
@@ -885,7 +821,90 @@ void vkma_xml::detail::generator_t::append_enumerations() {
 		for (auto const &type : api.registry)
 			std::visit(append_enumerations_visitor{ type.first, type.second.tag, *registry, *this },
 					   type.second.state);
+}
 
+std::string concatenate_success_codes(vkma_xml::detail::type_registry const &registry) {
+	if (auto iterator = registry.find("VkResult"); iterator != registry.end())
+		if (std::holds_alternative<vkma_xml::detail::type::enumeration>(iterator->second.state)) {
+			auto const &enumeration = std::get<vkma_xml::detail::type::enumeration>(iterator->second.state);
+			if (!enumeration.values.empty())
+				return enumeration.values.front().name;
+			else
+				std::cout << "Warning: Unable to select success codes: VkResult enumeration has no enumerators.";
+		} else
+			std::cout << "Warning: Unable to select success codes: VkResult is not an enumeration.";
+	else
+		std::cout << "Warning: Unable to select success codes: VkResult is not defined.";
+	return "";
+}
+std::string concatenate_error_codes(vkma_xml::detail::type_registry const &registry) {
+	if (auto iterator = registry.find("VkResult"); iterator != registry.end())
+		if (std::holds_alternative<vkma_xml::detail::type::enumeration>(iterator->second.state)) {
+			auto const &enumeration = std::get<vkma_xml::detail::type::enumeration>(iterator->second.state);
+			std::string output = "";
+			for (auto enumerator = ++enumeration.values.begin(); 
+					  enumerator != std::prev(enumeration.values.end());
+					++enumerator)
+				output += enumerator->name + ", ";
+			if (!enumeration.values.empty())
+				return output += enumeration.values.back().name;
+			else
+				std::cout << "Warning: Unable to select error codes: VkResult enumeration has no enumerators.";
+		} else
+			std::cout << "Warning: Unable to select error codes: VkResult is not an enumeration.";
+	else
+		std::cout << "Warning: Unable to select error codes: VkResult is not defined.";
+	return "";
+}
+
+void vkma_xml::detail::generator_t::append_commands() {
+	struct append_commands_visitor {
+		identifier_t const &name_ref;
+		type_tag const &tag;
+		pugi::xml_node &commands_ref;
+		generator_t &generator_ref;
+
+		inline void operator()(vkma_xml::detail::type::undefined const &) {}
+		inline void operator()(vkma_xml::detail::type::structure const &) {}
+		inline void operator()(vkma_xml::detail::type::handle const &) {}
+		inline void operator()(vkma_xml::detail::type::macro const &) {}
+		inline void operator()(vkma_xml::detail::type::enumeration const &) {}
+		inline void operator()(vkma_xml::detail::type::function const &function) {
+			static auto success_code_list = concatenate_success_codes(generator_ref.api.registry);
+			static auto error_code_list = concatenate_error_codes(generator_ref.api.registry);
+
+			auto command = commands_ref.append_child("command");
+			if (function.return_type.name == "VkResult" || function.return_type.name == "VkmaResult") {
+				if (!success_code_list.empty())
+					command.append_attribute("successcodes").set_value(success_code_list.data());
+				if (!error_code_list.empty())
+					command.append_attribute("errorcodes").set_value(error_code_list.data());
+			}
+			auto proto = command.append_child("proto");
+			append_typename(proto, function.return_type);
+			proto.append_child(pugi::node_pcdata).set_value(" ");
+			proto.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
+
+			for (auto &parameter : function.parameters) {
+				auto param = command.append_child("param");
+				append_typename(param, parameter.type);
+				param.append_child(pugi::node_pcdata).set_value(" ");
+				param.append_child("name").append_child(pugi::node_pcdata).set_value(parameter.name.data());
+			}
+		}
+		inline void operator()(vkma_xml::detail::type::function_pointer const &) {}
+		inline void operator()(vkma_xml::detail::type::alias const &) {}
+		inline void operator()(vkma_xml::detail::type::base const &) {}
+	};
+
+	if (registry) {
+		auto commands = registry->append_child("commands");
+		commands.append_attribute("comment").set_value("VKMA command definitions");
+		for (auto const &type : api.registry)
+			if (type.second.tag == type_tag::core)
+				std::visit(append_commands_visitor{ type.first, type.second.tag, commands, *this },
+						   type.second.state);
+	}
 }
 
 std::optional<pugi::xml_document> vkma_xml::generate(detail::api_t const &api) {
@@ -894,6 +913,7 @@ std::optional<pugi::xml_document> vkma_xml::generate(detail::api_t const &api) {
 	generator.append_header();
 	generator.append_types();
 	generator.append_enumerations();
+	generator.append_commands();
 
 	return std::move(generator.output);
 }
