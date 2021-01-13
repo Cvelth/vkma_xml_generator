@@ -89,39 +89,6 @@ void append_typename(pugi::xml_node &xml, std::string_view name, std::string pre
 	}
 }
 
-void append_header(pugi::xml_node &registry) {
-	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
-		"\nCopyright (c) 2021 Cvelth (cvelth.mail@gmail.com)"
-		"\nSPDX-License-Identifier: Unlicense."
-		"\n\nDO NOT MODIFY MANUALLY!"
-		"\nThis file was generated using [generator](https://github.com/Cvelth/vma_xml_generator)."
-		"\nGenerated files are licensed under [The Unlicense](https://unlicense.org)."
-		"\nThe generator itself is licensed under [MIT License](https://www.mit.edu/~amini/LICENSE.md)."
-	);
-	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
-		"\nThis file was generated from xml 'doxygen' documentation for "
-		"[vk_mem_alloc.h (VulkanMemoryAllocator)](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/blob/master/src/vk_mem_alloc.h) "
-		"header."
-		"\nIt is intended to be used as [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hpp) generator input."
-		"\nThe goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hpp/blob/master/vulkan/vulkan.hpp) "
-		"compatible header - an improved c++ interface."
-	);
-
-	auto platforms = registry.append_child("platforms");
-	platforms.append_attribute("comment").set_value("empty");
-	auto platform = platforms.append_child("platform");
-	platform.append_attribute("name").set_value("does_not_matter");
-	platform.append_attribute("protect").set_value("VMA_DOES_NOT_MATTER");
-	platform.append_attribute("comment").set_value("Why am I even required to specify this?");
-
-	auto tags = registry.append_child("tags");
-	tags.append_attribute("comment").set_value("empty");
-	auto tag = tags.append_child("tag");
-	tag.append_attribute("name").set_value("WC");
-	tag.append_attribute("author").set_value("Who cares?");
-	tag.append_attribute("contact").set_value("@cvelth");
-}
-
 void append_includes(pugi::xml_node &types) {
 	auto vulkan_include = types.append_child("type");
 	vulkan_include.append_attribute("name").set_value("vulkan");
@@ -301,24 +268,6 @@ void append_function_pointer(pugi::xml_node &types, std::vector<vkma_xml::detail
 			type.append_child(pugi::node_pcdata).set_value(
 				(" " + function_pointer->parameters.back().name + ");").data()
 			);
-		}
-}
-void append_struct(pugi::xml_node &types, std::vector<vkma_xml::detail::struct_t> const &structs,
-				   std::set<std::string> handle_names) {
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value("Struct types");
-	for (auto &structure : structs)
-		if (!handle_names.contains(structure.name)) {
-			auto type = types.append_child("type");
-			type.append_attribute("category").set_value("struct");
-			type.append_attribute("name").set_value(structure.name.data());
-			for (auto &variable : structure.variables) {
-				auto member = type.append_child("member");
-				append_typename(member, variable.type);
-				//member.append_child("type").append_child(pugi::node_pcdata).set_value(variable.type.data());
-				member.append_child(pugi::node_pcdata).set_value(" ");
-				member.append_child("name").append_child(pugi::node_pcdata).set_value(variable.name.data());
-			}
 		}
 }
 
@@ -552,15 +501,14 @@ std::optional<pugi::xml_document> vkma_xml::generate(detail::data_t const &data)
 */
 
 inline vkma_xml::detail::type_registry::underlying_t::iterator
-vkma_xml::detail::type_registry::get(std::string &&name) {
+vkma_xml::detail::type_registry::get(identifier_t &&name) {
 	auto [iterator, result] = underlying.try_emplace(
-		std::move(name),
-		type::undefined{}
+		std::move(name), type_t{ type::undefined{}, type_tag::helper }
 	);
 	return iterator;
 }
 inline vkma_xml::detail::type_registry::underlying_t::iterator
-vkma_xml::detail::type_registry::add(std::string &&name, type_t &&type_data) {
+vkma_xml::detail::type_registry::add(identifier_t &&name, type_t &&type_data) {
 	auto [iterator, result] = underlying.try_emplace(
 		std::move(name),
 		std::move(type_data)
@@ -582,13 +530,18 @@ vkma_xml::detail::type_registry::add(std::string &&name, type_t &&type_data) {
 
 	struct on_add_visitor {
 		vkma_xml::detail::type_registry &registry_ref;
+		identifier_t const &name_ref;
 
 		void operator()(type::undefined const &) {}
 		void operator()(type::structure const &structure) {
 			for (auto const &member : structure.members)
 				registry_ref.get(member.type.name);
 		}
-		void operator()(type::handle const &) {}
+		void operator()(type::handle const &) {
+			if (auto iterator = registry_ref.find(name_ref + "_T");
+					 iterator != registry_ref.end() && iterator->second.tag == type_tag::core)
+				iterator->second.tag = type_tag::helper;
+		}
 		void operator()(type::macro const &) {}
 		void operator()(type::enumeration const &enumeration) {
 			if (enumeration.type)
@@ -604,7 +557,7 @@ vkma_xml::detail::type_registry::add(std::string &&name, type_t &&type_data) {
 		}
 		void operator()(type::base const &) {}
 	};
-	std::visit(on_add_visitor{ *this }, iterator->second.state);
+	std::visit(on_add_visitor{ *this, iterator->first }, iterator->second.state);
 	return iterator;
 }
 
@@ -868,7 +821,7 @@ std::optional<vkma_xml::detail::api_t> vkma_xml::parse(input main_api, std::init
 				if (std::holds_alternative<detail::type::undefined>(type.second.state))
 					undefined.insert(type.first);
 			
-			std::cout << "Generator: finish parsing XMLs (It took " << 
+			std::cout << "Generator: finish parsing XMLs (It took " <<
 				std::chrono::duration_cast<std::chrono::duration<float>>(
 					std::chrono::high_resolution_clock::now() - start_time
 				).count() << "s)\n";
@@ -884,16 +837,120 @@ std::optional<vkma_xml::detail::api_t> vkma_xml::parse(input main_api, std::init
 	return std::nullopt;
 }
 
+vkma_xml::detail::generator_t::generator_t(api_t const &api)
+	: api(api), output(std::make_optional<pugi::xml_document>())
+	, registry(output->append_child("registry")) {}
+
+void vkma_xml::detail::generator_t::append_typename(pugi::xml_node &xml, 
+													decorated_typename_t const &type) {
+	xml.append_child(pugi::node_pcdata).set_value(type.prefix.data());
+	xml.append_child("type").append_child(pugi::node_pcdata).set_value(type.name.data());
+	xml.append_child(pugi::node_pcdata).set_value(type.postfix.data());
+}
+
+void vkma_xml::detail::generator_t::append_header() {
+	if (registry) {
+		registry->append_child("comment").append_child(pugi::node_pcdata).set_value(
+			"\nCopyright (c) 2021 Cvelth (cvelth.mail@gmail.com)"
+			"\nSPDX-License-Identifier: Unlicense."
+			"\n\nDO NOT MODIFY MANUALLY!"
+			"\nThis file was generated using [generator](https://github.com/Cvelth/vma_xml_generator)."
+			"\nGenerated files are licensed under [The Unlicense](https://unlicense.org)."
+			"\nThe generator itself is licensed under [MIT License](https://www.mit.edu/~amini/LICENSE.md)."
+		);
+		registry->append_child("comment").append_child(pugi::node_pcdata).set_value(
+			"\nThis file was generated from xml 'doxygen' documentation for "
+			"[vk_mem_alloc.h (VulkanMemoryAllocator)](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/blob/master/src/vk_mem_alloc.h) "
+			"header."
+			"\nIt is intended to be used as [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hpp) generator input."
+			"\nThe goal is to generate a [vulkan.hpp](https://github.com/KhronosGroup/Vulkan-Hpp/blob/master/vulkan/vulkan.hpp) "
+			"compatible header - a better c++ interface for VulkanMemoryAllocator."
+		);
+
+		auto platforms = registry->append_child("platforms");
+		platforms.append_attribute("comment").set_value("empty");
+		auto platform = platforms.append_child("platform");
+		platform.append_attribute("name").set_value("does_not_matter");
+		platform.append_attribute("protect").set_value("VMA_DOES_NOT_MATTER");
+		platform.append_attribute("comment").set_value("Why am I even required to specify this?");
+
+		auto tags = registry->append_child("tags");
+		tags.append_attribute("comment").set_value("empty");
+		auto tag = tags.append_child("tag");
+		tag.append_attribute("name").set_value("WC");
+		tag.append_attribute("author").set_value("Who cares?");
+		tag.append_attribute("contact").set_value("@cvelth");
+	}
+}
+
+void vkma_xml::detail::generator_t::append_types() {
+	struct append_types_visitor {
+		identifier_t const &name_ref;
+		pugi::xml_node &types_ref;
+		generator_t &generator_ref;
+
+		inline void operator()(vkma_xml::detail::type::undefined const &) {
+			std::cout << "Warning: Fail to append an undefined type: '"
+				<< name_ref << "'.\n";
+		}
+		inline void operator()(vkma_xml::detail::type::structure const &structure) {
+			if (!generator_ref.appended.contains(name_ref)) {
+				for (auto const &member : structure.members)
+					std::visit(append_types_visitor{ member.type.name, types_ref, generator_ref },
+							   generator_ref.api.registry.find(member.type.name)->second.state);
+
+				auto type = types_ref.append_child("type");
+				type.append_attribute("category").set_value("struct");
+				type.append_attribute("name").set_value(name_ref.data());
+				for (auto &member : structure.members) {
+					auto output = type.append_child("member");
+					append_typename(output, member.type);
+					output.append_child(pugi::node_pcdata).set_value(" ");
+					output.append_child("name").append_child(pugi::node_pcdata).set_value(member.name.data());
+				}
+				generator_ref.appended.emplace(name_ref);
+			}
+		}
+		inline void operator()(vkma_xml::detail::type::handle const &) {
+			std::cout << "Warning: Not implemented!\n";
+		}
+		inline void operator()(vkma_xml::detail::type::macro const &) {
+			std::cout << "Warning: Not implemented!\n";
+		}
+		inline void operator()(vkma_xml::detail::type::enumeration const &) {
+			std::cout << "Warning: Not implemented!\n";
+		}
+		inline void operator()(vkma_xml::detail::type::function const &) {
+			std::cout << "Warning: Not implemented!\n";
+		}
+		inline void operator()(vkma_xml::detail::type::alias const &alias) {
+			if (!generator_ref.appended.contains(name_ref)) {
+				std::visit(append_types_visitor{ name_ref, types_ref, generator_ref },
+						   generator_ref.api.registry.find(alias.real_type.name)->second.state);
+			}
+		}
+		inline void operator()(vkma_xml::detail::type::base const &) {
+			std::cout << "Warning: Not implemented!\n";
+		}
+	};
+
+	if (registry) {
+		auto types = registry->append_child("types");
+		types.append_attribute("comment").set_value("VMA type definitions");
+
+		for (auto const &type : api.registry)
+			if (type.second.tag == type_tag::core)
+				std::visit(append_types_visitor{ type.first, types, *this }, type.second.state);
+	}
+}
+
 std::optional<pugi::xml_document> vkma_xml::generate(detail::api_t const &api) {
-	auto output = std::make_optional<pugi::xml_document>();
-	auto registry = output->append_child("registry");
+	detail::generator_t generator = api;
 
-	for (auto const &type : api.registry)
-		std::visit(vkma_xml::detail::type_t_printer{ std::cout, type.first, type.second.tag }, type.second.state);
+	generator.append_header();
+	generator.append_types();
 
-	// TODO: Implement the generator
-
-	return std::move(output);
+	return std::move(generator.output);
 }
 
 #ifndef VMA_XML_NO_MAIN

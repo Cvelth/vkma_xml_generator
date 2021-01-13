@@ -15,6 +15,7 @@
 #include <variant>
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace vkma_xml {
 	struct input {
@@ -123,21 +124,21 @@ namespace vkma_xml {
 														 underlying_comparator_t>;
 		public:
 			underlying_t::iterator get(identifier_t &&name);
+			inline auto get(std::string_view name) {
+				return get(identifier_t(name));
+			}
 			underlying_t::iterator add(identifier_t &&name, type_t &&type_data);
-
-			underlying_t::iterator get(std::string_view name) {
-				identifier_t temp(name);
-				return get(std::move(temp));
-			}
-			underlying_t::iterator add(std::string_view name, type_t &&type_data) {
-				identifier_t temp(name);
-				return add(std::move(temp), std::move(type_data));
+			inline auto add(std::string_view name, type_t &&type_data) {
+				return add(identifier_t(name), std::move(type_data));
 			}
 
-			auto begin() const { return underlying.begin(); }
-			auto end() const { return underlying.end(); }
-			auto empty() const { return underlying.empty(); }
-			auto size() const { return underlying.size(); }
+			inline auto contains(std::string_view name) const { return underlying.contains(name); }
+			inline auto find(std::string_view name) const { return underlying.find(name); }
+			inline auto find(std::string_view name) { return underlying.find(name); }
+			inline auto begin() const { return underlying.begin(); }
+			inline auto end() const { return underlying.end(); }
+			inline auto empty() const { return underlying.empty(); }
+			inline auto size() const { return underlying.size(); }
 
 		protected:
 			underlying_t underlying;
@@ -161,66 +162,23 @@ namespace vkma_xml {
 			type_registry registry;
 		};
 
+		struct generator_t {
+			static void append_typename(pugi::xml_node &xml, decorated_typename_t const &type);
+
+			void append_header();
+			void append_types();
+
+		public:
+			generator_t(api_t const &api);
+		public:
+			api_t const &api;
+			std::unordered_set<std::string_view> appended;
+			std::optional<pugi::xml_document> output;
+			std::optional<pugi::xml_node> registry;
+		};
+
 		std::optional<pugi::xml_document> load_xml(std::filesystem::path const &file);
 		std::map<identifier_t, bool> load_handle_list(std::vector<std::filesystem::path> const &files);
-
-		struct type_t_printer {
-			std::ostream &stream_ref;
-			identifier_t const &name_ref;
-			type_tag tag;
-
-			void operator()(vkma_xml::detail::type::undefined const &) {
-				if (tag == type_tag::core)
-					stream_ref << "- " << name_ref << " - an undefined type.\n";
-			}
-			void operator()(vkma_xml::detail::type::structure const &structure) {
-				if (tag == type_tag::core) {
-					stream_ref << "- " << name_ref << " - a struct {\n";
-					for (auto const &member : structure.members)
-						stream_ref << "    " << member.type << ' ' << member.name << ";\n";
-					stream_ref << "};\n";
-				}
-			}
-			void operator()(vkma_xml::detail::type::handle const &handle) {
-				if (tag == type_tag::core)
-					stream_ref << "- " << name_ref << " - an "
-						<< (handle.dispatchable ? "" : "non-dispatchable ")
-						<< "object handle.\n";
-			}
-			void operator()(vkma_xml::detail::type::macro const &macro) {
-				if (tag == type_tag::core)
-					stream_ref << "- " << name_ref << " - a preprocessor macro.\n"
-						<< "    " << macro.value << "\n";
-			}
-			void operator()(vkma_xml::detail::type::enumeration const &enumeration) {
-				if (tag == type_tag::core) {
-					stream_ref << "- " << name_ref << " - an enumeration";
-					if (enumeration.type)
-						stream_ref << " : " << *enumeration.type;
-					stream_ref << " {\n";
-					for (auto const &enumerator : enumeration.values)
-						stream_ref << "    " << enumerator.name << " = " << enumerator.value << ";\n";
-					stream_ref << "};\n";
-				}
-			}
-			void operator()(vkma_xml::detail::type::function const &function) {
-				if (tag == type_tag::core) {
-					stream_ref << "- " << name_ref << " - a function: "
-						<< function.return_type << "(&)(\n";
-					for (auto const &parameter : function.parameters)
-						stream_ref << "    " << parameter.type << ' ' << parameter.name << ",\n";
-					stream_ref << ");\n";
-				}
-			}
-			void operator()(vkma_xml::detail::type::alias const alias) {
-				if (tag == type_tag::core)
-					stream_ref << "- " << name_ref << " - an alias for " << alias.real_type << "\n";
-			}
-			void operator()(vkma_xml::detail::type::base const &) {
-				if (tag == type_tag::core)
-					stream_ref << "- " << name_ref << " - a base type.\n";
-			}
-		};
 
 		using namespace std::string_view_literals;
 		constexpr std::array base_types = {
