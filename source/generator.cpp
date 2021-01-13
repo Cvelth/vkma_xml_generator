@@ -123,41 +123,6 @@ void append_vulkan(pugi::xml_node &types, std::set<std::string> const &vulkan_ty
 	}
 }
 
-void append_enum(pugi::xml_node &types, std::vector<vkma_xml::detail::enum_t> const &enums) {
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value("Enumeration types");
-	for (auto &enumeration : enums) {
-		auto type = types.append_child("type");
-		type.append_attribute("name").set_value(enumeration.name.data());
-		type.append_attribute("category").set_value("enum");
-	}
-
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
-	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
-		"enums required by Vulkan-HPP"
-	);
-
-	auto result = types.append_child("type");
-	result.append_attribute("name").set_value("VkResult");
-	result.append_attribute("category").set_value("enum");
-
-	auto structure_type = types.append_child("type");
-	structure_type.append_attribute("name").set_value("VkStructureType");
-	structure_type.append_attribute("category").set_value("enum");
-
-	auto object_type = types.append_child("type");
-	object_type.append_attribute("name").set_value("VkObjectType");
-	object_type.append_attribute("category").set_value("enum");
-
-	auto index_type = types.append_child("type");
-	index_type.append_attribute("name").set_value("VkIndexType");
-	index_type.append_attribute("category").set_value("enum");
-
-	auto debug_object_type = types.append_child("type");
-	debug_object_type.append_attribute("name").set_value("VkDebugReportObjectTypeEXT");
-	debug_object_type.append_attribute("category").set_value("enum");
-}
-
 void append_function_pointer(pugi::xml_node &types, std::vector<vkma_xml::detail::typedef_t> const &typedefs) {
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
 	types.append_child("comment").append_child(pugi::node_pcdata).set_value(
@@ -992,7 +957,7 @@ int main() {
 		"../input/Vulkan-Headers/include/vulkan/vk_platform.h"
 	};
 
-	std::filesystem::path const output_path = "../ouput/vkma.xml";
+	std::filesystem::path const output_path = "../output/vkma.xml";
 
 	auto output = vkma_xml::generate(
 		vkma_xml::input {
