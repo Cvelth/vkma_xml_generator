@@ -588,9 +588,35 @@ void vkma_xml::detail::generator_t::append_types() {
 				type.append_child(pugi::node_pcdata).set_value(";");
 			}
 		}
-		inline void operator()(vkma_xml::detail::type::function const &) {}
+		inline void operator()(vkma_xml::detail::type::function const &function) {
+			if (tag == type_tag::core) {
+				for (auto const &parameter : function.parameters)
+					if (auto iterator = generator_ref.api.registry.find(parameter.type.name);
+							 iterator != generator_ref.api.registry.end())
+						std::visit(append_types_visitor {
+							parameter.type.name, iterator->second.tag, types_ref, generator_ref
+						}, iterator->second.state);
+				if (auto iterator = generator_ref.api.registry.find(function.return_type.name);
+						 iterator != generator_ref.api.registry.end())
+					std::visit(append_types_visitor {
+						function.return_type.name, iterator->second.tag, types_ref, generator_ref
+					}, iterator->second.state);
+			}
+		}
 		inline void operator()(vkma_xml::detail::type::function_pointer const &function_pointer) {
 			if (tag == type_tag::core && !generator_ref.appended_types.contains(name_ref)) {
+				for (auto const &parameter : function_pointer.parameters)
+					if (auto iterator = generator_ref.api.registry.find(parameter.type.name);
+							 iterator != generator_ref.api.registry.end())
+						std::visit(append_types_visitor {
+							parameter.type.name, iterator->second.tag, types_ref, generator_ref
+						}, iterator->second.state);
+				if (auto iterator = generator_ref.api.registry.find(function_pointer.return_type.name);
+						 iterator != generator_ref.api.registry.end())
+					std::visit(append_types_visitor {
+						function_pointer.return_type.name, iterator->second.tag, types_ref, generator_ref
+					}, iterator->second.state);
+
 				auto type = types_ref.append_child("type");
 				type.append_attribute("category").set_value("funcpointer");
 				type.append_child(pugi::node_pcdata).set_value(

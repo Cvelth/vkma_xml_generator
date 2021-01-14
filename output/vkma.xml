@@ -73,6 +73,10 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>float</type> <name>priority</name>
 			</member>
 		</type>
+		<type category="handle" objtypeenum="VKMA_ALLOCATOR">
+			<type>VK_DEFINE_HANDLE</type>(<name>VkmaAllocator</name>)</type>
+		<type category="basetype">
+			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkDeviceMemory</name>)</type>
 		<type category="funcpointer">typedef void(*<name>PFN_vkmaAllocateDeviceMemoryFunction</name>)(<type>VkmaAllocator</type> allocator, <type>uint32_t</type> memoryType, <type>VkDeviceMemory</type> memory, <type>VkDeviceSize</type> size, <type>void</type> *pUserData);</type>
 		<type category="funcpointer">typedef void(*<name>PFN_vkmaFreeDeviceMemoryFunction</name>)(<type>VkmaAllocator</type> allocator, <type>uint32_t</type> memoryType, <type>VkDeviceMemory</type> memory, <type>VkDeviceSize</type> size, <type>void</type> *pUserData);</type>
 		<type category="struct" name="VkmaDeviceMemoryCallbacks">
@@ -203,8 +207,6 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>VkCommandBuffer</type> <name>commandBuffer</name>
 			</member>
 		</type>
-		<type category="basetype">
-			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkDeviceMemory</name>)</type>
 		<type category="struct" name="VkmaAllocationInfo">
 			<member><type>uint32_t</type> <name>memoryType</name>
 			</member>
@@ -280,10 +282,17 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>size_t</type> <name>blockCount</name>
 			</member>
 		</type>
-		<type category="handle" objtypeenum="VKMA_ALLOCATOR">
-			<type>VK_DEFINE_HANDLE</type>(<name>VkmaAllocator</name>)</type>
+		<type category="basetype">struct <name>VkPhysicalDeviceProperties</name>;</type>
+		<type category="basetype">struct <name>VkPhysicalDeviceMemoryProperties</name>;</type>
+		<type category="basetype">struct <name>VkBufferCreateInfo</name>;</type>
+		<type category="basetype">struct <name>VkMemoryRequirements</name>;</type>
+		<type category="basetype">struct <name>VkImageCreateInfo</name>;</type>
 		<type category="handle" parent="VkmaAllocator" objtypeenum="VKMA_DEFRAGMENTATION_CONTEXT">
 			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkmaDefragmentationContext</name>)</type>
+		<type category="basetype">
+			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkBuffer</name>)</type>
+		<type category="basetype">
+			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkImage</name>)</type>
 		<type category="handle" parent="VkmaAllocator" objtypeenum="VKMA_BUFFER">
 			<type>VK_DEFINE_HANDLE</type>(<name>VkmaBuffer</name>)</type>
 		<type category="handle" parent="VkmaAllocator" objtypeenum="VKMA_IMAGE">
@@ -869,15 +878,17 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 	<feature api="vkma" name="VKMA_VERSION_2_3" number="2.3" comment="VKMA API interface definitions">
 		<require comment="a mess, isn't it?">
 			<type name="vma" />
+			<type name="VkmaPoolStats" />
+			<type name="VkmaAllocator" />
 			<type name="VkmaAllocationCreateFlags" />
 			<type name="VkmaPoolCreateFlags" />
-			<type name="VkmaStatInfo" />
-			<type name="PFN_vkmaFreeDeviceMemoryFunction" />
 			<type name="VkmaAllocationCreateInfo" />
 			<type name="VkmaPoolCreateInfo" />
 			<type name="VkmaMemoryUsage" />
 			<type name="VkmaPool" />
 			<type name="PFN_vkmaAllocateDeviceMemoryFunction" />
+			<type name="VkmaStatInfo" />
+			<type name="PFN_vkmaFreeDeviceMemoryFunction" />
 			<type name="VkmaDeviceMemoryCallbacks" />
 			<type name="VkmaAllocatorCreateFlags" />
 			<type name="VkmaRecordFlags" />
@@ -898,8 +909,6 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<type name="VkmaAllocatorCreateFlagBits" />
 			<type name="VkmaAllocationCreateFlagBits" />
 			<type name="VkmaPoolCreateFlagBits" />
-			<type name="VkmaAllocator" />
-			<type name="VkmaPoolStats" />
 			<type name="VkmaBuffer" />
 			<type name="VkmaImage" />
 			<command name="vkmaCreateAllocator" />
