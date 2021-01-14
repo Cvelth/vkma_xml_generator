@@ -615,35 +615,37 @@ void vkma_xml::detail::generator_t::append_types() {
 			}
 		}
 		inline void operator()(vkma_xml::detail::type::alias const &alias) {
-			if (!generator_ref.appended_types.contains(name_ref)
-			 && !generator_ref.appended_basetypes.contains(name_ref)) {
-				if (tag == type_tag::core && alias.real_type.name == "VkFlags" &&
-						std::string_view(name_ref).substr(name_ref.size() - 5) == "Flags") {
-					auto type = types_ref.append_child("type");
-					type.append_attribute("category").set_value("bitmask");
-					if (auto iterator = generator_ref.api.registry.find(
-						name_ref.substr(0, name_ref.size() - 1) + "Bits"
-					); iterator != generator_ref.api.registry.end())
-						type.append_attribute("requires").set_value(iterator->first.data());
+			if (tag == type_tag::core)
+				if (!generator_ref.appended_types.contains(name_ref)) {
+					if (std::string_view(name_ref).substr(name_ref.size() - 5) == "Flags" &&
+							alias.real_type.name == "VkFlags") {
+						auto type = types_ref.append_child("type");
+						type.append_attribute("category").set_value("bitmask");
+						if (auto iterator = generator_ref.api.registry.find(
+							name_ref.substr(0, name_ref.size() - 1) + "Bits"
+						); iterator != generator_ref.api.registry.end())
+							type.append_attribute("requires").set_value(iterator->first.data());
+						else
+							type.append_attribute("requires").set_value("none");
+						type.append_child(pugi::node_pcdata).set_value("typedef ");
+						type.append_child("type").append_child(pugi::node_pcdata).set_value("VkFlags");
+						type.append_child(pugi::node_pcdata).set_value(" ");
+						type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
+						type.append_child(pugi::node_pcdata).set_value(";");
+						generator_ref.appended_types.insert(name_ref);
+					} else if (auto iterator = generator_ref.api.registry.find(alias.real_type.name);
+							   iterator != generator_ref.api.registry.end())
+						std::visit(append_types_visitor{ name_ref, tag, types_ref, generator_ref },
+								   iterator->second.state);
 					else
-						type.append_attribute("requires").set_value("none");
-					type.append_child(pugi::node_pcdata).set_value("typedef ");
-					type.append_child("type").append_child(pugi::node_pcdata).set_value("VkFlags");
-					type.append_child(pugi::node_pcdata).set_value(" ");
-					type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
-					type.append_child(pugi::node_pcdata).set_value(";");
-				} else if (auto iterator = generator_ref.api.registry.find(alias.real_type.name);
-						   iterator != generator_ref.api.registry.end())
-					std::visit(append_types_visitor{ name_ref, tag, types_ref, generator_ref },
-							   iterator->second.state);
-				else
-					std::cout << "Warning: An undefined aliased type: '" << alias.real_type.name << "'.\n";
-			}
+						std::cout << "Warning: An undefined aliased type: '" << alias.real_type.name << "'.\n";
+				}
 		}
 		inline void operator()(vkma_xml::detail::type::base const &) {
 			if (!generator_ref.appended_basetypes.contains(name_ref)) {
 				auto type = types_ref.append_child("type");
-				type.append_attribute("name").set_value(name_ref.data());
+				type.append_attribute("category").set_value("basetype");
+				type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
 				generator_ref.appended_basetypes.emplace(name_ref);
 			}
 		}
@@ -652,6 +654,9 @@ void vkma_xml::detail::generator_t::append_types() {
 	if (registry) {
 		auto types = registry->append_child("types");
 		types.append_attribute("comment").set_value("VKMA type definitions");
+
+		auto required_comment = types.append_child("comment");
+		required_comment.append_child(pugi::node_pcdata).set_value("Why is a comment here required?!");
 
 		auto vma_include = types.append_child("type");
 		vma_include.append_attribute("name").set_value("vma");

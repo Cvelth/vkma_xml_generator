@@ -23,12 +23,18 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		<tag name="WC" author="Who cares?" contact="@cvelth" />
 	</tags>
 	<types comment="VKMA type definitions">
+		<comment>Why is a comment here required?!</comment>
 		<type name="vma" category="include">#include "vk_mem_alloc.h"</type>
-		<type name="uint32_t" />
+		<type category="basetype">
+			<name>uint32_t</name>
+		</type>
 		<type category="bitmask" requires="VkmaPoolCreateFlagBits">typedef <type>VkFlags</type> <name>VkmaPoolCreateFlags</name>;</type>
-		<type name="VkDeviceSize" />
-		<type name="size_t" />
-		<type name="float" />
+		<type category="basetype">
+			<name>size_t</name>
+		</type>
+		<type category="basetype">
+			<name>float</name>
+		</type>
 		<type category="struct" name="VkmaPoolCreateInfo">
 			<member><type>uint32_t</type> <name>memoryTypeIndex</name>
 			</member>
@@ -47,7 +53,6 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		</type>
 		<type name="VkmaMemoryUsage" category="enum" />
 		<type category="bitmask" requires="VkmaAllocationCreateFlagBits">typedef <type>VkFlags</type> <name>VkmaAllocationCreateFlags</name>;</type>
-		<type name="VkMemoryPropertyFlags" />
 		<type category="handle" parent="VkmaAllocator" objtypeenum="VKMA_POOL">
 			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkmaPool</name>)</type>
 		<type category="struct" name="VkmaAllocationCreateInfo">
@@ -68,8 +73,6 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>float</type> <name>priority</name>
 			</member>
 		</type>
-		<type category="bitmask" requires="VkmaPoolCreateFlagBits">typedef <type>VkFlags</type> <name>VkmaPoolCreateFlags</name>;</type>
-		<type category="bitmask" requires="VkmaAllocationCreateFlagBits">typedef <type>VkFlags</type> <name>VkmaAllocationCreateFlags</name>;</type>
 		<type category="funcpointer">typedef void(*<name>PFN_vkmaAllocateDeviceMemoryFunction</name>)(<type>VkmaAllocator</type> allocator, <type>uint32_t</type> memoryType, <type>VkDeviceMemory</type> memory, <type>VkDeviceSize</type> size, <type>void</type> *pUserData);</type>
 		<type category="funcpointer">typedef void(*<name>PFN_vkmaFreeDeviceMemoryFunction</name>)(<type>VkmaAllocator</type> allocator, <type>uint32_t</type> memoryType, <type>VkDeviceMemory</type> memory, <type>VkDeviceSize</type> size, <type>void</type> *pUserData);</type>
 		<type category="struct" name="VkmaDeviceMemoryCallbacks">
@@ -123,7 +126,9 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</member>
 		</type>
 		<type category="bitmask" requires="VkmaRecordFlagBits">typedef <type>VkFlags</type> <name>VkmaRecordFlags</name>;</type>
-		<type name="char" />
+		<type category="basetype">
+			<name>char</name>
+		</type>
 		<type category="struct" name="VkmaRecordSettings">
 			<member><type>VkmaRecordFlags</type> <name>flags</name>
 			</member>
@@ -158,7 +163,6 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>uint32_t</type> <name>vulkanApiVersion</name>
 			</member>
 		</type>
-		<type category="bitmask" requires="VkmaAllocatorCreateFlagBits">typedef <type>VkFlags</type> <name>VkmaAllocatorCreateFlags</name>;</type>
 		<type category="struct" name="VkmaBudget">
 			<member><type>VkDeviceSize</type> <name>blockBytes</name>
 			</member>
@@ -169,12 +173,10 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>VkDeviceSize</type> <name>budget</name>
 			</member>
 		</type>
-		<type category="bitmask" requires="VkmaRecordFlagBits">typedef <type>VkFlags</type> <name>VkmaRecordFlags</name>;</type>
 		<type name="VkmaDefragmentationFlagBits" category="enum" />
 		<type category="bitmask" requires="VkmaDefragmentationFlagBits">typedef <type>VkFlags</type> <name>VkmaDefragmentationFlags</name>;</type>
 		<type category="handle" parent="VkmaAllocator" objtypeenum="VKMA_ALLOCATION">
 			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkmaAllocation</name>)</type>
-		<type name="VkBool32" />
 		<type category="basetype">
 			<type>VK_DEFINE_HANDLE</type>(<name>VkCommandBuffer</name>)</type>
 		<type category="struct" name="VkmaDefragmentationInfo2">
@@ -201,7 +203,6 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>VkCommandBuffer</type> <name>commandBuffer</name>
 			</member>
 		</type>
-		<type category="bitmask" requires="VkmaDefragmentationFlagBits">typedef <type>VkFlags</type> <name>VkmaDefragmentationFlags</name>;</type>
 		<type category="basetype">
 			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkDeviceMemory</name>)</type>
 		<type category="struct" name="VkmaAllocationInfo">
@@ -868,6 +869,8 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 	<feature api="vkma" name="VKMA_VERSION_2_3" number="2.3" comment="VKMA API interface definitions">
 		<require comment="a mess, isn't it?">
 			<type name="vma" />
+			<type name="VkmaAllocationCreateFlags" />
+			<type name="VkmaPoolCreateFlags" />
 			<type name="VkmaStatInfo" />
 			<type name="PFN_vkmaFreeDeviceMemoryFunction" />
 			<type name="VkmaAllocationCreateInfo" />
@@ -876,12 +879,16 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<type name="VkmaPool" />
 			<type name="PFN_vkmaAllocateDeviceMemoryFunction" />
 			<type name="VkmaDeviceMemoryCallbacks" />
+			<type name="VkmaAllocatorCreateFlags" />
+			<type name="VkmaRecordFlags" />
 			<type name="VkmaVulkanFunctions" />
 			<type name="VkmaRecordSettings" />
 			<type name="VkmaAllocatorCreateInfo" />
 			<type name="VkmaBudget" />
 			<type name="VkmaDefragmentationInfo2" />
 			<type name="VkmaDefragmentationFlagBits" />
+			<type name="VkmaDefragmentationContext" />
+			<type name="VkmaDefragmentationFlags" />
 			<type name="VkmaAllocationInfo" />
 			<type name="VkmaAllocation" />
 			<type name="VkmaRecordFlagBits" />
@@ -893,7 +900,6 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<type name="VkmaPoolCreateFlagBits" />
 			<type name="VkmaAllocator" />
 			<type name="VkmaPoolStats" />
-			<type name="VkmaDefragmentationContext" />
 			<type name="VkmaBuffer" />
 			<type name="VkmaImage" />
 			<command name="vkmaCreateAllocator" />
