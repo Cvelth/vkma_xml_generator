@@ -948,4 +948,9 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<command name="vkmaGetImageAllocation" />
 		</require>
 	</feature>
+	<extensions comment="empty">
+		<extension name="VK_WC_why_y_y_y_y" number="1" type="instance" author="WC" contact="@cvelth" supported="disabled" />
+	</extensions>
+	<spirvextensions comment="empty" />
+	<spirvcapabilities comment="empty" />
 </registry>

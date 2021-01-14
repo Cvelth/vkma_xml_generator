@@ -179,6 +179,7 @@ namespace vkma_xml {
 			void append_enumerations();
 			void append_commands();
 			void append_feature();
+			void append_footer();
 
 		public:
 			generator_t(api_t const &api);

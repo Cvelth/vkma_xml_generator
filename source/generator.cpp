@@ -20,103 +20,6 @@ std::optional<pugi::xml_document> vkma_xml::detail::load_xml(std::filesystem::pa
 	return std::nullopt;
 }
 
-/*
-constexpr std::array index_types {
-	constexpr_enum_value_t{ "VK_INDEX_TYPE_UINT16", "0" },
-	constexpr_enum_value_t{ "VK_INDEX_TYPE_UINT32", "1" }
-};
-
-void append_vk_enums(pugi::xml_node &registry, std::set<std::string> const &handle_names) {
-	registry.append_child("comment").append_child(pugi::node_pcdata).set_value("____");
-	registry.append_child("comment").append_child(pugi::node_pcdata).set_value(
-		"enums required by Vulkan-HPP"
-	);
-
-	auto result = registry.append_child("enums");
-	result.append_attribute("name").set_value("VkResult");
-	result.append_attribute("type").set_value("enum");
-	for (auto &code : result_codes) {
-		auto temp = result.append_child("enum");
-		temp.append_attribute("value").set_value(code.value.data());
-		temp.append_attribute("name").set_value(code.name.data());
-	}
-
-	auto structure_type = registry.append_child("enums");
-	structure_type.append_attribute("name").set_value("VkStructureType");
-	structure_type.append_attribute("type").set_value("enum");
-
-	auto object_type = registry.append_child("enums");
-	object_type.append_attribute("name").set_value("VkObjectType");
-	object_type.append_attribute("type").set_value("enum");
-	for (size_t counter = 1'000; auto &handle : handle_names) {
-		auto temp = object_type.append_child("enum");
-		temp.append_attribute("value").set_value(std::to_string(counter++).data());
-		temp.append_attribute("name").set_value(to_objtypeenum(handle).data());
-	}
-
-	auto index_type = registry.append_child("enums");
-	index_type.append_attribute("name").set_value("VkIndexType");
-	index_type.append_attribute("type").set_value("enum");
-	for (auto &type : index_types) {
-		auto temp = index_type.append_child("enum");
-		temp.append_attribute("value").set_value(type.value.data());
-		temp.append_attribute("name").set_value(type.name.data());
-	}
-
-	auto debug_object_type = registry.append_child("enums");
-	debug_object_type.append_attribute("name").set_value("VkDebugReportObjectTypeEXT");
-	debug_object_type.append_attribute("type").set_value("enum");
-}
-
-void append_misc(pugi::xml_node &registry) {
-	auto extensions = registry.append_child("extensions");
-	extensions.append_attribute("comment").set_value("empty");
-	auto extension = extensions.append_child("extension");
-	extension.append_attribute("name").set_value("VK_WC_why_y_y_y_y");
-	extension.append_attribute("number").set_value("1");
-	extension.append_attribute("type").set_value("instance");
-	extension.append_attribute("author").set_value("WC");
-	extension.append_attribute("contact").set_value("@cvelth");
-	extension.append_attribute("supported").set_value("disabled");
-
-	// Skip 'spirvextensions' if it can be avoided
-	auto spirvextensions = registry.append_child("spirvextensions");
-	spirvextensions.append_attribute("comment").set_value("empty");
-
-	// Skip 'spirvcapabilities' if it can be avoided
-	auto spirvcapabilities = registry.append_child("spirvcapabilities");
-	spirvcapabilities.append_attribute("comment").set_value("empty");
-}
-
-std::optional<pugi::xml_document> vkma_xml::generate(detail::data_t const &data) {
-	auto output = std::make_optional<pugi::xml_document>();
-	auto registry = output->append_child("registry");
-
-	append_header(registry);
-	{
-		auto types = registry.append_child("types");
-		types.append_attribute("comment").set_value("VMA type definitions");
-
-		append_includes(types);
-		append_defines(types, data.defines);
-		append_basic(types);
-		append_vulkan(types, data.vulkan_type_names);
-		append_bitmask(types, data.typedefs, data.enums);
-		append_handle(types, data.handle_names);
-		append_enum(types, data.enums);
-		append_function_pointer(types, data.typedefs);
-		append_struct(types, data.structs, data.handle_names);
-	}
-	append_enumerations(registry, data.enums);
-	append_vk_enums(registry, data.handle_names);
-	append_commands(registry, data.functions);
-	append_api(registry, data);
-	append_misc(registry);
-
-	return std::move(output);
-}
-*/
-
 inline vkma_xml::detail::type_registry::underlying_t::iterator
 vkma_xml::detail::type_registry::get(identifier_t &&name) {
 	auto [iterator, result] = underlying.try_emplace(
@@ -917,6 +820,24 @@ void vkma_xml::detail::generator_t::append_feature() {
 	}
 }
 
+void vkma_xml::detail::generator_t::append_footer() {
+	if (registry) {
+		auto extensions = registry->append_child("extensions");
+		extensions.append_attribute("comment").set_value("empty");
+		auto extension = extensions.append_child("extension");
+		extension.append_attribute("name").set_value("VK_WC_why_y_y_y_y");
+		extension.append_attribute("number").set_value("1");
+		extension.append_attribute("type").set_value("instance");
+		extension.append_attribute("author").set_value("WC");
+		extension.append_attribute("contact").set_value("@cvelth");
+		extension.append_attribute("supported").set_value("disabled");
+		auto spirvextensions = registry->append_child("spirvextensions");
+		spirvextensions.append_attribute("comment").set_value("empty");
+		auto spirvcapabilities = registry->append_child("spirvcapabilities");
+		spirvcapabilities.append_attribute("comment").set_value("empty");
+	}
+}
+
 std::optional<pugi::xml_document> vkma_xml::generate(detail::api_t const &api) {
 	detail::generator_t generator = api;
 
@@ -925,6 +846,7 @@ std::optional<pugi::xml_document> vkma_xml::generate(detail::api_t const &api) {
 	generator.append_enumerations();
 	generator.append_commands();
 	generator.append_feature();
+	generator.append_footer();
 
 	return std::move(generator.output);
 }
