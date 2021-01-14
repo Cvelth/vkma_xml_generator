@@ -588,6 +588,7 @@ void vkma_xml::detail::generator_t::append_types() {
 				type.append_child(pugi::node_pcdata).set_value("enum ");
 				type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
 				type.append_child(pugi::node_pcdata).set_value(";");
+				generator_ref.appended_basetypes.emplace(name_ref);
 			}
 		}
 		inline void operator()(vkma_xml::detail::type::function const &function) {
@@ -606,40 +607,47 @@ void vkma_xml::detail::generator_t::append_types() {
 			}
 		}
 		inline void operator()(vkma_xml::detail::type::function_pointer const &function_pointer) {
-			if (tag == type_tag::core && !generator_ref.appended_types.contains(name_ref)) {
-				for (auto const &parameter : function_pointer.parameters)
-					if (auto iterator = generator_ref.api.registry.find(parameter.type.name);
+			if (tag == type_tag::core) {
+				if (!generator_ref.appended_types.contains(name_ref)) {
+					for (auto const &parameter : function_pointer.parameters)
+						if (auto iterator = generator_ref.api.registry.find(parameter.type.name);
+								 iterator != generator_ref.api.registry.end())
+							std::visit(append_types_visitor {
+								parameter.type.name, iterator->second.tag, types_ref, generator_ref
+							}, iterator->second.state);
+					if (auto iterator = generator_ref.api.registry.find(function_pointer.return_type.name);
 							 iterator != generator_ref.api.registry.end())
 						std::visit(append_types_visitor {
-							parameter.type.name, iterator->second.tag, types_ref, generator_ref
+							function_pointer.return_type.name, iterator->second.tag, types_ref, generator_ref
 						}, iterator->second.state);
-				if (auto iterator = generator_ref.api.registry.find(function_pointer.return_type.name);
-						 iterator != generator_ref.api.registry.end())
-					std::visit(append_types_visitor {
-						function_pointer.return_type.name, iterator->second.tag, types_ref, generator_ref
-					}, iterator->second.state);
 
-				auto type = types_ref.append_child("type");
-				type.append_attribute("category").set_value("funcpointer");
-				type.append_child(pugi::node_pcdata).set_value(
-					("typedef " + function_pointer.return_type.to_string() + "(*").data()
-				);
-				type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
-				type.append_child(pugi::node_pcdata).set_value(")(");
-				for (auto iterator = function_pointer.parameters.begin()
-					 ; iterator != std::prev(function_pointer.parameters.end())
-					 ; ++iterator) {
-
-					append_typename(type, iterator->type);
+					auto type = types_ref.append_child("type");
+					type.append_attribute("category").set_value("funcpointer");
 					type.append_child(pugi::node_pcdata).set_value(
-						(" " + iterator->name + ", ").data()
+						("typedef " + function_pointer.return_type.to_string() + "(*").data()
 					);
+					type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
+					type.append_child(pugi::node_pcdata).set_value(")(");
+					for (auto iterator = function_pointer.parameters.begin()
+						 ; iterator != std::prev(function_pointer.parameters.end())
+						 ; ++iterator) {
+
+						append_typename(type, iterator->type);
+						type.append_child(pugi::node_pcdata).set_value(
+							(" " + iterator->name + ", ").data()
+						);
+					}
+					append_typename(type, function_pointer.parameters.back().type);
+					type.append_child(pugi::node_pcdata).set_value(
+						(" " + function_pointer.parameters.back().name + ");").data()
+					);
+					generator_ref.appended_types.emplace(name_ref);
 				}
-				append_typename(type, function_pointer.parameters.back().type);
-				type.append_child(pugi::node_pcdata).set_value(
-					(" " + function_pointer.parameters.back().name + ");").data()
-				);
-				generator_ref.appended_types.emplace(name_ref);
+			} else if (!generator_ref.appended_basetypes.contains(name_ref)) {
+				auto type = types_ref.append_child("type");
+				type.append_attribute("category").set_value("basetype");
+				type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
+				generator_ref.appended_basetypes.emplace(name_ref);
 			}
 		}
 		inline void operator()(vkma_xml::detail::type::alias const &alias) {

@@ -105,6 +105,57 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<name>VkDevice</name>
 		</type>
 		<type category="basetype">struct <name>VkAllocationCallbacks</name>;</type>
+		<type category="basetype">
+			<name>PFN_vkGetPhysicalDeviceProperties</name>
+		</type>
+		<type category="basetype">
+			<name>PFN_vkGetPhysicalDeviceMemoryProperties</name>
+		</type>
+		<type category="basetype">
+			<name>PFN_vkAllocateMemory</name>
+		</type>
+		<type category="basetype">
+			<name>PFN_vkFreeMemory</name>
+		</type>
+		<type category="basetype">
+			<name>PFN_vkMapMemory</name>
+		</type>
+		<type category="basetype">
+			<name>PFN_vkUnmapMemory</name>
+		</type>
+		<type category="basetype">
+			<name>PFN_vkFlushMappedMemoryRanges</name>
+		</type>
+		<type category="basetype">
+			<name>PFN_vkInvalidateMappedMemoryRanges</name>
+		</type>
+		<type category="basetype">
+			<name>PFN_vkBindBufferMemory</name>
+		</type>
+		<type category="basetype">
+			<name>PFN_vkBindImageMemory</name>
+		</type>
+		<type category="basetype">
+			<name>PFN_vkGetBufferMemoryRequirements</name>
+		</type>
+		<type category="basetype">
+			<name>PFN_vkGetImageMemoryRequirements</name>
+		</type>
+		<type category="basetype">
+			<name>PFN_vkCreateBuffer</name>
+		</type>
+		<type category="basetype">
+			<name>PFN_vkDestroyBuffer</name>
+		</type>
+		<type category="basetype">
+			<name>PFN_vkCreateImage</name>
+		</type>
+		<type category="basetype">
+			<name>PFN_vkDestroyImage</name>
+		</type>
+		<type category="basetype">
+			<name>PFN_vkCmdCopyBuffer</name>
+		</type>
 		<type category="struct" name="VkmaVulkanFunctions">
 			<member><type>PFN_vkGetPhysicalDeviceProperties</type> <name>vkGetPhysicalDeviceProperties</name>
 			</member>
