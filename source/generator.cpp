@@ -112,6 +112,15 @@ static std::string to_string(pugi::xml_node const &xml) {
 	return optimize(std::move(output));
 }
 
+static std::string trim(std::string &&input) {
+	auto begin = input.find_first_not_of(' ');
+	if (begin == std::string::npos)
+		begin = 0;
+	auto end = input.find_last_not_of(' ');
+	if (end == std::string::npos)
+		end = input.size();
+	return input.substr(begin, end - begin + 1);
+}
 vkma_xml::detail::decorated_typename_t::decorated_typename_t(std::string input) : name(input) {
 	bool changed = false;
 	do {
@@ -133,6 +142,8 @@ vkma_xml::detail::decorated_typename_t::decorated_typename_t(std::string input) 
 				changed = true;
 			}
 	} while (changed);
+	prefix = trim(std::move(prefix));
+	postfix = trim(std::move(postfix));
 }
 
 std::optional<vkma_xml::detail::variable_t>
