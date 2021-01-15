@@ -71,6 +71,7 @@ namespace vkma_xml {
 			struct enumeration {
 				std::optional<decorated_typename_t> type;
 				std::vector<constant_t> values;
+				std::vector<constant_t> aliases;
 			};
 			struct function {
 				decorated_typename_t return_type;

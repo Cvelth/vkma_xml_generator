@@ -158,15 +158,6 @@ vkma_xml::detail::api_t::load_define(pugi::xml_node const &xml) {
 		return std::make_optional<constant_t>(to_string(name), to_string(value));
 	return std::nullopt;
 }
-std::optional<vkma_xml::detail::constant_t>
-vkma_xml::detail::api_t::load_enum_value(pugi::xml_node const &xml) {
-	if (auto name = xml.child("name"), value = xml.child("initializer"); name && value)
-		if (auto value_str = to_string(value); std::string_view(value_str).substr(0, 2) == "= ")
-			return std::make_optional<constant_t>(to_string(name), value_str.substr(2));
-		else
-			return std::make_optional<constant_t>(to_string(name), value_str);
-	return std::nullopt;
-}
 std::optional<vkma_xml::detail::enum_t>
 vkma_xml::detail::api_t::load_enum(pugi::xml_node const &xml) {
 	enum_t output;
@@ -179,9 +170,19 @@ vkma_xml::detail::api_t::load_enum(pugi::xml_node const &xml) {
 		else if (child.name() == "name"sv)
 			output.name = to_string(child);
 		else if (child.name() == "enumvalue"sv)
-			if (auto value = load_enum_value(child); value)
-				if (std::string_view(value->name).substr(value->name.size() - 9) != "_MAX_ENUM")
-					output.state.values.emplace_back(*value);
+			if (auto name = child.child("name"), value = child.child("initializer"); name && value) {
+				auto value_str = to_string(value);
+				if (std::string_view(value_str).substr(0, 2) == "= ")
+					value_str = value_str.substr(2);
+				if (auto name_str = to_string(name); 
+						std::string_view(name_str).substr(name_str.size() - 9) != "_MAX_ENUM")
+					if (std::ranges::find_if(output.state.values, [&value_str](constant_t const &value) {
+						return value_str == value.name;
+					}) == output.state.values.end())
+						output.state.values.emplace_back(std::move(name_str), std::move(value_str));
+					else
+						output.state.aliases.emplace_back(std::move(name_str), std::move(value_str));
+			}
 	if (output.name != "")
 		return output;
 	else
@@ -744,6 +745,11 @@ void vkma_xml::detail::generator_t::append_enumerations() {
 					enum_.append_attribute("value").set_value(enumerator.value.data());
 					enum_.append_attribute("name").set_value(enumerator.name.data());
 				}
+				for (auto &alias : enumeration.aliases) {
+					auto enum_ = enums.append_child("enum");
+					enum_.append_attribute("name").set_value(alias.name.data());
+					enum_.append_attribute("alias").set_value(alias.value.data());
+				}
 			}
 		}
 		inline void operator()(vkma_xml::detail::type::function const &) {}
@@ -784,13 +790,13 @@ std::string concatenate_error_codes(vkma_xml::detail::type_registry const &regis
 		if (std::holds_alternative<vkma_xml::detail::type::enumeration>(iterator->second.state)) {
 			auto const &enumeration = std::get<vkma_xml::detail::type::enumeration>(iterator->second.state);
 			std::string output = "";
-			for (auto enumerator = ++enumeration.values.begin(); 
-					  enumerator != std::prev(enumeration.values.end());
-					++enumerator)
-				output += enumerator->name + ", ";
-			if (!enumeration.values.empty())
+			if (!enumeration.values.empty()) {
+				for (auto enumerator = ++enumeration.values.begin(); 
+						  enumerator != std::prev(enumeration.values.end());
+						++enumerator)
+					output += enumerator->name + ", ";
 				return output += enumeration.values.back().name;
-			else
+			} else
 				std::cout << "Warning: Unable to select error codes: VkResult enumeration has no enumerators.";
 		} else
 			std::cout << "Warning: Unable to select error codes: VkResult is not an enumeration.";
