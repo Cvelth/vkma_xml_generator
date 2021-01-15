@@ -455,7 +455,9 @@ void vkma_xml::detail::generator_t::append_header() {
 		registry->append_child("comment").append_child(pugi::node_pcdata).set_value(
 			"\nCopyright (c) 2021 Cvelth (cvelth.mail@gmail.com)"
 			"\nSPDX-License-Identifier: Unlicense."
-			"\n\nDO NOT MODIFY MANUALLY!"
+		);
+		registry->append_child("comment").append_child(pugi::node_pcdata).set_value(
+			"\nDO NOT MODIFY MANUALLY!"
 			"\nThis file was generated using [generator](https://github.com/Cvelth/vkma_xml_generator)."
 			"\nGenerated files are licensed under [The Unlicense](https://unlicense.org)."
 			"\nThe generator itself is licensed under [MIT License](https://www.mit.edu/~amini/LICENSE.md)."

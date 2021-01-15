@@ -2,8 +2,8 @@
 <registry>
 	<comment>
 Copyright (c) 2021 Cvelth (cvelth.mail@gmail.com)
-SPDX-License-Identifier: Unlicense.
-
+SPDX-License-Identifier: Unlicense.</comment>
+	<comment>
 DO NOT MODIFY MANUALLY!
 This file was generated using [generator](https://github.com/Cvelth/vkma_xml_generator).
 Generated files are licensed under [The Unlicense](https://unlicense.org).
