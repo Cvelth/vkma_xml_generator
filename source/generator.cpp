@@ -557,6 +557,15 @@ void vkma_xml::detail::generator_t::append_types() {
 		inline void operator()(vkma_xml::detail::type::handle const &handle) {
 			if (tag == type_tag::core) {
 				if (!generator_ref.appended_types.contains(name_ref)) {
+					if (handle.parent)
+						if (auto iterator = generator_ref.api.registry.find(*handle.parent);
+								 iterator != generator_ref.api.registry.end())
+							std::visit(append_types_visitor{ 
+								iterator->first, iterator->second.tag, types_ref, generator_ref 
+							}, iterator->second.state);
+						else
+							std::cout << "Warning: An undefined aliased type: '" << *handle.parent << "'.\n";
+
 					auto type = types_ref.append_child("type");
 					type.append_attribute("category").set_value("handle");
 					if (handle.parent)

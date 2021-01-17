@@ -59,6 +59,8 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		<type category="bitmask" requires="VkmaAllocationCreateFlagBits">typedef <type>VkFlags</type> <name>VkmaAllocationCreateFlags</name>;</type>
 		<type category="basetype">typedef <type>uint32_t</type> <name>VkFlags</name>;</type>
 		<type category="basetype">typedef <type>VkFlags</type> <name>VkMemoryPropertyFlags</name>;</type>
+		<type category="handle" objtypeenum="VKMA_ALLOCATOR">
+			<type>VK_DEFINE_HANDLE</type>(<name>VkmaAllocator</name>)</type>
 		<type category="handle" parent="VkmaAllocator" objtypeenum="VKMA_POOL">
 			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkmaPool</name>)</type>
 		<type category="basetype">
@@ -82,8 +84,6 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>float</type> <name>priority</name>
 			</member>
 		</type>
-		<type category="handle" objtypeenum="VKMA_ALLOCATOR">
-			<type>VK_DEFINE_HANDLE</type>(<name>VkmaAllocator</name>)</type>
 		<type category="basetype">
 			<name>VkDeviceMemory</name>
 		</type>
