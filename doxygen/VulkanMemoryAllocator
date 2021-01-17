@@ -2254,7 +2254,10 @@ INCLUDE_FILE_PATTERNS  =
 # This tag requires that the tag ENABLE_PREPROCESSING is set to YES.
 
 PREDEFINED             = VMA_CALL_PRE= \
-                         VMA_CALL_POST=
+                         VMA_CALL_POST= \
+                         VMA_DEDICATED_ALLOCATION=1 \
+                         VMA_BIND_MEMORY2=1 \
+                         VMA_MEMORY_BUDGET=1
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then this
 # tag can be used to specify a list of macro names that should be expanded. The

@@ -156,6 +156,21 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		<type category="basetype">
 			<name>PFN_vkCmdCopyBuffer</name>
 		</type>
+		<type category="basetype">
+			<name>PFN_vkGetBufferMemoryRequirements2KHR</name>
+		</type>
+		<type category="basetype">
+			<name>PFN_vkGetImageMemoryRequirements2KHR</name>
+		</type>
+		<type category="basetype">
+			<name>PFN_vkBindBufferMemory2KHR</name>
+		</type>
+		<type category="basetype">
+			<name>PFN_vkBindImageMemory2KHR</name>
+		</type>
+		<type category="basetype">
+			<name>PFN_vkGetPhysicalDeviceMemoryProperties2KHR</name>
+		</type>
 		<type category="struct" name="VkmaVulkanFunctions">
 			<member><type>PFN_vkGetPhysicalDeviceProperties</type> <name>vkGetPhysicalDeviceProperties</name>
 			</member>
@@ -190,6 +205,16 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>PFN_vkDestroyImage</type> <name>vkDestroyImage</name>
 			</member>
 			<member><type>PFN_vkCmdCopyBuffer</type> <name>vkCmdCopyBuffer</name>
+			</member>
+			<member><type>PFN_vkGetBufferMemoryRequirements2KHR</type> <name>vkGetBufferMemoryRequirements2KHR</name>
+			</member>
+			<member><type>PFN_vkGetImageMemoryRequirements2KHR</type> <name>vkGetImageMemoryRequirements2KHR</name>
+			</member>
+			<member><type>PFN_vkBindBufferMemory2KHR</type> <name>vkBindBufferMemory2KHR</name>
+			</member>
+			<member><type>PFN_vkBindImageMemory2KHR</type> <name>vkBindImageMemory2KHR</name>
+			</member>
+			<member><type>PFN_vkGetPhysicalDeviceMemoryProperties2KHR</type> <name>vkGetPhysicalDeviceMemoryProperties2KHR</name>
 			</member>
 		</type>
 		<type category="bitmask" requires="VkmaRecordFlagBits">typedef <type>VkFlags</type> <name>VkmaRecordFlags</name>;</type>
