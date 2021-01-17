@@ -592,7 +592,7 @@ void vkma_xml::detail::generator_t::append_types() {
 				}
 			} else if (!generator_ref.appended_basetypes.contains(name_ref)) {
 				auto type = types_ref.append_child("type");
-				type.append_attribute("category").set_value("basetype");
+				type.append_attribute("category").set_value("define");
 				type.append_child(pugi::node_pcdata).set_value("#define ");
 				type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
 				type.append_child(pugi::node_pcdata).set_value((" " + macro.value).data());
