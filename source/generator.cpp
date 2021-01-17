@@ -590,14 +590,8 @@ void vkma_xml::detail::generator_t::append_types() {
 					type.append_child(pugi::node_pcdata).set_value((" " + macro.value).data());
 					generator_ref.appended_types.emplace(name_ref);
 				}
-			} else if (!generator_ref.appended_basetypes.contains(name_ref)) {
-				auto type = types_ref.append_child("type");
-				type.append_attribute("category").set_value("define");
-				type.append_child(pugi::node_pcdata).set_value("#define ");
-				type.append_child("name").append_child(pugi::node_pcdata).set_value(name_ref.data());
-				type.append_child(pugi::node_pcdata).set_value((" " + macro.value).data());
-				generator_ref.appended_basetypes.emplace(name_ref);
-			}
+			} else
+				generator_ref.appended_constants.emplace(name_ref);
 		}
 		inline void operator()(vkma_xml::detail::type::enumeration const &) {
 			if (tag == type_tag::core) {
@@ -789,10 +783,25 @@ void vkma_xml::detail::generator_t::append_enumerations() {
 		inline void operator()(vkma_xml::detail::type::base const &) {}
 	};
 
-	if (registry)
+	if (registry) {
+		auto enums = registry->append_child("enums");
+		enums.append_attribute("name").set_value("API Constants");
+		enums.append_attribute("comment").set_value("Hardcoded constants - not an enumerated type, part of the header boilerplate");
+		for (auto const &constant_name : appended_constants)
+			if (auto iterator = api.registry.find(constant_name);
+					 iterator != api.registry.end())
+				if (std::holds_alternative<type::macro>(iterator->second.state)) {
+					auto enum_ = enums.append_child("enum");
+					enum_.append_attribute("value").set_value(std::get<type::macro>(iterator->second.state).value.data());
+					enum_.append_attribute("name").set_value(constant_name.data());
+				} else
+					std::cout << "Ignore a constant(" << constant_name << "): its type is not supported.\n";
+			else
+				std::cout << "Warning: Ignore an unknown constant: " << constant_name << ".\n";
 		for (auto const &type : api.registry)
 			std::visit(append_enumerations_visitor{ type.first, type.second.tag, *registry, *this },
 					   type.second.state);
+	}
 }
 
 std::string concatenate_success_codes(vkma_xml::detail::type_registry const &registry) {

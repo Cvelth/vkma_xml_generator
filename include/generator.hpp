@@ -189,6 +189,7 @@ namespace vkma_xml {
 			std::unordered_set<std::string_view> appended_basetypes;
 			std::unordered_set<std::string_view> appended_types;
 			std::unordered_set<std::string_view> appended_commands;
+			std::unordered_set<std::string_view> appended_constants;
 			std::optional<pugi::xml_document> output;
 			std::optional<pugi::xml_node> registry;
 		};
