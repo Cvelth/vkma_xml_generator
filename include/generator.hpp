@@ -50,6 +50,7 @@ namespace vkma_xml {
 		struct variable_t {
 			identifier_t name;
 			decorated_typename_t type;
+			std::optional<identifier_t> array;
 		};
 		struct constant_t {
 			identifier_t name;
@@ -156,7 +157,6 @@ namespace vkma_xml {
 		struct api_t {
 			static std::optional<variable_t> load_variable(pugi::xml_node const &xml);
 			static std::optional<constant_t> load_define(pugi::xml_node const &xml);
-			static std::optional<constant_t> load_enum_value(pugi::xml_node const &xml);
 			static std::optional<enum_t> load_enum(pugi::xml_node const &xml);
 			static std::optional<variable_t> load_typedef(pugi::xml_node const &xml);
 			static std::optional<variable_t> load_function_parameter(pugi::xml_node const &xml);

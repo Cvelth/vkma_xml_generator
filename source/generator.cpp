@@ -148,8 +148,17 @@ vkma_xml::detail::decorated_typename_t::decorated_typename_t(std::string input) 
 
 std::optional<vkma_xml::detail::variable_t>
 vkma_xml::detail::api_t::load_variable(pugi::xml_node const &xml) {
-	if (auto name = xml.child("name"), type = xml.child("type"); name && type)
-		return std::make_optional<variable_t>(to_string(name), to_string(type));
+	if (auto name = xml.child("name"), type = xml.child("type"); name && type) {
+		if (auto argsstring = xml.child("argsstring"); argsstring)
+			if (auto str = to_string(argsstring); !str.empty())
+				if (str.size() > 2 && str.front() == '[' && str.back() == ']')
+					return std::make_optional<variable_t>(to_string(name), to_string(type),
+														  str.substr(1, str.size() - 2));
+				else
+					std::cout << "Warning: Unable to parse 'argsstring' of a variable("
+						<< to_string(name) << "): " << str << ".\n";
+		return std::make_optional<variable_t>(to_string(name), to_string(type), std::nullopt);
+	}
 	return std::nullopt;
 }
 std::optional<vkma_xml::detail::constant_t>
@@ -174,7 +183,7 @@ vkma_xml::detail::api_t::load_enum(pugi::xml_node const &xml) {
 				auto value_str = to_string(value);
 				if (std::string_view(value_str).substr(0, 2) == "= ")
 					value_str = value_str.substr(2);
-				if (auto name_str = to_string(name); 
+				if (auto name_str = to_string(name);
 						std::string_view(name_str).substr(name_str.size() - 9) != "_MAX_ENUM")
 					if (std::ranges::find_if(output.state.values, [&value_str](constant_t const &value) {
 						return value_str == value.name;
@@ -443,7 +452,7 @@ vkma_xml::detail::generator_t::generator_t(api_t const &api)
 	: api(api), output(std::make_optional<pugi::xml_document>())
 	, registry(output->append_child("registry")) {}
 
-void vkma_xml::detail::generator_t::append_typename(pugi::xml_node &xml, 
+void vkma_xml::detail::generator_t::append_typename(pugi::xml_node &xml,
 													decorated_typename_t const &type) {
 	xml.append_child(pugi::node_pcdata).set_value(type.prefix.data());
 	xml.append_child("type").append_child(pugi::node_pcdata).set_value(type.name.data());
@@ -504,12 +513,19 @@ void vkma_xml::detail::generator_t::append_types() {
 		inline void operator()(vkma_xml::detail::type::structure const &structure) {
 			if (tag == type_tag::core) {
 				if (!generator_ref.appended_types.contains(name_ref)) {
-					for (auto const &member : structure.members)
+					for (auto const &member : structure.members) {
 						if (auto iterator = generator_ref.api.registry.find(member.type.name);
 								 iterator != generator_ref.api.registry.end())
 							std::visit(append_types_visitor {
 								member.type.name, iterator->second.tag, types_ref, generator_ref
 							}, iterator->second.state);
+						if (member.array)
+							if (auto iterator = generator_ref.api.registry.find(*member.array);
+									 iterator != generator_ref.api.registry.end())
+								std::visit(append_types_visitor {
+									*member.array, iterator->second.tag, types_ref, generator_ref
+								}, iterator->second.state);
+					}
 
 					auto type = types_ref.append_child("type");
 					type.append_attribute("category").set_value("struct");
@@ -520,6 +536,12 @@ void vkma_xml::detail::generator_t::append_types() {
 						output.append_child(pugi::node_pcdata).set_value(" ");
 						output.append_child("name").append_child(pugi::node_pcdata)
 							.set_value(member.name.data());
+						if (member.array) {
+							output.append_child(pugi::node_pcdata).set_value("[");
+							output.append_child("enum").append_child(pugi::node_pcdata)
+								.set_value(member.array->data());
+							output.append_child(pugi::node_pcdata).set_value("]");
+						}
 					}
 					generator_ref.appended_types.emplace(name_ref);
 				}
@@ -681,8 +703,8 @@ void vkma_xml::detail::generator_t::append_types() {
 			} else if (!generator_ref.appended_basetypes.contains(name_ref))
 				if (auto iterator = generator_ref.api.registry.find(alias.real_type.name);
 						 iterator != generator_ref.api.registry.end()) {
-					std::visit(append_types_visitor{ 
-						alias.real_type.name, iterator->second.tag, types_ref, generator_ref 
+					std::visit(append_types_visitor{
+						alias.real_type.name, iterator->second.tag, types_ref, generator_ref
 					}, iterator->second.state);
 					auto type = types_ref.append_child("type");
 					type.append_attribute("category").set_value("basetype");
@@ -793,7 +815,7 @@ std::string concatenate_error_codes(vkma_xml::detail::type_registry const &regis
 			auto const &enumeration = std::get<vkma_xml::detail::type::enumeration>(iterator->second.state);
 			std::string output = "";
 			if (!enumeration.values.empty()) {
-				for (auto enumerator = ++enumeration.values.begin(); 
+				for (auto enumerator = ++enumeration.values.begin();
 						  enumerator != std::prev(enumeration.values.end());
 						++enumerator)
 					output += enumerator->name + ", ";

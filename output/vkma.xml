@@ -314,11 +314,11 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>VkDeviceSize</type> <name>unusedRangeSizeMax</name>
 			</member>
 		</type>
+		<type category="basetype">#define <name>VK_MAX_MEMORY_TYPES</name> 32</type>
+		<type category="basetype">#define <name>VK_MAX_MEMORY_HEAPS</name> 16</type>
 		<type category="struct" name="VkmaStats">
-			<member><type>VkmaStatInfo</type> <name>memoryType</name>
-			</member>
-			<member><type>VkmaStatInfo</type> <name>memoryHeap</name>
-			</member>
+			<member><type>VkmaStatInfo</type> <name>memoryType</name>[<enum>VK_MAX_MEMORY_TYPES</enum>]</member>
+			<member><type>VkmaStatInfo</type> <name>memoryHeap</name>[<enum>VK_MAX_MEMORY_HEAPS</enum>]</member>
 			<member><type>VkmaStatInfo</type> <name>total</name>
 			</member>
 		</type>
