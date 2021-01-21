@@ -289,6 +289,7 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>VkCommandBuffer</type> <name>commandBuffer</name>
 			</member>
 		</type>
+		<type category="define">#define <name>VKMA_ASSERT</name> VMA_ASSERT</type>
 		<type category="struct" name="VkmaStatInfo">
 			<member><type>uint32_t</type> <name>blockCount</name>
 			</member>
@@ -982,6 +983,7 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<type name="VkmaPoolCreateInfo" />
 			<type name="VkmaMemoryUsage" />
 			<type name="VkmaPool" />
+			<type name="VKMA_ASSERT" />
 			<type name="PFN_vkmaAllocateDeviceMemoryFunction" />
 			<type name="VkmaStatInfo" />
 			<type name="PFN_vkmaFreeDeviceMemoryFunction" />
