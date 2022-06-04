@@ -1,10 +1,16 @@
 ﻿// Copyright (c) 2021 Cvelth <cvelth.mail@gmail.com>
 // SPDX-License-Identifier: MIT
 
-#pragma warning(push)
-#pragma warning(disable : 4702)
+#ifdef _MSVC_LANG
+  #pragma warning(push)
+  #pragma warning(disable : 4702)
+#endif
+
 #include "ctre.hpp"
-#pragma warning(pop)
+
+#ifdef _MSVC_LANG
+  #pragma warning(pop)
+#endif
 
 #include <filesystem>
 #include <fstream>
@@ -39,16 +45,16 @@ void append_handles(
   std::string_view source, bool is_dispatchable,
   std::map<vkma_xml::detail::identifier_t, vkma_xml::detail::type::handle> &output) {
   for (auto search_result = ctre::search<pattern>(source); search_result;) {
-    std::string_view remaining_text{ search_result.get<0>().end(), source.end() };
+    std::string_view remaining_text{ search_result.template get<0>().end(), source.end() };
     std::string_view remaining_line{ remaining_text.begin(),
                                      remaining_text.begin() + remaining_text.find('\n') };
     std::optional<vkma_xml::detail::identifier_t> parent = std::nullopt;
     if (remaining_line.size() > 12 && remaining_line.substr(0, 12) == " // parent: ")
       if (remaining_line.substr(12) != "none")
         parent = vkma_xml::detail::identifier_t(remaining_line.substr(12));
-    output.emplace(search_result.get<1>().to_string(),
+    output.emplace(search_result.template get<1>().to_string(),
                    vkma_xml::detail::type::handle{ is_dispatchable, parent });
-    search_result = ctre::search<pattern>(search_result.get<1>().end(), source.end());
+    search_result = ctre::search<pattern>(search_result.template get<1>().end(), source.end());
   }
 }
 

@@ -93,7 +93,7 @@ static std::string optimize(std::string &&input) {
       // Skip consecutive blank characters.
     } else
       output += input[i];
-  return std::move(output);
+  return output;
 }
 static std::string to_string(pugi::xml_node const &xml) {
   std::string output;
@@ -180,10 +180,10 @@ vkma_xml::detail::api_t::load_enum(pugi::xml_node const &xml) {
           value_str = value_str.substr(2);
         if (auto name_str = to_string(name);
             std::string_view(name_str).substr(name_str.size() - 9) != "_MAX_ENUM")
-          if (std::ranges::find_if(output.state.values,
-                                   [&value_str](constant_t const &value) {
-                                     return value_str == value.name;
-                                   })
+          if (std::find_if(output.state.values.begin(), output.state.values.end(),
+                           [&value_str](constant_t const &value) {
+                             return value_str == value.name;
+                           })
               == output.state.values.end())
             output.state.values.emplace_back(std::move(name_str), std::move(value_str));
           else
@@ -478,7 +478,7 @@ void vkma_xml::detail::generator_t::append_header() {
         "\nHeaders used for name lookup: "
         "\n[vk_mem_alloc.h "
         "(VulkanMemoryAllocator)](https://github.com/GPUOpen-LibrariesAndSDKs/"
-        "VulkanMemoryAllocator/blob/master/src/vk_mem_alloc.h) "
+        "VulkanMemoryAllocator/blob/master/include/vk_mem_alloc.h) "
         "\n[vulkan_core.h "
         "(Vulkan-Headers)](https://github.com/KhronosGroup/Vulkan-Headers/blob/master/include/"
         "vulkan/vulkan_core.h) "
@@ -906,8 +906,8 @@ void vkma_xml::detail::generator_t::append_feature() {
   if (registry) {
     auto feature = registry->append_child("feature");
     feature.append_attribute("api").set_value("vkma");
-    feature.append_attribute("name").set_value("VKMA_VERSION_2_3");
-    feature.append_attribute("number").set_value("2.3");
+    feature.append_attribute("name").set_value("VKMA_VERSION_3_0_1");
+    feature.append_attribute("number").set_value("3.0.1");
     feature.append_attribute("comment").set_value("VKMA API interface definitions");
 
     if (registry) {
@@ -967,7 +967,7 @@ int main() {
 
   std::filesystem::path const vma_directory = "../xml/VulkanMemoryAllocator";
   std::vector<std::filesystem::path> const vma_header_files = {
-    "../input/VulkanMemoryAllocator/src/vk_mem_alloc.h"
+    "../input/VulkanMemoryAllocator/include/vk_mem_alloc.h"
   };
 
   std::filesystem::path const vulkan_directory = "../xml/Vulkan-Headers";

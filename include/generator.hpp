@@ -51,10 +51,16 @@ namespace vkma_xml {
       identifier_t name;
       decorated_typename_t type;
       std::optional<identifier_t> array;
+
+      variable_t(identifier_t name, decorated_typename_t type,
+                 std::optional<identifier_t> array = std::nullopt)
+        : name(name), type(type), array(array) {}
     };
     struct constant_t {
       identifier_t name;
       value_t value;
+
+      constant_t(identifier_t name, value_t value) : name(name), value(value) {}
     };
 
     namespace type {
@@ -121,12 +127,12 @@ namespace vkma_xml {
         size_t operator()(char const *txt) const { return std::hash<std::string_view>{}(txt); }
       };
       using underlying_t
-        = std::pmr::unordered_map<identifier_t, type_t, underlying_hash_t, underlying_comparator_t>;
+        = std::unordered_map<identifier_t, type_t, underlying_hash_t, underlying_comparator_t>;
 
     public:
-      underlying_t::iterator get(identifier_t &&name);
+      typename underlying_t::iterator get(identifier_t &&name);
       inline auto get(std::string_view name) { return get(identifier_t(name)); }
-      underlying_t::iterator add(identifier_t &&name, type_t &&type_data);
+      typename underlying_t::iterator add(identifier_t &&name, type_t &&type_data);
       inline auto add(std::string_view name, type_t &&type_data) {
         return add(identifier_t(name), std::move(type_data));
       }
