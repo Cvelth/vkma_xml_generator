@@ -864,7 +864,7 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = ../input/VulkanMemoryAllocator/src/vk_mem_alloc.h
+INPUT                  = ../input/VulkanMemoryAllocator/include/vk_mem_alloc.h
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -1212,7 +1212,7 @@ IGNORE_PREFIX          =
 # If the GENERATE_HTML tag is set to YES, doxygen will generate HTML output
 # The default value is: YES.
 
-GENERATE_HTML          = NO
+GENERATE_HTML          = YES
 
 # The HTML_OUTPUT tag is used to specify where the HTML docs will be put. If a
 # relative path is entered the value of OUTPUT_DIRECTORY will be put in front of
@@ -2255,6 +2255,11 @@ INCLUDE_FILE_PATTERNS  =
 
 PREDEFINED             = VMA_CALL_PRE= \
                          VMA_CALL_POST= \
+                         VKAPI_PTR= \
+                         VMA_NULLABLE= \
+                         VMA_NULLABLE_NON_DISPATCHABLE= \
+                         VMA_NOT_NULL= \
+                         VMA_LEN_IF_NOT_NULL(name)= \
                          VMA_DEDICATED_ALLOCATION=1 \
                          VMA_BIND_MEMORY2=1 \
                          VMA_MEMORY_BUDGET=1

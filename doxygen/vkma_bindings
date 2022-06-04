@@ -2257,8 +2257,9 @@ PREDEFINED             = VMA_CALL_PRE= \
                          VMA_CALL_POST= \
                          VKAPI_PTR= \
                          VMA_NULLABLE= \
+                         VMA_NULLABLE_NON_DISPATCHABLE= \
                          VMA_NOT_NULL= \
-                         VMA_LEN_IF_NOT_NULL(name)=
+                         VMA_LEN_IF_NOT_NULL(name)= \
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then this
 # tag can be used to specify a list of macro names that should be expanded. The
