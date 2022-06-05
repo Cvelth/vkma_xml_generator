@@ -14,4 +14,4 @@
 [submodule "input/Vulkan-Headers"]
 	path = input/Vulkan-Headers
 	url = https://github.com/KhronosGroup/Vulkan-Headers
-	branch = v1.2.166
+	branch = v1.3.216
