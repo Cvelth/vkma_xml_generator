@@ -49,9 +49,9 @@ void append_handles(
     std::string_view remaining_line{ remaining_text.begin(),
                                      remaining_text.begin() + remaining_text.find('\n') };
     std::optional<vkma_xml::detail::identifier_t> parent = std::nullopt;
-    if (remaining_line.size() > 12 && remaining_line.substr(0, 12) == " // parent: ")
-      if (remaining_line.substr(12) != "none")
-        parent = vkma_xml::detail::identifier_t(remaining_line.substr(12));
+    if (auto parent_ps = remaining_line.find(" // parent: "); parent_ps != std::string_view::npos)
+      if (remaining_line.size() > parent_ps + 12 && remaining_line.substr(parent_ps + 12) != "none")
+        parent = vkma_xml::detail::identifier_t(remaining_line.substr(parent_ps + 12));
     output.emplace(search_result.template get<1>().to_string(),
                    vkma_xml::detail::type::handle{ is_dispatchable, parent });
     search_result = ctre::search<pattern>(search_result.template get<1>().end(), source.end());
