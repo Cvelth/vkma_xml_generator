@@ -64,7 +64,9 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		<type category="bitmask" requires="VkmaAllocationCreateFlagBits">typedef <type>VkFlags</type> <name>VkmaAllocationCreateFlags</name>;</type>
 		<type category="basetype">typedef <type>uint32_t</type> <name>VkFlags</name>;</type>
 		<type category="basetype">typedef <type>VkFlags</type> <name>VkMemoryPropertyFlags</name>;</type>
-		<type category="handle" objtypeenum="VKMA_POOL">
+		<type category="handle" objtypeenum="VKMA_ALLOCATOR">
+			<type>VK_DEFINE_HANDLE</type>(<name>VkmaAllocator</name>)</type>
+		<type category="handle" parent="VkmaAllocator" objtypeenum="VKMA_POOL">
 			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkmaPool</name>)</type>
 		<type category="struct" name="VkmaAllocationCreateInfo">
 			<member><type>VkmaAllocationCreateFlags</type> <name>flags</name>
@@ -95,8 +97,6 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member><type>void</type>* <name>pUserData</name>
 			</member>
 		</type>
-		<type category="handle" objtypeenum="VKMA_ALLOCATOR">
-			<type>VK_DEFINE_HANDLE</type>(<name>VkmaAllocator</name>)</type>
 		<type category="basetype">
 			<name>VkDeviceMemory</name>
 		</type>
@@ -279,12 +279,12 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			<member>const<type>VkExternalMemoryHandleTypeFlagsKHR</type>* <name>pTypeExternalMemoryHandleTypes</name>
 			</member>
 		</type>
-		<type category="handle" objtypeenum="VKMA_BUFFER">
+		<type category="handle" parent="VkmaAllocator" objtypeenum="VKMA_BUFFER">
 			<type>VK_DEFINE_HANDLE</type>(<name>VkmaBuffer</name>)</type>
 		<type category="handle" objtypeenum="VKMA_VIRTUAL_BLOCK">
 			<type>VK_DEFINE_HANDLE</type>(<name>VkmaVirtualBlock</name>)</type>
 		<type name="VkmaDefragmentationMoveOperation" category="enum" />
-		<type category="handle" objtypeenum="VKMA_ALLOCATION">
+		<type category="handle" parent="VkmaAllocator" objtypeenum="VKMA_ALLOCATION">
 			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkmaAllocation</name>)</type>
 		<type category="struct" name="VkmaDefragmentationMove">
 			<member><type>VkmaDefragmentationMoveOperation</type> <name>operation</name>
@@ -372,7 +372,7 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 			</member>
 		</type>
 		<type name="VkmaResult" category="enum" />
-		<type category="handle" objtypeenum="VKMA_VIRTUAL_ALLOCATION">
+		<type category="handle" parent="VkmaVirtualBlock" objtypeenum="VKMA_VIRTUAL_ALLOCATION">
 			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkmaVirtualAllocation</name>)</type>
 		<type category="basetype">
 			<name>char</name>
@@ -420,7 +420,7 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 		</type>
 		<type category="handle" parent="VkmaAllocator" objtypeenum="VKMA_DEFRAGMENTATION_CONTEXT">
 			<type>VK_DEFINE_NON_DISPATCHABLE_HANDLE</type>(<name>VkmaDefragmentationContext</name>)</type>
-		<type category="handle" objtypeenum="VKMA_IMAGE">
+		<type category="handle" parent="VkmaAllocator" objtypeenum="VKMA_IMAGE">
 			<type>VK_DEFINE_HANDLE</type>(<name>VkmaImage</name>)</type>
 	</types>
 	<enums name="API Constants" comment="Hardcoded constants - not an enumerated type, part of the header boilerplate">
@@ -1177,15 +1177,15 @@ The goal is to generate a [vulkan-hpp](https://github.com/KhronosGroup/Vulkan-Hp
 	<feature api="vkma" name="VKMA_VERSION_3_0_1" number="3.0.1" comment="VKMA API interface definitions">
 		<require comment="a mess, isn't it?">
 			<type name="vma" />
-			<type name="VkmaAllocationCreateFlags" />
+			<type name="VkmaAllocator" />
 			<type name="VkmaVirtualAllocationCreateInfo" />
+			<type name="VkmaAllocationCreateFlags" />
 			<type name="VkmaPoolCreateFlags" />
 			<type name="VkmaAllocationCreateInfo" />
 			<type name="VkmaPoolCreateInfo" />
 			<type name="VkmaMemoryUsage" />
 			<type name="VkmaPool" />
 			<type name="VkmaVirtualAllocationCreateFlags" />
-			<type name="VkmaAllocator" />
 			<type name="VkmaVirtualAllocationCreateFlagBits" />
 			<type name="VKMA_ASSERT" />
 			<type name="VkmaVirtualBlockCreateFlags" />
